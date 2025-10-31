@@ -1,0 +1,30 @@
+@import './variables.css';
+@import './mixhtml.css';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 1rem;
+  font-family: var(--font_regular);
+}
+
+body{
+    /* background-color: var(--color_main_bg); */
+}
+
+p{
+    font-family: var(--font_regular);
+    color: var(--color_primary);
+}
+
+main{
+    margin: 0 auto;
+    width: 80%;
+}
+
+footer{
+    span.trademark{
+    font-family: var(--font_light);
+    }
+}

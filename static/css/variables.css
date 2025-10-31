@@ -1,0 +1,27 @@
+@font-face {
+    font-family: Netflix-Sans;
+    src: url("../fonts/Netflix_Sans_Medium.otf") format("opentype");
+}
+
+@font-face {
+    font-family: Netflix-Sans-bold;
+    font-weight: bold;
+    src: url("../fonts/Netflix_Sans_Bold.otf") format("opentype");
+}
+
+@font-face {
+    font-family: Netflix-Sans-light;
+    font-weight: light;
+    src: url("../fonts/Netflix_Sans_Light.otf") format("opentype");
+}
+
+:root{
+    --color_primary: #E50914;
+    --color_secondary: #fff;
+
+    --color_main_bg: #141414;
+
+    --font_regular: 'Netflix-Sans', 'Helvetica Neue', 'sans-serif';
+    --font_light: 'Netflix-Sans-light', 'Helvetica Neue', 'sans-serif';
+}
+
