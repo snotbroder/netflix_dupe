@@ -39,7 +39,7 @@ def view_index():
 def login():
 
     if request.method == "GET":
-        if session.get("user", ""): return redirect(url_for("home"))
+        if session.get("user", ""): return redirect(url_for("browse"))
         return render_template("login.html", x=x)
 
     if request.method == "POST":
@@ -63,7 +63,7 @@ def login():
             user.pop("user_password")
 
             session["user"] = user
-            return f"""<browser mix-redirect="/home"></browser>"""
+            return f"""<browser mix-redirect="/browse"></browser>"""
 
         except Exception as ex:
             ic(ex)
@@ -178,9 +178,9 @@ def logout():
         pass
 
     ##############################
-@app.get("/home")
+@app.get("/browse")
 @x.no_cache
-def home():
+def browse():
     try:
         user = session.get("user", "")
         if not user: return redirect(url_for("login"))
@@ -201,7 +201,7 @@ def home():
         # suggestions = cursor.fetchall()
         # ic(suggestions)
 
-        return render_template("home.html", user=user)
+        return render_template("browse.html", user=user)
     except Exception as ex:
         ic(ex)
         return "error"
