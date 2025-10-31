@@ -1,0 +1,66 @@
+# Generated with chatGPT 
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+*.eggs/
+build/
+dist/
+*.manifest
+*.spec
+
+# --- Virtual environments ---
+venv/
+.env/
+env/
+.venv/
+ENV/
+env.bak/
+
+# --- Flask ---
+instance/
+flask_session/
+*.db
+*.sqlite3
+
+# --- Logs & cache ---
+*.log
+*.pot
+*.pyc
+*.pkl
+.cache/
+.coverage
+htmlcov/
+.tox/
+pytest_cache/
+.mypy_cache/
+.dmypy.json
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+
+# --- IDEs / Editors ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- Docker ---
+# Ignore local Docker-related files, but keep Dockerfile
+docker-compose.yaml
+docker-compose.override.yaml
+*.pid
+*.sock
+
+# --- Environment / secrets ---
+.env.local
+.env.*.local
+secrets.json
+*.pem
+*.key
+*.crt
