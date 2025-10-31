@@ -1,0 +1,14 @@
+{% include "components/_header.html" %}
+
+<p>Please log in to continue</p>
+<section>
+    <form action="/login" mix-post class="" autocomplete="off">
+        <input name="user_email" type="text" placeholder="Email" mix-check="{{ x.REGEX_EMAIL }}">
+        <input name="user_password" type="password" placeholder="Password" mix-check="{{ x.REGEX_USER_PASSWORD }}">
+        <button class="" mix-default="Login" mix-await="Logging in ...">
+            Log in
+        </button>
+    </form>
+</section>
+
+{% include "components/_footer.html" %}

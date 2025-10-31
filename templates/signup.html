@@ -1,0 +1,36 @@
+{% include "components/_header.html" %}
+
+<p>Sign up</p>
+<section>
+    <form class="x-dialog__form" action="{{ url_for('signup') }}" mix-post autocomplete="off">
+        <div>
+            <label for="user_email">
+                <span>Email</span>
+            </label>
+            <input name="user_email" id="user_email" type="text" mix-check="{{ x.REGEX_EMAIL }}">
+        </div>
+        <div>
+            <label for="user_username">
+                <span>Username</span> - {{ x.USER_USERNAME_MIN }} to {{ x.USER_USERNAME_MAX }} characters
+            </label>
+            <input name="user_username" id="user_username" type="text" mix-check="{{ x.REGEX_USER_USERNAME }}">
+        </div>
+        <div>
+            <label for="user_first_name">
+                <span>User first name</span> - {{ x.USER_FIRST_NAME_MIN }} to {{ x.USER_FIRST_NAME_MAX }} characters
+            </label>
+            <input name="user_first_name" id="user_first_name" type="text" mix-check="{{ x.REGEX_USER_USERNAME }}">
+        </div>
+        <div>
+            <label for="password">
+                <span>Password</span> - {{ x.USER_PASSWORD_MIN }} to {{ x.USER_PASSWORD_MAX }} characters
+            </label>
+            <input name="user_password" id="password" type="password" mix-check="{{ x.REGEX_USER_PASSWORD }}">
+        </div>
+        <button class="x-dialog__btn" mix-default="Sign up" mix-await="Signing up...">
+            Sign up
+        </button>
+    </form>
+</section>
+
+{% include "components/_footer.html" %}
