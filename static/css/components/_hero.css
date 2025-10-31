@@ -1,0 +1,18 @@
+/* Stolen from netflix own website */
+.trailer-vignette {
+    background: var(--gradient_hero);
+    bottom: 0;
+    left: 0;
+    opacity: 1;
+    position: absolute;
+    right: 26.09%;
+    top: 0;
+    transition: opacity .5s;
+}
+
+.vignette-layer {
+    left: 0;
+    position: absolute;
+    right: 0;
+    z-index: 8;
+}

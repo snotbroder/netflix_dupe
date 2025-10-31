@@ -1,5 +1,163 @@
 header{
-    padding: 0 4%;
-    max-width: 980px;
-    margin: 20px auto 0;
+    position: sticky;
+    top: 0px;
+    padding: 20px 4%;
+    /* background: var(--gradient_header_full); */
+    display: flex;
+    z-index: 10;
+    transition: background .4s;
+
+
+    nav{
+        display: flex;
+        justify-content: space-between;
+    }
+    nav div{
+        display: flex;
+        gap: 2rem;
+        place-items: center;
+    }
+
+    .header-logo-container{
+        min-width: 90px;
+        width: 8%;
+    }
+    nav .header-menu{
+        display: none;
+        gap: 1rem;
+        @media (min-width: 880px) {
+            display: flex;
+        }
+        li a{
+            font-family: var(--font_light);
+            color: var(--color_tertiary50);
+            transition: color .125s;
+            &:hover{
+                color: var(--color_tertiary);
+            }
+            
+            &.selected{
+                color: var(--color_secondary);
+                font-family: var(--font_regular);
+                cursor: default;
+            }
+        }
+    }
+    nav .header-utility{
+        display: flex;
+        gap: 1.5rem;
+        >li{
+            align-self: center;
+        }
+        .icon{
+            color: var(--color_tertiary50);
+            font-size: 24px;
+        }
+        .header-profile-container{
+            display: flex;
+            gap: .5rem;
+            cursor: pointer;
+            .header-profile-icon{
+                width: 32px;
+                img{
+                    border-radius: .25rem;
+                    width: 100%;
+                }
+                
+            }
+            .header-caret-icon{
+                transition: transform .25s;
+                place-self: center;
+            }
+            &:hover .header-caret-icon{
+                transform: rotate(180deg);
+                transition: transform .25s;
+            }
+        }
+        .header-profile-container{
+            &:hover .header-profile-dropdown{
+                display: block;
+                
+            }
+            .header-profile-dropdown{
+                display: none;
+                position: absolute;
+                top: 35px;
+                right: 4%;
+                width: 250px;
+                background-color: var(--color_main_bg85);
+                color: var(--color_secondary);
+                padding: .75rem 0;
+                margin-top: 30px;
+                border: var(--color_tertiary) .5px solid;
+            .header-profile-dropdown-content{
+                display: flex;
+                flex-direction: column;
+                gap: .5rem;
+                padding: 1rem 0;
+            }
+            .header-profile-dropdown-item{
+                display: flex;
+                align-items: center;
+                width: 200px;
+                color: var(--color_secondary);
+                gap: 1rem;
+                >span{
+                    text-align: right;
+                }
+                &:hover span{
+                    text-decoration: underline;
+                }
+                }
+            }
+            .header-profile-dropdown:hover{
+                display: block;
+            }
+            .header-profile-dropdown-hoverfield{
+                position: absolute;
+                top: -30px;
+                right: 0;
+                height: 30px;
+                width: 50px;
+                margin-left: auto;
+                /* border: red solid 2px; */
+                &:hover .header-profile-dropdown{
+                    display: block;
+                }
+            }
+
+            .header-profile-dropdown-signout{
+                width: 100%;
+                border-top: var(--color_tertiary) solid 1.5px;
+                padding: 1rem;
+                span a{
+                    color: var(--color_secondary);
+                    &:hover{
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
+        
+    }
+}
+
+
+/* Credit to Adam Argyle: https://codepen.io/argyleink/pen/KKrGNEO */
+@supports (animation-timeline: view()) {
+  @keyframes fade-in {
+    from { 
+        background: var(--gradient_header); 
+    }
+    to   { 
+        background: var(--gradient_header); 
+        background-color: var(--color_main_bg); 
+    }
+  }
+  
+  header {
+    animation: fade-in auto linear both;
+    animation-timeline: scroll();
+    animation-range: 0% 10px;
+  }
 }

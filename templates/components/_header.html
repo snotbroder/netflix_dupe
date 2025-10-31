@@ -16,13 +16,82 @@
 </head>
 
 <body>
-    <h1>Welcome to Netflix</h1>
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('browse') }}">NETFLIX LOGO</a></li>
-            <li>Drop down</li>
-        </ul>
-    </nav>
+    <header>
+        <nav>
+            <div>
+                <div class="header-logo-container">
+                    <a href="{{ url_for('browse') }}"><img class="w-full"
+                            src="{{ url_for('static', filename='images/Logonetflix.png') }}" alt="Netflix logo"></a>
+                </div>
+                {% if user %}
+                <ul class="header-menu">
+                    <li><a class="selected" href="#">Home</a></li>
+                    <li><a href="#">Series</a></li>
+                    <li><a href="#">Films</a></li>
+                    <li><a href="#">Games</a></li>
+                    <li><a href="#">New and Popular</a></li>
+                    <li><a href="#">My List</a></li>
+                    <li><a href="#">Browse by language</a></li>
+                </ul>
+            </div>
+            <ul class="header-utility">
+                <li>
+                    <form>
+                        <label for=""><i class="fa-solid fa-magnifying-glass fa-lg icon"></i></label>
+                        <input class="hidden" type="text">
+                    </form>
+                </li>
+                <li>
+                    <a href="#" class="text-24px">
+                        <i class="fa-regular fa-bell fa-lg icon"></i>
+                    </a>
+                </li>
+                <li class="header-profile-container">
+                    <div class="header-profile-icon">
+                        <img src="{{ url_for('static', filename='images/' ~ (user.user_avatar_path if user.user_avatar_path else 'unknown.jpg')) }}"
+                            alt="Profile">
+                    </div>
+                    <span class="header-caret-icon"><i class="fa-solid fa-caret-down icon"></i></span>
+                    <div class="header-profile-dropdown">
+                        <div class="header-profile-dropdown-hoverfield"></div>
+                        <ul class="header-profile-dropdown-content">
+                            <li>
+                                <a class="header-profile-dropdown-item" href="">
+                                    <i class="fa-solid fa-pencil"></i>
+                                    <span>Manage Profiles</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="header-profile-dropdown-item" href="">
+                                    <i class="fa-solid fa-square-up-right"></i>
+                                    <span>Transfer Profile</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="header-profile-dropdown-item" href="">
+                                    <i class="fa-solid fa-user"></i>
+                                    <span>Account</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="header-profile-dropdown-item" href="">
+                                    <i class="fa-regular fa-circle-question"></i>
+                                    <span>Help Centre</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="header-profile-dropdown-signout">
+                            <span><a href="{{ url_for('logout') }}">Sign out of Dupeflix</a></span>
+                        </div>
+
+                    </div>
+                </li>
+                {% else %}
+                <p class="text-c-white p-self-end">Currently not logged in</p>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
 
     <div id="toast"></div>
-    <main>
+    <main class="min-h-800px">

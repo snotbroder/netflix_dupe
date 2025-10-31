@@ -19,10 +19,16 @@
     --color_primary: #E50914;
     --color_secondary: #fff;
     --color_tertiary: #808080;
+    --color_tertiary50: #E5E5E5;
 
     --color_main_bg: #141414;
+    --color_main_bg85: rgba(20, 20, 20, 0.85);
+
+    --gradient_hero: linear-gradient(77deg, rgba(0, 0, 0, .6), transparent 85%);
+    --gradient_header: linear-gradient(180deg, rgba(0, 0, 0, .7) 10%, transparent);
 
     --font_regular: 'Netflix-Sans', 'Helvetica Neue', 'sans-serif';
     --font_light: 'Netflix-Sans-light', 'Helvetica Neue', 'sans-serif';
+    --font_bold: 'Netflix-Sans-bold', 'Helvetica Neue', 'sans-serif';
 }
 
