@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     gap: .75rem;
+    animation: fade_in_kf .5s both ease;
     .form-handle-item{
         display: flex;
         flex-direction: column;
@@ -17,7 +18,32 @@
             background-color: var(--color_input);
             border: solid var(--color_input_border) 1px;
             color: var(--color_secondary);
+            &:user-invalid{
+                outline: var(--color_system_error) solid 2px;
+            }
+        }
+        & label:has(+ input[required])::after {
+            content: " *";
+            color: var(--color_primary);
+            margin-left: 0.25rem;
         }
     }
-    
+}
+
+/* Styling for system feedback component */
+.label-error{
+    transform: translateY(0px);
+    animation: fade_in_kf .5s both ease;
+
+}
+
+@keyframes fade_in_kf{
+    from{
+        transform: translateY(10px);
+        opacity: 0;
+    }
+    to{
+        transform: translateY(0px);
+        opacity: 1;
+    }
 }
