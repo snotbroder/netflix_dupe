@@ -39,11 +39,12 @@
 
     --color_system_error: #6f181d;
 
-    --color_main_bg: #141414;
+    --color_main_bg: #040202;
     --color_main_bg85: rgba(50, 50, 50, 0.85);
 
     --gradient_hero: linear-gradient(77deg, rgba(0, 0, 0, .6), transparent 85%);
     --gradient_header: linear-gradient(180deg, rgba(0, 0, 0, .7) 10%, transparent);
+    --gradient_body: linear-gradient(180deg, #491819 0%, #040202 100%);
 
     --font_regular: 'Netflix-Sans', 'Helvetica Neue', 'sans-serif';
     --font_bold: 'Netflix-Sans-bold', 'Helvetica Neue', 'sans-serif';

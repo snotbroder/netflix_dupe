@@ -14,7 +14,7 @@
 
 body{
     background-color: var(--color_main_bg) !important;
-    background: linear-gradient(180deg, #491819 0%, #040202 100%);
+    background: var(--gradient_body);
     ul{
         list-style: none;
     }

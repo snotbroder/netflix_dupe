@@ -171,7 +171,7 @@ def verify_account():
 def logout():
     try:
         session.clear()
-        return redirect(url_for("login"))
+        return redirect(url_for("view_index"))
     except Exception as ex:
         ic(ex)
         return "error"
@@ -184,7 +184,7 @@ def logout():
 def browse():
     try:
         user = session.get("user", "")
-        if not user: return redirect(url_for("login"))
+        if not user: return redirect(url_for("view_index"))
         db, cursor = x.db()
 
         # q = "SELECT * FROM users JOIN posts ON user_pk = post_user_fk ORDER BY RAND() LIMIT 5"
