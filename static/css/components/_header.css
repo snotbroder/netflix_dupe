@@ -1,4 +1,4 @@
-header{
+header.header-global{
     position: sticky;
     top: 0px;
     padding: 20px 4%;
@@ -6,7 +6,6 @@ header{
     display: flex;
     z-index: 10;
     transition: background .4s;
-
 
     nav{
         display: flex;
@@ -155,7 +154,7 @@ header{
     }
   }
   
-  header {
+  header.header-global {
     animation: fade-in auto linear both;
     animation-timeline: scroll();
     animation-range: 0% 10px;

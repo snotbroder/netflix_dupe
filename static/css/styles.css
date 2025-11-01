@@ -21,12 +21,62 @@ body{
 main{
     margin: 0 auto;
     padding: 0 4%;
+    font-family: var(--font_fallback);
+    color: var(--color_secondary);
 
     p{
         color: var(--color_secondary);
     }
+
+    h1{
+        color: var(--color_primary);
+        font-family: var(--font_bold);
+        font-size: 3rem;
+        letter-spacing: .5px;
+    }
+    h2{
+        color: var(--color_secondary);
+        font-family: var(--font_semibold);
+        font-size: 1.4rem;
+        letter-spacing: .5px;
+    }
+    h3{
+        color: var(--color_secondary);
+        font-family: var(--font_regular);
+        font-size: 1rem;
+        letter-spacing: .5px;
+    }
 }
 
+.img-container{
+    /* Default img size, correct container size with mojocss */
+    width: 100px; 
+    .img{
+        object-fit: cover;
+        width: 100%;
+    }
+}
+
+.button-primary{
+    background-color: var(--color_primary);
+    color: var(--color_secondary);
+    padding: .40rem 1.15rem;
+    border-radius: .125rem;
+    font-family: var(--font_semibold);
+    letter-spacing: .5px;
+    font-size: 1.25rem;
+}
+.button-secondary{
+    background-color: transparent;
+    box-sizing: border-box;
+    border: solid var(--color_secondary) 2px;
+    color: var(--color_secondary);
+    padding: .25rem 1rem;
+    border-radius: .125rem;
+    font-family: var(--font_semibold);
+    letter-spacing: .5px;
+    font-size: 1.25rem;
+}
 .hidden{
     display: none;
 }

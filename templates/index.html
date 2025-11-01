@@ -1,8 +1,17 @@
 {% include "components/_header.html" %}
+<section>
+    <h1 class="test">Netflix is better with the app</h1>
+    <div class="w-200px img-container">
+        <img class="img" src="https://assets.nflxext.com/ffe/siteui/acquisition/simplicity/symbol_n.png"
+            alt="Netflix app icon">
+    </div>
+    <p>Already have an account?</p>
+    <section class="d-flex gap-1rem p-items-center mx-auto">
+        <a class="button-primary" href="{{ url_for('login') }}">Log in</a>
+        <a class="button-secondary" href="{{ url_for('signup') }}">Sign up <i
+                class="fa-solid fa-chevron-right fa-lg text-1.25rem"></i></a>
+    </section>
 
-
-<a href="{{ url_for('login') }}">Login</a>
-<p>or</p>
-<a href="{{ url_for('signup') }}">Sign up</a>
+</section>
 
 {% include "components/_footer.html" %}

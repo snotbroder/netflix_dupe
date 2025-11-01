@@ -1,19 +1,32 @@
 @font-face {
     font-family: Netflix-Sans;
-    src: url("../fonts/Netflix_Sans_Medium.otf") format("opentype");
+    /* src: url("../fonts/Netflix_Sans_Medium.otf") format("opentype"); */
+    src: url("../fonts/netflix-sans-core-variable-full.woff2");
+    font-weight: 400;
 }
 
 @font-face {
     font-family: Netflix-Sans-bold;
-    font-weight: bold;
-    src: url("../fonts/Netflix_Sans_Bold.otf") format("opentype");
+    font-weight: 600;
+    src: url("../fonts/netflix-sans-core-variable-full.woff2");
+}
+@font-face {
+    font-family: Netflix-Sans-semibold;
+    font-weight: 500;
+    src: url("../fonts/netflix-sans-core-variable-full.woff2");
 }
 
 @font-face {
     font-family: Netflix-Sans-light;
-    font-weight: light;
-    src: url("../fonts/Netflix_Sans_Light.otf") format("opentype");
+    font-weight: 300;
+    src: url("../fonts/netflix-sans-core-variable-full.woff2");
 }
+@font-face {
+    font-family: Netflix-Sans-fallback;
+    font-weight: 100;
+    src: url("../fonts/netflix-sans-core-variable-full.woff2");
+}
+
 
 :root{
     --color_primary: #E50914;
@@ -28,7 +41,9 @@
     --gradient_header: linear-gradient(180deg, rgba(0, 0, 0, .7) 10%, transparent);
 
     --font_regular: 'Netflix-Sans', 'Helvetica Neue', 'sans-serif';
-    --font_light: 'Netflix-Sans-light', 'Helvetica Neue', 'sans-serif';
     --font_bold: 'Netflix-Sans-bold', 'Helvetica Neue', 'sans-serif';
+    --font_semibold: 'Netflix-Sans-semibold', 'Helvetica Neue', 'sans-serif';
+    --font_light: 'Netflix-Sans-light', 'Helvetica Neue', 'sans-serif';
+    --font_fallback: 'Netflix-Sans-fallback', 'Helvetica Neue', 'sans-serif';
 }
 

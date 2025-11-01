@@ -29,7 +29,7 @@ def _____USER_____(): pass
 
 @app.get("/")
 def view_index():
-   
+    
     return render_template("index.html")
 
 
