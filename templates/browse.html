@@ -8,13 +8,14 @@
     <div class="hero-vignette vignette-layer"></div>
 </section>
 
-<section class="h-auto">
-    <h2>Genre</h2>
-    <div class="d-flex gap-24 overflow-scroll">
-        {% for i in range(11) %}
+<section class="content-carrousel-container">
+    <h2>Popular right now</h2>
+    <div class="content-carrousel">
+        {% for movie in movies_popular %}
         {% include "components/_movie_card.html" %}
         {% endfor %}
     </div>
 </section>
+<div class="h-32rem"></div>
 
 {% include "components/_footer.html" %}

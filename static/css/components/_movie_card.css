@@ -1,0 +1,35 @@
+.content-carrousel-container{
+    overflow: hidden;
+    margin-right: -4%;
+}
+.content-carrousel{
+    display: flex;
+    gap: .5rem;
+}
+
+/* Component style */
+.card-container {
+  flex: 0 0 auto;
+  width: 250px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.card-container .card-content {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 1rem;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+/* The "active" class applied via JS */
+.card-container.card-active {
+  transform: translateY(-20px) scale(1.1);
+  z-index: 10;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+
+  .card-content {
+    max-height: 200px;
+    padding: 1rem;
+  }
+}

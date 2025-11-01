@@ -1,7 +1,9 @@
-<article class="h-70px w-120 bg-c-white pa-2rem">
-    <section>
-        <img src="" alt="">
-    </section>
-    <h3>Title</h3>
-
+<article class="card-container">
+    <div class="img-container w-250px">
+        <img src="https://image.tmdb.org/t/p/w500{{movie.backdrop_path}}" alt="">
+    </div>
+    <div class="card-content">
+        <h2>{{ movie.title }}</h2>
+        <p>Genres: {{ movie.genres | join(", ") }}</p>
+    </div>
 </article>

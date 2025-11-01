@@ -4,6 +4,7 @@
 @import './components/_header.css';
 @import './components/_footer.css';
 @import './components/_hero.css';
+@import './components/_movie_card.css';
 
 * {
   margin: 0;
@@ -54,7 +55,7 @@ main{
 .img-container{
     /* Default img size, correct container size with mojocss */
     width: 100px; 
-    .img{
+    img{
         object-fit: cover;
         width: 100%;
     }

@@ -1,11 +1,16 @@
 from flask import Flask, render_template, request, session, redirect, url_for
+import requests
 from flask_session import Session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
+from dotenv import load_dotenv
 import x
 import time
 import uuid
 import os
+
+load_dotenv()
+TMDB_API_KEY = os.getenv("TMDB_API_KEY")
 
 from icecream import ic
 ic.configureOutput(prefix=f'----- | ', includeContext=True)
@@ -187,25 +192,36 @@ def browse():
         if not user: return redirect(url_for("view_index"))
         db, cursor = x.db()
 
-        # q = "SELECT * FROM users JOIN posts ON user_pk = post_user_fk ORDER BY RAND() LIMIT 5"
-        # cursor.execute(q)
-        # tweets = cursor.fetchall()
-        # ic(tweets)
+        ### MovieDB fetching
+        url_movies_popular = f"https://api.themoviedb.org/3/movie/popular?api_key={TMDB_API_KEY}&language=en-US&page=1"
+        headers = {"Authorization": f"Bearer {TMDB_API_KEY}"}
+        response = requests.get(url_movies_popular, headers=headers)
+        data = response.json()
 
-        # q = "SELECT * FROM trends ORDER BY RAND() LIMIT 3"
-        # cursor.execute(q)
-        # trends = cursor.fetchall()
-        # ic(trends)
+        movies_popular = data.get("results", [])
 
-        # q = "SELECT * FROM users WHERE user_pk != %s ORDER BY RAND() LIMIT 3"
-        # cursor.execute(q, (user["user_pk"],))
-        # suggestions = cursor.fetchall()
-        # ic(suggestions)
+        # How many of the fetched movies will return to the web ui
+        movies_popular = movies_popular[:9]
 
-        return render_template("browse.html", user=user)
+        ### Genre fetching
+        url_movies_genres = f"https://api.themoviedb.org/3/genre/movie/list?api_key={TMDB_API_KEY}&language=en-US&page=1"
+        headers = {"Authorization": f"Bearer {TMDB_API_KEY}"}
+        response = requests.get(url_movies_genres, headers=headers)
+        genres_data = response.json()
+
+        # ChatGPT helped
+        genre_mapping = {g["id"]: g["name"] for g in genres_data["genres"]}
+        for movie_popular in movies_popular:
+            movie_popular["genres"] = [genre_mapping.get(gid, "Unknown") for gid in movie_popular.get("genre_ids", [])]
+
+
+
+        return render_template("browse.html", user=user, movies_popular=movies_popular)
     except Exception as ex:
         ic(ex)
-        return "error"
+        return f"error {ex}"
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
+
+################## API FETCHING ##################
