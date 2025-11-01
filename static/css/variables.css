@@ -34,8 +34,13 @@
     --color_tertiary: #808080;
     --color_tertiary50: #E5E5E5;
 
+    --color_input: #0e0e0ecc;
+    --color_input_border: #2e2e2e;
+
+    --color_system_error: #6f181d;
+
     --color_main_bg: #141414;
-    --color_main_bg85: rgba(20, 20, 20, 0.85);
+    --color_main_bg85: rgba(50, 50, 50, 0.85);
 
     --gradient_hero: linear-gradient(77deg, rgba(0, 0, 0, .6), transparent 85%);
     --gradient_header: linear-gradient(180deg, rgba(0, 0, 0, .7) 10%, transparent);

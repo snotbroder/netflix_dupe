@@ -52,7 +52,7 @@ def login():
             db, cursor = x.db()
             cursor.execute(q, (user_email,))
             user = cursor.fetchone()
-            if not user: raise Exception("User not found", 400)
+            if not user: raise Exception("User not found, please check for spelling", 400)
 
             if not check_password_hash(user["user_password"], user_password):
                 raise Exception("Invalid credentials", 400)
@@ -63,6 +63,7 @@ def login():
             user.pop("user_password")
 
             session["user"] = user
+        
             return f"""<browser mix-redirect="/browse"></browser>"""
 
         except Exception as ex:
@@ -70,8 +71,8 @@ def login():
 
             # User errors
             if ex.args[1] == 400:
-                toast_error = render_template("components/toast/___toast_error.html", message=ex.args[0])
-                return f"""<browser mix-update="#toast">{ toast_error }</browser>""", 400
+                label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
+                return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 400
 
             # System or developer error
             toast_error = render_template("components/toast/___toast_error.html", message="System under maintenance")
@@ -94,7 +95,6 @@ def signup():
             # Validate
             user_email = x.validate_user_email()
             user_password = x.validate_user_password()
-            user_username = x.validate_user_username()
             user_first_name = x.validate_user_first_name()
 
             user_pk = uuid.uuid4().hex
@@ -106,9 +106,9 @@ def signup():
             user_hashed_password = generate_password_hash(user_password)
 
             # Connect to the database
-            q = "INSERT INTO users VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            q = "INSERT INTO users VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
             db, cursor = x.db()
-            cursor.execute(q, (user_pk, user_email, user_hashed_password, user_username, 
+            cursor.execute(q, (user_pk, user_email, user_hashed_password, 
             user_first_name, user_last_name, user_avatar_path, user_verification_key, user_verified_at))
             db.commit()
 
@@ -120,17 +120,18 @@ def signup():
             return f"""<mixhtml mix-redirect="{ url_for('login') }"></mixhtml>""", 400
         except Exception as ex:
             ic(ex)
+            # # User errors
+            # if ex.args[1] == 400:
+            #     toast_error = render_template("components/toast/___toast_error.html", message=ex.args[0])
+            #     return f"""<mixhtml mix-update="#toast">{ toast_error }</mixhtml>""", 400
             # User errors
             if ex.args[1] == 400:
-                toast_error = render_template("components/toast/___toast_error.html", message=ex.args[0])
-                return f"""<mixhtml mix-update="#toast">{ toast_error }</mixhtml>""", 400
+                label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
+                return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 400
             
             # Database errors
             if "Duplicate entry" and user_email in str(ex): 
                 toast_error = render_template("components/toast/___toast_error.html", message="Email already registered")
-                return f"""<mixhtml mix-update="#toast">{ toast_error }</mixhtml>""", 400
-            if "Duplicate entry" and user_username in str(ex): 
-                toast_error = render_template("components/toast/___toast_error.html", message="Username already registered")
                 return f"""<mixhtml mix-update="#toast">{ toast_error }</mixhtml>""", 400
             
             # System or developer error 

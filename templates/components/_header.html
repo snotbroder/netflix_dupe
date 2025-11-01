@@ -21,7 +21,8 @@
             <div>
                 <div class="header-logo-container">
                     <a href="{{ url_for('browse') }}"><img class="w-full"
-                            src="{{ url_for('static', filename='images/Logonetflix.png') }}" alt="Netflix logo"></a>
+                            src="{{ url_for('static', filename='images/Logonetflix.png') }}" alt="Netflix logo"
+                            width="90"></a>
                 </div>
                 {% if user %}
                 <ul class="header-menu">
@@ -54,6 +55,7 @@
                     <span class="header-caret-icon"><i class="fa-solid fa-caret-down icon"></i></span>
                     <div class="header-profile-dropdown">
                         <div class="header-profile-dropdown-hoverfield"></div>
+                        <p class="header-user-name">Hello {{ user.user_first_name }}</span></p>
                         <ul class="header-profile-dropdown-content">
                             <li>
                                 <a class="header-profile-dropdown-item" href="">
@@ -94,4 +96,4 @@
     </header>
 
     <div id="toast"></div>
-    <main class="min-h-800px">
+    <main class="min-h-75vh">

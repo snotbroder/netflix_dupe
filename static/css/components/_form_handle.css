@@ -1,0 +1,23 @@
+.form-handle{
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    .form-handle-item{
+        display: flex;
+        flex-direction: column;
+        gap: .25rem;
+        min-width: 250px;
+        label{
+            font-family: var(--font_regular);
+        }
+        input{
+            height: 3rem;
+            padding: 1rem;
+            border-radius: .25rem;
+            background-color: var(--color_input);
+            border: solid var(--color_input_border) 1px;
+            color: var(--color_secondary);
+        }
+    }
+    
+}
