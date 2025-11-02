@@ -57,9 +57,7 @@ def login():
             db, cursor = x.db()
             cursor.execute(q, (user_email,))
             user = cursor.fetchone()
-
-            if not user: 
-                raise Exception("User not found, please check for spelling", 400)
+            if not user: raise Exception("User not found", 400)
 
             if not check_password_hash(user["user_password"], user_password):
                 raise Exception("Invalid credentials", 400)
@@ -68,23 +66,22 @@ def login():
                 raise Exception("User not verified. Please check your email", 400)
 
             user.pop("user_password")
+
             session["user"] = user
-        
             return f"""<browser mix-redirect="/browse"></browser>"""
 
         except Exception as ex:
             ic(ex)
-            
+
             # User errors
             if ex.args[1] == 400:
-                label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
-                ic("An error occured in Email")
-                return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 400
-            
+                toast_error = render_template("___toast_error.html", message=ex.args[0])
+                return f"""<browser mix-update="#toast">{ toast_error }</browser>""", 400
+
             # System or developer error
-            toast_error = render_template("components/toast/___toast_error.html", message="System under maintenance")
+            toast_error = render_template("___toast_error.html", message="System under maintenance")
             return f"""<browser mix-bottom="#toast">{ toast_error }</browser>""", 500
-    
+
         finally:
             if "cursor" in locals(): cursor.close()
             if "db" in locals(): db.close()
