@@ -47,6 +47,9 @@
     --gradient_hero: linear-gradient(77deg, rgba(0, 0, 0, .6), transparent 85%);
     --gradient_header: linear-gradient(180deg, rgba(0, 0, 0, .7) 10%, transparent);
     --gradient_body: linear-gradient(180deg, #491819 0%, #040202 100%);
+    --gradient_arch: linear-gradient(to right,rgba(33, 13, 22, 1) 16%,rgba(184, 40, 105, 1),rgba(229, 9, 20, 1),rgba(184, 40, 105, 1),rgba(33, 13, 22, 1) 84%);
+    --gradient_arch_bg: radial-gradient(50% 500% at 50% -420%, rgba(64, 97, 231, 0.4) 80%, rgba(0, 0, 0, 0.1) 100%), black;
+
 
     --font_regular: 'Netflix-Sans', 'Helvetica Neue', 'sans-serif';
     --font_bold: 'Netflix-Sans-bold', 'Helvetica Neue', 'sans-serif';

@@ -63,6 +63,7 @@ main{
 
 .button-primary{
     background-color: var(--color_primary);
+    height: fit-content;
     color: var(--color_secondary);
     padding: .40rem 1.15rem;
     border-radius: .25rem;
@@ -77,6 +78,8 @@ main{
 .button-secondary{
     background-color: transparent;
     box-sizing: border-box;
+    height: fit-content;
+    width: fit-content;
     border: solid var(--color_secondary) 2px;
     color: var(--color_secondary);
     padding: .25rem 1.15rem;
@@ -112,4 +115,33 @@ main{
 .button-primary.disabled{
     opacity: .5;
     cursor: not-allowed;
+}
+
+
+/* Start page */
+.start-page{
+    display: grid;
+    
+    .start-img-container .img-container{
+        /* Don't look at this mess.... */
+        margin-top: -75px;
+        margin-inline: -4.4%;
+        width: 108.75%;   
+        height: 37rem;
+        img{
+            height: 100%;
+        }
+    }
+    .start-img-container, .start-content-container{
+        grid-area: 1/1;
+        text-align: center;
+    }
+}
+
+.start-arch-container{
+    background: var(--gradient_arch_bg);
+    height: 5rem;
+    .start-arch{
+        background: var(--gradient_arch);
+    }
 }

@@ -35,7 +35,7 @@ def _____USER_____(): pass
 @app.get("/")
 def view_index():
     
-    return render_template("index.html")
+    return render_template("index.html", x=x)
 
 
 ##############################
@@ -57,7 +57,8 @@ def login():
             db, cursor = x.db()
             cursor.execute(q, (user_email,))
             user = cursor.fetchone()
-            if not user: raise Exception("User not found, please check for spelling", 400)
+            if not user: 
+                raise Exception("User not found, please check for spelling", 400)
 
             if not check_password_hash(user["user_password"], user_password):
                 raise Exception("Invalid credentials", 400)
