@@ -72,7 +72,8 @@ main{
     font-size: 1.25rem;
     cursor: pointer;
     &:hover{
-        text-decoration: underline;
+        background-color: var(--color_primary50);
+        color: var(--color_tertiary50);
     }
 }
 .button-secondary{

@@ -58,12 +58,6 @@ def login():
             cursor.execute(q, (user_email,))
             user = cursor.fetchone()
 
-            ic(user_email)
-            ic(type(user_email))
-            ic(cursor.statement)
-            ic(user)
-
-
             if not user: 
                 raise Exception("User not found, please check for spelling", 400)
 
@@ -74,7 +68,6 @@ def login():
                 raise Exception("User not verified. Please check your email", 400)
 
             user.pop("user_password")
-
             session["user"] = user
         
             return f"""<browser mix-redirect="/browse"></browser>"""
