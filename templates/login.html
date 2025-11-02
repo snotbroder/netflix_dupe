@@ -10,13 +10,11 @@
     <form action="/login" mix-post class="form-handle" autocomplete="off">
         <div class="form-handle-item">
             <label for="user_email">E-mail</label>
-            <input name="user_email" type="text" placeholder="e.g. email@domail.net" mix-check="{{ x.REGEX_EMAIL }}"
-                required>
+            <input name="user_email" type="text" placeholder="e.g. email@domail.net" mix-check="{{ x.REGEX_EMAIL }}">
         </div>
         <div class="form-handle-item">
             <label for="user_password">Password</label>
-            <input name="user_password" type="password" placeholder="password" mix-check="{{ x.REGEX_USER_PASSWORD }}"
-                required>
+            <input name="user_password" type="password" placeholder="password" mix-check="{{ x.REGEX_USER_PASSWORD }}">
         </div>
         <button class="button-primary h-3rem mt-1rem" mix-default="Login" mix-await="Logging in ...">
             Log in

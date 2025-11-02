@@ -57,6 +57,13 @@ def login():
             db, cursor = x.db()
             cursor.execute(q, (user_email,))
             user = cursor.fetchone()
+
+            ic(user_email)
+            ic(type(user_email))
+            ic(cursor.statement)
+            ic(user)
+
+
             if not user: 
                 raise Exception("User not found, please check for spelling", 400)
 
@@ -74,16 +81,17 @@ def login():
 
         except Exception as ex:
             ic(ex)
-
+            
             # User errors
             if ex.args[1] == 400:
                 label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
+                ic("An error occured in Email")
                 return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 400
-
+            
             # System or developer error
             toast_error = render_template("components/toast/___toast_error.html", message="System under maintenance")
             return f"""<browser mix-bottom="#toast">{ toast_error }</browser>""", 500
-
+    
         finally:
             if "cursor" in locals(): cursor.close()
             if "db" in locals(): db.close()
