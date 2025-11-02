@@ -41,12 +41,12 @@ main{
     h2{
         color: var(--color_secondary);
         font-family: var(--font_semibold);
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         letter-spacing: .5px;
     }
     h3{
         color: var(--color_secondary);
-        font-family: var(--font_regular);
+        font-family: var(--font_semibold);
         font-size: 1rem;
         letter-spacing: .5px;
     }

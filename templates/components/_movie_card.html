@@ -1,9 +1,9 @@
 <article class="card-container">
-    <div class="img-container w-250px">
+    <div class="img-container w-100%">
         <img src="https://image.tmdb.org/t/p/w500{{movie.backdrop_path}}" alt="">
     </div>
     <div class="card-content">
-        <h2>{{ movie.title }}</h2>
+        <h3>{{ movie.title }}</h3>
         <p>Genres: {{ movie.genres | join(", ") }}</p>
     </div>
 </article>

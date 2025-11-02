@@ -7,14 +7,23 @@
         alt="Trailer">
     <div class="hero-vignette vignette-layer"></div>
 </section>
-
-<section class="content-carrousel-container">
-    <h2>Popular right now</h2>
-    <div class="content-carrousel">
-        {% for movie in movies_popular %}
-        {% include "components/_movie_card.html" %}
-        {% endfor %}
-    </div>
+<section class="content-wrapper">
+    <section class="content-carrousel-container">
+        <h2>Popular right now</h2>
+        <div class="content-carrousel">
+            {% for movie in movies_popular %}
+            {% include "components/_movie_card.html" %}
+            {% endfor %}
+        </div>
+    </section>
+    <section class="content-carrousel-container">
+        <h2>Popular right now</h2>
+        <div class="content-carrousel">
+            {% for movie in movies_popular %}
+            {% include "components/_movie_card.html" %}
+            {% endfor %}
+        </div>
+    </section>
 </section>
 <div class="h-32rem"></div>
 
