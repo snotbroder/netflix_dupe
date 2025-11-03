@@ -134,13 +134,24 @@ main{
 
 
 /* Start page */
-.start-arch-container{
-    background: var(--gradient_arch_bg);
-    height: 5rem;
-    .start-arch{
-        background: var(--gradient_arch);
-    }
+.start-trending {
+  position: relative;
+  background: var(--gradient_arch_bg);
+  padding-top: 3rem;
+  padding-bottom: 1rem;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: var(--gradient_arch);
+    z-index: 20;
+    width: 100%;
+    height: 1rem;
+  }
 }
+
 
 .start-info-cards-container .start-info-card{
     background: var(--gradient_info_card);
