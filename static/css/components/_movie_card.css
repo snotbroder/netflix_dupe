@@ -1,14 +1,20 @@
+/* Parent style */
 .content-wrapper{
     overflow-x: hidden;
     margin-right: -4%;
-    padding-bottom: 6rem;
+    margin-top: -4rem;
 }
 
 .content-carrousel-container{
     overflow-x: visible;
     position: relative;
     padding: .75rem 0;
-    
+    &:not(:first-of-type, :last-of-type){
+        margin-block: 2rem;
+    }
+    &:last-of-type{
+        padding-bottom: 10rem;
+    }
 }
 .content-carrousel{
     display: flex;

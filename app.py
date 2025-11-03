@@ -200,31 +200,43 @@ def view_browse():
         if not user: return redirect(url_for("view_index"))
         db, cursor = x.db()
 
-        ### MovieDB fetching
-        url_movies_popular = f"https://api.themoviedb.org/3/movie/popular?api_key={TMDB_API_KEY}&language=en-US&page=1"
         headers = {"Authorization": f"Bearer {TMDB_API_KEY}"}
+
+        ### POPULAR
+        url_movies_popular = f"https://api.themoviedb.org/3/movie/popular?language=en-US&page=1"
         response = requests.get(url_movies_popular, headers=headers)
         data = response.json()
+        # [:9] means how many will be stored in the variable
+        movies_popular = data.get("results", [])[:9]
 
-        movies_popular = data.get("results", [])
+        ### COMEDY
+        url_movies_comedy = f"https://api.themoviedb.org/3/discover/movie?language=en-US&sort_by=popularity.desc&with_genres=35&page=2"
+        response_comedy = requests.get(url_movies_comedy, headers=headers)
+        data_comedy = response_comedy.json()
+        movies_comedy = data_comedy.get("results", [])[:9]
 
-        # How many of the fetched movies will return to the web ui
-        movies_popular = movies_popular[:9]
-
-        ### Genre fetching
-        url_movies_genres = f"https://api.themoviedb.org/3/genre/movie/list?api_key={TMDB_API_KEY}&language=en-US&page=1"
-        headers = {"Authorization": f"Bearer {TMDB_API_KEY}"}
-        response = requests.get(url_movies_genres, headers=headers)
-        genres_data = response.json()
+        ### ROMANCE
+        url_movies_romance = f"https://api.themoviedb.org/3/discover/movie?language=en-US&sort_by=popularity.desc&with_genres=10749&page=1"
+        response_romance = requests.get(url_movies_romance, headers=headers)
+        data_romance = response_romance.json()
+        movies_romance = data_romance.get("results", [])[:9]
 
         # ChatGPT helped
+        ### Fetch all genres for name mapping
+        url_movies_genres = "https://api.themoviedb.org/3/genre/movie/list?language=en-US"
+        response_genres = requests.get(url_movies_genres, headers=headers)
+        genres_data = response_genres.json()
         genre_mapping = {g["id"]: g["name"] for g in genres_data["genres"]}
-        for movie_popular in movies_popular:
-            movie_popular["genres"] = [genre_mapping.get(gid, "Unknown") for gid in movie_popular.get("genre_ids", [])]
 
+        # Attach genre names to movie categories
+        for movie_list in [movies_popular, movies_comedy, movies_romance]:
+            for movie in movie_list:
+                movie["genres"] = [
+                    genre_mapping.get(gid, "Unknown")
+                    for gid in movie.get("genre_ids", [])
+                ]
 
-
-        return render_template("browse.html", user=user, movies_popular=movies_popular)
+        return render_template("browse.html", user=user, movies_popular=movies_popular, movies_comedy=movies_comedy, movies_romance=movies_romance)
     except Exception as ex:
         ic(ex)
         return f"error {ex}"

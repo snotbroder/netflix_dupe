@@ -91,7 +91,9 @@
                     </div>
                 </li>
                 {% else %}
+                {% if request.endpoint != 'login' %}
                 <a class="button-primary ml-auto text-1rem" href="{{ url_for('login') }}">Log in</a>
+                {% endif %}
                 {% endif %}
             </ul>
         </nav>
