@@ -134,29 +134,14 @@ main{
 
 
 /* Start page */
-/* .start-page{
-    display: grid;
-    
-    .start-img-container .img-container{ */
-        /* Don't look at this mess.... */
-        /* margin-top: -75px;
-        margin-inline: -4.4%;
-        width: 108.75%;   
-        height: 37rem;
-        img{
-            height: 100%;
-        }
-    }
-    .start-img-container, .start-content-container{
-        grid-area: 1/1;
-        text-align: center;
-    }
-} */
-
 .start-arch-container{
     background: var(--gradient_arch_bg);
     height: 5rem;
     .start-arch{
         background: var(--gradient_arch);
     }
+}
+
+.start-info-cards-container .start-info-card{
+    background: var(--gradient_info_card);
 }

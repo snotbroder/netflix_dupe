@@ -1,13 +1,12 @@
 {% include "components/_header.html" %}
-<div class="start-img-container p-absolute w-100% top-0 left-0 z--10">
-    <div class="img-container w-100% h-37rem">
+<div class="start-img-container p-absolute w-100% h-37rem top-0 left-0 z--10">
+    <div class="img-container w-100% h-100%">
         <div class="start-img-overlay"></div>
         <img class="img" src="{{ url_for('static', filename='images/start_page_bg_img.jpg')}}" alt="Netflix app icon">
+        <div class="mt--10% h-100% bg-c-black"></div>
     </div>
 </div>
-<section class="start-page">
-
-
+<section class="start-page mb-7rem">
     <div class="start-content-container max-w-480px mx-auto mt-5% text-a-center">
         <h1 class="text-3rem text-lh-14">Unlimited films, series and more</h1>
         <p class="mt-1rem text-a-center" lg="text-1.2rem">Starts at 89 kr.. Cancel at any
@@ -22,7 +21,8 @@
                     <input name="user_email" id="user_email" type="text" placeholder="e.g. email@domail.net"
                         mix-check="{{ x.REGEX_EMAIL }}" required>
                 </div>
-                <a class="button-primary h-3rem w-100%" md="a-self-end w-60%" href="{{ url_for('signup') }}">Get
+                <a class="button-primary h-3rem w-100%" md="a-self-end w-40%" lg="w-70%"
+                    href="{{ url_for('signup') }}">Get
                     started
                     <i class="fa-solid fa-chevron-right fa-lg "></i>
                 </a>
@@ -30,8 +30,19 @@
         </section>
     </div>
 </section>
-<section class="start-arch-container">
+<!-- <section class="start-arch-container">
     <div class="start-arch"></div>
+</section> -->
+<section class="start-info-cards-container bg-c-var(--color_main_bg) px-4% py-2rem mx--4.2%">
+    <header>
+        <h2>More reasons to join</h2>
+    </header>
+    <div class="d-grid gap-1rem" lg="cols-2">
+        {% include "/components/_info_card.html" %}
+        {% include "/components/_info_card.html" %}
+        {% include "/components/_info_card.html" %}
+        {% include "/components/_info_card.html" %}
+    </div>
 </section>
 
 {% include "components/_footer.html" %}
