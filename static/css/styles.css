@@ -156,6 +156,20 @@ main{
 .start-info-cards-container .start-info-card{
     background: var(--gradient_info_card);
 }
+.fade-overlay{
+    position: relative;
+    &::after{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: var(--gradient_fade_right);
+        z-index: 10;
+        width: 100%;
+        height: 100%;
+
+    }
+}
 .start-trending-card{
     position: relative;
     background-image: url("../images/trending_the_asset.jpg");
@@ -163,6 +177,9 @@ main{
     background-size: cover;
     border-radius: .5rem;
     aspect-ratio: 5/7;
+    &:first-of-type{
+        margin-left: 1rem;
+    }
     span{
         color: var(--color_main_bg);
         position: absolute;

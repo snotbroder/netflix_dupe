@@ -22,19 +22,7 @@
                 outline: var(--color_system_error) solid 2px;
             }
             &[type="file"]{
-                background-color: transparent;
-                box-sizing: border-box;
-                height: fit-content;
-                width: fit-content;
-                border: solid var(--color_secondary) 2px;
-                color: var(--color_secondary);
-                padding: .25rem 1.15rem;
-                border-radius: .25rem;
-                font-family: var(--font_semibold);
-                letter-spacing: .5px;
-                font-size: 1.25rem;
-                cursor: pointer;
-                place-content: center;
+                max-width: 50%;
             }
         }
         & label:has(+ input[required])::after {

@@ -34,13 +34,15 @@
     <header>
         <h2>Trending Now</h2>
     </header>
-    <div class="start-trending-cards-wrapper d-flex overflow-visible gap-1.5rem h-10rem" md="h-15rem gap-2.5rem"
+
+    <div class="start-trending-cards-wrapper fade-overlay d-flex gap-1.5rem h-10rem" md="h-15rem gap-2.5rem"
         lg="h-20rem">
+
         {% for i in range(1, 11) %}
         {% include "/components/_trending_card.html" %}
         {% endfor %}
-
     </div>
+
 </section>
 <section class="start-info-cards-container bg-c-var(--color_main_bg) px-4% py-2rem mx--4.2%">
     <header>

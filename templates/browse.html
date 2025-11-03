@@ -7,30 +7,41 @@
         alt="Trailer">
     <div class="hero-vignette vignette-layer"></div>
 </section>
-<section class="content-wrapper">
-    <section class="content-carrousel-container">
-        <h2>Popular Right Now</h2>
-        <div class="content-carrousel">
-            {% for movie in movies_popular %}
-            {% include "components/_movie_card.html" %}
-            {% endfor %}
-        </div>
-    </section>
-    <section class="content-carrousel-container">
-        <h2>Hilarious Comedy</h2>
-        <div class="content-carrousel">
-            {% for movie in movies_comedy %}
-            {% include "components/_movie_card.html" %}
-            {% endfor %}
-        </div>
-    </section>
-    <section class="content-carrousel-container">
-        <h2>Heart Warming Romance</h2>
-        <div class="content-carrousel">
-            {% for movie in movies_romance %}
-            {% include "components/_movie_card.html" %}
-            {% endfor %}
-        </div>
+<div class=""></div>
+<section class="p-relative top--10rem z-200">
+    <section class="content-wrapper">
+        <section class="content-carrousel-container">
+            <h2>Popular Right Now</h2>
+            <div class="content-carrousel ">
+                {% for movie in movies_popular %}
+                {% include "components/_movie_card.html" %}
+                {% endfor %}
+            </div>
+        </section>
+        <section class="content-wrapper mt-2rem">
+            <h2>Top 10 Series In Denmark Today</h2>
+            <div class="content-carrousel gap-2rem ">
+                {% for i in range(1, 9) %}
+                {% include "/components/_trending_card.html" %}
+                {% endfor %}
+            </div>
+        </section>
+        <section class="content-carrousel-container">
+            <h2>Hilarious Comedy</h2>
+            <div class="content-carrousel ">
+                {% for movie in movies_comedy %}
+                {% include "components/_movie_card.html" %}
+                {% endfor %}
+            </div>
+        </section>
+        <section class="content-carrousel-container">
+            <h2>Heart Warming Romance</h2>
+            <div class="content-carrousel">
+                {% for movie in movies_romance %}
+                {% include "components/_movie_card.html" %}
+                {% endfor %}
+            </div>
+        </section>
     </section>
 </section>
 
