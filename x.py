@@ -124,6 +124,12 @@ def validate_post(post = ""):
     if not re.match(REGEX_POST, post): raise Exception("x-error post", 400)
     return post
 
+##############################
+IMAGE_FILE_ALLOWED = "image/jpg, image/png, image/jpeg"
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+def validate_avatar_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 ##############################
 def send_email(to_email, subject, template):

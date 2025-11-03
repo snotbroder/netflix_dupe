@@ -1,0 +1,46 @@
+{% include "components/_header.html" %}
+<section class="max-w-580px ma-auto">
+    <header class="mb-2rem">
+        <h1 class="text-t-capitalize">Hello {{ user.user_first_name }}</h1>
+        <h2>Change account details</h2>
+    </header>
+    <div id="error_container"></div>
+    <form class="form-handle" action="{{ url_for('api_update_account') }}" mix-post autocomplete="off"
+        enctype="multipart/form-data">
+        <div class="form-handle-item">
+            <label for="user_first_name">
+                User first name <span class="text-c-var(--color_tertiary)">-
+                    {{ x.USER_FIRST_NAME_MIN }} to {{ x.USER_FIRST_NAME_MAX }} characters</span>
+            </label>
+            <input name="user_first_name" id="user_first_name" type="text" mix-check="{{ x.REGEX_USER_FIRST_NAME }}"
+                value="{{ user.user_first_name }}">
+        </div>
+        <div class="form-handle-item">
+            <label for="user_email">
+                Email
+            </label>
+            <input name="user_email" id="user_email" type="text" mix-check="{{ x.REGEX_EMAIL }}"
+                value="{{ user.user_email }}">
+        </div>
+        <div class="form-handle-item form-image-upload">
+            <div>
+                <label for="user_avatar_file_upload">Choose a profile picture
+                    <span class="text-c-var(--color_tertiary)">- {{ x.IMAGE_FILE_ALLOWED }}</span>
+                </label>
+
+                <input type="file" id="file" name="user_avatar_file_upload" accept="{{ x.IMAGE_FILE_ALLOWED }}" />
+
+            </div>
+            <div class="img-container">
+                <h3>Current profile picture</h3>
+                <img src="{{ url_for('static', filename='' ~ (user.user_avatar_path if user.user_avatar_path else '/images/twitter_default.png')) }}"
+                    alt="Profile picture" class="img rounded-md">
+            </div>
+        </div>
+
+        <button class="button-primary w-100%" mix-default="Update account" mix-await="Updating account ...">
+            Update account details
+        </button>
+    </form>
+</section>
+{% include "components/_footer.html" %}

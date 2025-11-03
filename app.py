@@ -15,10 +15,13 @@ TMDB_API_KEY = os.getenv("TMDB_API_KEY")
 from icecream import ic
 ic.configureOutput(prefix=f'----- | ', includeContext=True)
 
+UPLOAD_FOLDER = 'static/images/user_uploads/avatars'
+
 app = Flask(__name__)
 
 # Set the maximum file size to 10 MB
-app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024   # 1 MB
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
@@ -109,7 +112,7 @@ def signup():
 
             user_pk = uuid.uuid4().hex
             user_last_name = ""
-            user_avatar_path = "twitter_default.png"
+            user_avatar_path = "images/twitter_default.png"
             user_verification_key = uuid.uuid4().hex
             user_verified_at = 0
 
@@ -189,9 +192,9 @@ def logout():
         pass
 
     ##############################
-@app.get("/browse")
+@app.route("/browse")
 @x.no_cache
-def browse():
+def view_browse():
     try:
         user = session.get("user", "")
         if not user: return redirect(url_for("view_index"))
@@ -229,4 +232,83 @@ def browse():
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
 
-################## API FETCHING ##################
+################## 
+@app.route("/account")
+@x.no_cache
+def view_account():
+    try:
+        user = session.get("user", "")
+        if not user: return redirect(url_for("view_index"))
+
+        q = "SELECT * FROM users WHERE user_pk = %s"
+        db, cursor = x.db()
+        cursor.execute(q, (user["user_pk"],))
+        user = cursor.fetchone()
+        
+        return render_template("account.html", x=x, user=user)
+    
+    except Exception as ex:
+        ic(ex)
+    finally:
+        pass
+
+@app.route("/api-update-account", methods=["POST"])
+def api_update_account():
+
+    try:
+
+        user = session.get("user", "")
+        if not user: return "invalid user"
+
+        # Validate
+        user_email = x.validate_user_email()
+        user_first_name = x.validate_user_first_name()
+
+        file = request.files.get('user_avatar_file_upload')
+        file_path = None
+
+        # Check if user has uploaded a file, then validate
+        if file and x.validate_avatar_file(file.filename):
+            filetype = os.path.splitext(file.filename)[1].lower()
+            filename = f"{uuid.uuid4().hex}{filetype}"
+
+            save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(save_path)
+
+            # Save the relative path (NO 'static/' prefix)
+            file_path = os.path.join('images/user_uploads/avatars', filename)
+
+        # Connect to the database
+        db, cursor = x.db()
+        if file_path:
+            q = "UPDATE users SET user_email = %s, user_first_name = %s, user_avatar_path = %s WHERE user_pk = %s"
+            cursor.execute(q, (user_email, user_first_name, file_path, user["user_pk"]))
+        else:
+            q = "UPDATE users SET user_email = %s, user_first_name = %s WHERE user_pk = %s"
+            cursor.execute(q, (user_email, user_first_name, user["user_pk"]))
+        db.commit()
+
+        # Response to the browser
+        label_ok = render_template("components/toast/___label_ok.html", message="Account details updated successfully")
+        return f"""<browser mix-update="#error_container">{label_ok}</browser>""", 200
+    
+    except Exception as ex:
+        ic(ex)
+        
+        # User errors
+        if ex.args[1] == 400:
+            label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
+            return f"""<mixhtml mix-update="#error_container">{ label_error }</mixhtml>""", 400
+        
+        # Database errors
+        if "Duplicate entry" and user_email in str(ex): 
+            label_error = render_template("components/toast/___label_error.html", message="Email already registered")
+            return f"""<mixhtml mix-update="#error_container">{ label_error }</mixhtml>""", 400
+        
+        # System or developer error
+        label_error = render_template("components/toast/___label_error.html", message="System under maintenance")
+        return f"""<mixhtml mix-bottom="#error_container">{ label_error }</mixhtml>""", 500
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()

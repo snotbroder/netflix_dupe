@@ -22,7 +22,7 @@
         <nav class="max-w-1620px mx-auto">
             <div>
                 <div class="header-logo-container">
-                    <a href="{{ url_for('browse') }}"><img class="w-full"
+                    <a href="{{ url_for('view_browse') }}"><img class="w-full"
                             src="{{ url_for('static', filename='images/Logonetflix.png') }}" alt="Netflix logo"
                             width="90"></a>
                 </div>
@@ -50,8 +50,8 @@
                     </a>
                 </li>
                 <li class="header-profile-container">
-                    <div class="header-profile-icon">
-                        <img src="{{ url_for('static', filename='images/' ~ (user.user_avatar_path if user.user_avatar_path else 'unknown.jpg')) }}"
+                    <div id="header-profile-icon" class="header-profile-icon">
+                        <img src="{{ url_for('static', filename='' ~ (user.user_avatar_path if user.user_avatar_path else '/images/twitter_default.png')) }}"
                             alt="Profile">
                     </div>
                     <span class="header-caret-icon"><i class="fa-solid fa-caret-down icon"></i></span>
@@ -59,6 +59,12 @@
                         <div class="header-profile-dropdown-hoverfield"></div>
                         <p class="header-user-name">Hello {{ user.user_first_name }}</span></p>
                         <ul class="header-profile-dropdown-content">
+                            <li>
+                                <a class="header-profile-dropdown-item" href="{{ url_for('view_account') }}">
+                                    <i class="fa-solid fa-user"></i>
+                                    <span>Account</span>
+                                </a>
+                            </li>
                             <li>
                                 <a class="header-profile-dropdown-item" href="">
                                     <i class="fa-solid fa-pencil"></i>
@@ -69,12 +75,6 @@
                                 <a class="header-profile-dropdown-item" href="">
                                     <i class="fa-solid fa-square-up-right"></i>
                                     <span>Transfer Profile</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="header-profile-dropdown-item" href="">
-                                    <i class="fa-solid fa-user"></i>
-                                    <span>Account</span>
                                 </a>
                             </li>
                             <li>
