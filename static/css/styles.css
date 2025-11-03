@@ -145,3 +145,24 @@ main{
 .start-info-cards-container .start-info-card{
     background: var(--gradient_info_card);
 }
+.start-trending-card{
+    position: relative;
+    background-image: url("../images/trending_the_asset.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: .5rem;
+    aspect-ratio: 5/7;
+    span{
+        color: var(--color_main_bg);
+        position: absolute;
+        bottom: 0px;
+        left: -10px;
+        font-size: 70px;
+        font-family: var(--font_bold);
+        &.stroke{
+            -webkit-text-stroke: .25rem var(--color_tertiary);
+            -webkit-text-fill-color: var(--color_main_bg);
+            text-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.5);   
+        }
+    }
+}

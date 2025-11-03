@@ -6,7 +6,7 @@
         <div class="mt--10% h-100% bg-c-black"></div>
     </div>
 </div>
-<section class="start-page mb-7rem">
+<section class="start-page mb-5rem">
     <div class="start-content-container max-w-480px mx-auto mt-5% text-a-center">
         <h1 class="text-3rem text-lh-14">Unlimited films, series and more</h1>
         <p class="mt-1rem text-a-center" lg="text-1.2rem">Starts at 89 kr.. Cancel at any
@@ -33,6 +33,18 @@
 <!-- <section class="start-arch-container">
     <div class="start-arch"></div>
 </section> -->
+<section class="start-trending bg-c-var(--color_main_bg) px-4% py-2rem mx--4.2%">
+    <header>
+        <h2>Trending Now</h2>
+    </header>
+    <div class="start-trending-cards-wrapper d-flex overflow-visible gap-1.5rem h-10rem" md="h-15rem gap-2.5rem"
+        lg="h-20rem">
+        {% for i in range(1, 11) %}
+        {% include "/components/_trending_card.html" %}
+        {% endfor %}
+
+    </div>
+</section>
 <section class="start-info-cards-container bg-c-var(--color_main_bg) px-4% py-2rem mx--4.2%">
     <header>
         <h2>More reasons to join</h2>
