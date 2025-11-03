@@ -46,10 +46,6 @@ REGEX_EMAIL = "^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(
 
 def validate_user_email():
     user_email = request.form.get("user_email", "").strip()
-
-    if not user_email:
-        raise Exception("Please enter your email", 400)
-    ic("Error in no email in input")
     
     if not re.match(REGEX_EMAIL, user_email): 
         raise Exception("Invalid email", 400)
