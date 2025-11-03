@@ -1,4 +1,4 @@
-// Select all cards
+// Select cards
 const cards = document.querySelectorAll('.card-container');
 
 cards.forEach(card => {
@@ -8,12 +8,12 @@ cards.forEach(card => {
 
     // Add .card-active to the hovered card
     card.classList.add('card-active');
-    console.log("added class")
+    // console.log("added class")
 });
 
+// Remove class from the active card
 card.addEventListener('mouseout', () => {
-    // Optional: remove the class when mouse leaves
     card.classList.remove('card-active');
-    console.log("removed class")
+    // console.log("removed class")
   });
 });

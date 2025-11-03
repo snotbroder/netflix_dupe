@@ -52,6 +52,9 @@ def login():
             # Validate           
             user_email = x.validate_user_email()
             user_password = x.validate_user_password()
+
+            if not user_email:
+                raise Exception("Please enter a valid email", 400)
             # Connect to the database
             q = "SELECT * FROM users WHERE user_email = %s"
             db, cursor = x.db()
