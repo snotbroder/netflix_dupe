@@ -22,7 +22,7 @@
                 outline: var(--color_system_error) solid 2px;
             }
             &[type="file"]{
-                max-width: 50%;
+                padding: .65rem;
             }
         }
         & label:has(+ input[required])::after {
