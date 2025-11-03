@@ -64,6 +64,7 @@ main{
 .button-primary{
     background-color: var(--color_primary);
     height: fit-content;
+    width: fit-content;
     color: var(--color_secondary);
     padding: .40rem 1.15rem;
     border-radius: .25rem;
@@ -71,9 +72,20 @@ main{
     letter-spacing: .5px;
     font-size: 1.25rem;
     cursor: pointer;
+    place-content: center;
     &:hover{
         background-color: var(--color_primary50);
         color: var(--color_tertiary50);
+        i{
+            transform: translateX(5px);
+            transition: transform .15s ease-in-out;
+        }
+    }
+    i{
+        font-size: 85%;
+        align-self: center;
+        transition: transform .1s ease-in;
+        
     }
 }
 .button-secondary{
@@ -88,6 +100,8 @@ main{
     font-family: var(--font_semibold);
     letter-spacing: .5px;
     font-size: 1.25rem;
+    cursor: pointer;
+    place-content: center;
     transition: border-color .1s ease-in;
     i{
         transition: transform .1s ease-in;
@@ -120,12 +134,12 @@ main{
 
 
 /* Start page */
-.start-page{
+/* .start-page{
     display: grid;
     
-    .start-img-container .img-container{
+    .start-img-container .img-container{ */
         /* Don't look at this mess.... */
-        margin-top: -75px;
+        /* margin-top: -75px;
         margin-inline: -4.4%;
         width: 108.75%;   
         height: 37rem;
@@ -137,7 +151,7 @@ main{
         grid-area: 1/1;
         text-align: center;
     }
-}
+} */
 
 .start-arch-container{
     background: var(--gradient_arch_bg);
