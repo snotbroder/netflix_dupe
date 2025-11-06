@@ -1,8 +1,10 @@
 /* Parent style */
 .content-wrapper{
     overflow-x: hidden;
-    margin-right: -4%;
+    margin-right: -4.3%;
     margin-top: -4rem;
+
+    
 }
 
 .content-carrousel-container{
@@ -15,11 +17,23 @@
     &:last-of-type{
         padding-bottom: 10rem;
     }
+    &:hover&::after{
+        content: '';
+        position: absolute;
+        top: 25%;
+        right: 0;
+        background: var(--gradient_fade_right);
+        z-index: 10;
+        width: 5%;
+        height: 70%;
+    }
+    
 }
 .content-carrousel{
     display: flex;
     gap: .5rem;
     overflow: visible;
+    
 }
 
 

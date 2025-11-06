@@ -168,7 +168,7 @@ function mixhtml(){
             if(["POST", "PUT", "PATCH"].includes(method)){
                 let errors = false
                 el.querySelectorAll("[mix-check]").forEach(el=>{
-                    el.classList.remove("mix-error")                     
+                    el.classList.remove("mix-error")           
                     const regex = el.getAttribute("mix-check")                  
                     const re = new RegExp(regex)
                     if( ! re.test(el.value) ){

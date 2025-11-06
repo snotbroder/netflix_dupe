@@ -4,7 +4,7 @@ header.header-global{
     padding: 20px 4%;
     /* background: var(--gradient_header_full); */
     display: flex;
-    z-index: 10;
+    z-index: 500;
     transition: background .4s;
 
     nav{
