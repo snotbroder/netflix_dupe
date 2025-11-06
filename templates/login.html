@@ -6,6 +6,7 @@
         <p class="mb-4 text-c-var(--color_tertiary50)">Or get started with a new account.</p>
     </div>
     <div id="error_container">
+        <span id="error_container_item">Hello</span>
         <!-- {% include "components/toast/___label_error.html" with context%} -->
     </div>
 
@@ -20,8 +21,7 @@
             <input name="user_password" type="password" placeholder="password" mix-check="{{ x.REGEX_USER_PASSWORD }}"
                 required>
         </div>
-        <button type="submit" class="button-primary h-3rem mt-1rem w-100%" mix-default="Login"
-            mix-await="Logging in ...">
+        <button class="button-primary h-3rem mt-1rem w-100%" mix-default="Login" mix-await="Logging in ...">
             Log in
         </button>
     </form>

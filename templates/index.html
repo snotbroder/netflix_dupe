@@ -14,18 +14,17 @@
         </p>
         <p class="mt-1rem text-a-center">Ready to watch? Enter your email to create or restart your membership.</p>
         <section>
-            <form class="form-handle d-flex flex-column" md="flex-row" action="{{ url_for('signup') }}"
+            <form class="form-handle d-flex flex-column" md="flex-row" method="post" action="/index-pass-email"
                 autocomplete="off">
                 <div class="form-handle-item" md="w-70%" lg="w-60%">
                     <label class="p-self-start text-.85rem pl-.125rem" for="user_email">Email</label>
                     <input name="user_email" id="user_email" type="text" placeholder="e.g. email@domail.net"
-                        mix-check="{{ x.REGEX_EMAIL }}" required>
+                        mix-check="{{ x.REGEX_EMAIL }}">
                 </div>
-                <a class="button-primary h-3rem w-100%" md="a-self-end w-40%" lg="w-70%"
-                    href="{{ url_for('signup') }}">Get
-                    started
+                <button class="button-primary h-3rem w-100%" md="a-self-end w-40%" lg="w-70%">
+                    Get started
                     <i class="fa-solid fa-chevron-right fa-lg "></i>
-                </a>
+                </button>
             </form>
         </section>
     </div>

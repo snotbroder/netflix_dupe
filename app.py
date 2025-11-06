@@ -95,13 +95,25 @@ def login():
             if "cursor" in locals(): cursor.close()
             if "db" in locals(): db.close()
 
+##############################
+@app.post("/index-pass-email")
+def index_signup():
+        try:
+            email = request.form.get("user_email")
+            
+            return redirect( url_for('signup', email=email))
+        except Exception as ex:
+            ic(ex)
+        finally:
+            pass
 
 ##############################
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
 
     if request.method == "GET":
-        return render_template("signup.html", x=x)
+        user_email = request.args.get("email", "")
+        return render_template("signup.html", x=x, user_email=user_email)
 
     if request.method == "POST":
         try:
