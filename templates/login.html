@@ -6,20 +6,20 @@
         <p class="mb-4 text-c-var(--color_tertiary50)">Or get started with a new account.</p>
     </div>
     <div id="error_container">
-        <span id="error_container_item">Hello</span>
+        <!-- <span id="error_container_item"></span> -->
         <!-- {% include "components/toast/___label_error.html" with context%} -->
     </div>
 
     <form action="/login" mix-post class="form-handle" autocomplete="off">
         <div class="form-handle-item">
             <label for="user_email">E-mail</label>
-            <input name="user_email" type="text" placeholder="e.g. email@domail.net" mix-check="{{ x.REGEX_EMAIL }}"
-                required>
+            <input class="required" name="user_email" type="text" placeholder="e.g. email@domail.net"
+                mix-check="{{ x.REGEX_EMAIL }}">
         </div>
         <div class="form-handle-item">
             <label for="user_password">Password</label>
-            <input name="user_password" type="password" placeholder="password" mix-check="{{ x.REGEX_USER_PASSWORD }}"
-                required>
+            <input class="required" name="user_password" type="password" placeholder="password"
+                mix-check="{{ x.REGEX_USER_PASSWORD }}">
         </div>
         <button class="button-primary h-3rem mt-1rem w-100%" mix-default="Login" mix-await="Logging in ...">
             Log in

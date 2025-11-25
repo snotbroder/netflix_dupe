@@ -156,12 +156,12 @@ def signup():
             
             # Database errors
             if "Duplicate entry" and user_email in str(ex): 
-                toast_error = render_template("components/toast/___toast_error.html", message="Email already registered")
-                return f"""<mixhtml mix-update="#toast">{ toast_error }</mixhtml>""", 400
+                label_error = render_template("components/toast/___label_error.html", message="Email already registered")
+                return f"""<mixhtml mix-update="#error_container">{ label_error }</mixhtml>""", 400
             
             # System or developer error 
-            toast_error = render_template("components/toast/___toast_error.html", message="System under maintenance")
-            return f"""<mixhtml mix-bottom="#toast">{ toast_error }</mixhtml>""", 500
+            label_error = render_template("components/toast/___label_error.html", message="System under maintenance")
+            return f"""<mixhtml mix-bottom="#error_container">{ label_error }</mixhtml>""", 500
 
         finally:
             if "cursor" in locals(): cursor.close()

@@ -11,20 +11,20 @@
     <form class="form-handle" action="{{ url_for('signup') }}" mix-post autocomplete="off">
         <div class="form-handle-item">
             <label for="user_first_name">First name</label>
-            <input name="user_first_name" id="user_first_name" type="text"
+            <input class="required" name="user_first_name" id="user_first_name" type="text"
                 placeholder="{{ x.USER_FIRST_NAME_MIN }} to {{ x.USER_FIRST_NAME_MAX }} characters"
-                mix-check="{{ x.REGEX_USER_USERNAME }}" required>
+                mix-check="{{ x.REGEX_USER_USERNAME }}">
         </div>
         <div class="form-handle-item">
             <label for="user_email">Email</label>
-            <input name="user_email" id="user_email" type="text" placeholder="e.g. email@domail.net"
-                mix-check="{{ x.REGEX_EMAIL }}" value="{{ user_email }}" required>
+            <input class="required" name="user_email" id="user_email" type="text" placeholder="e.g. email@domail.net"
+                mix-check="{{ x.REGEX_EMAIL }}" value="{{ user_email }}">
         </div>
         <div class="form-handle-item">
             <label for="password">Password</label>
-            <input name="user_password" id="password" type="password"
+            <input class="required " name="user_password" id="password" type="password"
                 placeholder="{{ x.USER_PASSWORD_MIN }} to {{ x.USER_PASSWORD_MAX }} characters"
-                mix-check="{{ x.REGEX_USER_PASSWORD }}" required>
+                mix-check="{{ x.REGEX_USER_PASSWORD }}">
         </div>
 
         <button class="button-primary h-3rem mt-1rem w-100%" mix-default="Sign up" mix-await="Signing up...">

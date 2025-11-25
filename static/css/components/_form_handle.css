@@ -18,14 +18,14 @@
             background-color: var(--color_input);
             border: solid var(--color_input_border) 1px;
             color: var(--color_secondary);
-            &:user-invalid{
+            /* &:user-invalid{
                 outline: var(--color_system_error) solid 2px;
-            }
+            } */
             &[type="file"]{
                 padding: .65rem;
             }
         }
-        & label:has(+ input[required])::after {
+        & label:has(+ input.required)::after {
             content: " *";
             color: var(--color_primary);
             margin-left: 0.25rem;
@@ -42,6 +42,17 @@
             }
         }
     }
+}
+
+/* System feedback */
+.form-handle-item input.mix-error{
+        /* background-color: var(--color_system_error); */
+        border-color: var(--color_system_error);
+}
+.form-handle-item:has(.mix-error)::after {
+    animation: fade_in_kf .2s both ease;
+    content: "Please check the requirements";
+    color: var(--color_primary);
 }
 
 /* Styling for system feedback component */
