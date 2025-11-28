@@ -276,6 +276,7 @@ def view_account():
     finally:
         pass
 
+################## 
 @app.route("/api-update-account", methods=["POST"])
 def api_update_account():
 
@@ -336,3 +337,73 @@ def api_update_account():
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
+
+################## 
+@app.route("/admin")
+def view_admin():
+    try:
+        user = session.get("admin_session", "")
+        if not user: 
+            return redirect(url_for("view_admin_login"))
+        # Connect to the database
+        db, cursor = x.db()
+        q = "SELECT * FROM users LIMIT 5"
+        cursor.execute(q)
+        users = cursor.fetchall()
+        
+
+        return render_template("admin.html", x=x, users=users)
+
+    except Exception as ex:
+        ic(ex)
+        return "An error occured", 500
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+################## 
+@app.route("/admin-login", methods=["GET", "POST"])
+@x.no_cache
+def view_admin_login():
+
+    if request.method == "GET":
+        if session.get("admin_session", ""): return render_template("admin.html")
+        return render_template("adminlogin.html", x=x)
+
+    if request.method == "POST":
+        try:
+            # Validate           
+            user_email = x.validate_user_email()
+            user_password = x.validate_user_password()
+            
+            # HArdcoded for demonstration purposes 
+            admin_email = "admin@email.com"
+            admin_password = "password"
+
+            if not user_email:
+                raise Exception("Please enter a valid email", 400)
+
+            if user_email != admin_email or user_password != admin_password:
+                raise Exception ("Invalid credentials", 400)
+            
+            session["admin_session"] = True
+
+            return f"""<browser mix-redirect="/admin"></browser>"""
+
+        except Exception as ex:
+            ic(ex)
+            
+            # User errors
+            if ex.args[1] == 400:
+                label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
+                ic("An error occured in Email")
+                return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 400
+            
+            # System or developer error
+            toast_error = render_template("components/toast/___toast_error.html", message="System under maintenance")
+            return f"""<browser mix-bottom="#toast">{ toast_error }</browser>""", 500
+    
+        finally:
+            pass
+
+        

@@ -1,0 +1,9 @@
+{% include "components/_header.html" %}
+<header>
+    <h1>Admin configurations</h1>
+</header>
+<a href="{{ url_for('logout') }}">Sign out as Admin</a>
+{% for user in users %}
+{% include "components/_admin_account_card.html" %}
+{% endfor %}
+{% include "components/_footer.html" %}

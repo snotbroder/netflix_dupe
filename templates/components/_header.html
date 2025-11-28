@@ -26,7 +26,7 @@
                             src="{{ url_for('static', filename='images/Logonetflix.png') }}" alt="Netflix logo"
                             width="90"></a>
                 </div>
-                {% if user %}
+                {% if user or admin_session %}
                 <ul class="header-menu">
                     <li><a class="selected" href="#">Home</a></li>
                     <li><a href="#">Series</a></li>
@@ -57,7 +57,8 @@
                     <span class="header-caret-icon"><i class="fa-solid fa-caret-down icon"></i></span>
                     <div class="header-profile-dropdown">
                         <div class="header-profile-dropdown-hoverfield"></div>
-                        <p class="header-user-name">Hello {{ user.user_first_name }}</span></p>
+                        <p class="header-user-name">Hello {{ user.user_first_name }}</span>
+                        </p>
                         <ul class="header-profile-dropdown-content">
                             <li>
                                 <a class="header-profile-dropdown-item" href="{{ url_for('view_account') }}">
