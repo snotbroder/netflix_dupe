@@ -144,7 +144,7 @@ def send_email(to_email, subject, template):
         
         # Create the email message
         message = MIMEMultipart()
-        message["From"] = "X clone"
+        message["From"] = "Dupeflix"
         message["To"] = to_email
         message["Subject"] = subject
 

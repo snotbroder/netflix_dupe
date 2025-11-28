@@ -194,3 +194,11 @@ main{
         }
     }
 }
+dialog{
+    margin: auto;
+    margin-top: 10%;
+    &::backdrop{
+        background-color: black;
+        opacity: .75;
+    }
+}

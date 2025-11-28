@@ -12,6 +12,7 @@
     <!-- <script defer src="{{ url_for('static', filename='dialog.js') }}"></script> -->
     <script defer src="{{ url_for('static', filename='js/moviecardScript.js') }}"></script>
 
+
     <title>
         Home | Netflix Dupe
     </title>
@@ -26,7 +27,7 @@
                             src="{{ url_for('static', filename='images/Logonetflix.png') }}" alt="Netflix logo"
                             width="90"></a>
                 </div>
-                {% if user or admin_session %}
+                {% if user %}
                 <ul class="header-menu">
                     <li><a class="selected" href="#">Home</a></li>
                     <li><a href="#">Series</a></li>
@@ -86,15 +87,24 @@
                             </li>
                         </ul>
                         <div class="header-profile-dropdown-signout">
-                            <span><a href="{{ url_for('logout') }}">Sign out of Dupeflix</a></span>
+                            <a class="button-primary ml-auto text-1rem" href="/logout">Log out of Dupeflix</a>
                         </div>
 
                     </div>
                 </li>
                 {% else %}
-                {% if request.endpoint != 'login' %}
+
+                {% if request.endpoint not in ['login', 'view_admin', 'view_admin_login'] %}
                 <a class="button-primary ml-auto text-1rem" href="{{ url_for('login') }}">Log in</a>
+
                 {% endif %}
+                {% if request.endpoint == 'view_admin' %}
+                <a class="button-primary ml-auto text-1rem" href="/logout">Log out as Admin</a>
+
+                {% endif %}
+
+
+
                 {% endif %}
             </ul>
         </nav>

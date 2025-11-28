@@ -145,10 +145,6 @@ def signup():
             return f"""<mixhtml mix-redirect="{ url_for('login') }"></mixhtml>""", 400
         except Exception as ex:
             ic(ex)
-            # # User errors
-            # if ex.args[1] == 400:
-            #     toast_error = render_template("components/toast/___toast_error.html", message=ex.args[0])
-            #     return f"""<mixhtml mix-update="#toast">{ toast_error }</mixhtml>""", 400
             # User errors
             if ex.args[1] == 400:
                 label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
@@ -347,12 +343,18 @@ def view_admin():
             return redirect(url_for("view_admin_login"))
         # Connect to the database
         db, cursor = x.db()
-        q = "SELECT * FROM users LIMIT 5"
+        #Active uses in database
+        q = "SELECT * FROM users WHERE user_deleted_at = '0'" #LIMIT 5
         cursor.execute(q)
-        users = cursor.fetchall()
+        active_users = cursor.fetchall()
+
+         #Active uses in database
+        q = "SELECT * FROM users WHERE user_deleted_at != '0'"
+        cursor.execute(q)
+        deleted_users = cursor.fetchall()
         
 
-        return render_template("admin.html", x=x, users=users)
+        return render_template("admin.html", x=x, active_users=active_users, deleted_users=deleted_users)
 
     except Exception as ex:
         ic(ex)
@@ -392,7 +394,6 @@ def view_admin_login():
 
         except Exception as ex:
             ic(ex)
-            
             # User errors
             if ex.args[1] == 400:
                 label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
@@ -400,10 +401,91 @@ def view_admin_login():
                 return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 400
             
             # System or developer error
-            toast_error = render_template("components/toast/___toast_error.html", message="System under maintenance")
-            return f"""<browser mix-bottom="#toast">{ toast_error }</browser>""", 500
+            label_error = render_template("components/toast/___label_error.html", message="System under maintenance")
+            return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 500
     
         finally:
             pass
 
+################## 
+@app.patch("/delete-user")
+def delete_user():
+    try:
+            user_id = request.args.get("user_id")
+            if not user_id:
+                return "User not found", 400
+
+            db, cursor = x.db()
+
+            # Fetch the users email
+            q = "SELECT user_email FROM users WHERE user_pk = %s"
+            cursor.execute(q, (user_id,))
+            result = cursor.fetchone()
+            if not result:
+                return "User not found", 404
+
+            # extract email
+            # If fetchone() returns a dict - Chatgpt helped me here
+            user_email = result['user_email'] if 'user_email' in result else result[0]
+
+            #delete user
+            user_deleted_at = int(time.time())
+            q = "UPDATE users SET user_deleted_at = %s WHERE user_pk = %s"
+            cursor.execute(q, (user_deleted_at, user_id))
+            db.commit()
+
+            # send email letting user know
+            email_user_deleted = render_template("components/email/_email_user_deleted.html")
+            x.send_email(user_email, "Dupeflix account suspended", email_user_deleted)
+
+            label_ok = render_template("components/toast/___label_ok.html", message="Successfully deleted user")
+            return f"""
+            <browser mix-update="#error_container">{ label_ok }</browser>
+            """, 200
+    except Exception as ex:
+        ic(ex)
+        return "An error occured", 500
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+################## 
+@app.patch("/reactivate-user")
+def reactivate_user():
+    try:
+        user_id = request.args.get("user_id")
+        if not user_id:
+            return "User not found", 400
         
+        db, cursor = x.db()
+        # Fetch the users email
+        q = "SELECT user_email FROM users WHERE user_pk = %s"
+        cursor.execute(q, (user_id,))
+        result = cursor.fetchone()
+        if not result:
+            return "User not found", 404
+
+        # extract email
+        # If fetchone() returns a dict - Chatgpt helped me here
+        user_email = result['user_email'] if 'user_email' in result else result[0]
+
+        #Update user to deleted in database
+        user_deleted_at = 0
+        q = "UPDATE users SET user_deleted_at = %s WHERE user_pk = %s"
+        cursor.execute(q, (user_deleted_at, user_id))
+        db.commit()
+        
+        # send email letting user know
+        email_user_reactivated = render_template("components/email/_email_user_reactivated.html")
+        x.send_email(user_email, "Dupeflix account reactivated", email_user_reactivated)
+
+        label_ok = render_template("components/toast/___label_ok.html", message="Successfully reactivated user")
+        return f"""
+        <browser mix-update="#error_container">{ label_ok }</browser>
+        """, 200
+    except Exception as ex:
+        ic(ex)
+        return "An error occured", 500
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()

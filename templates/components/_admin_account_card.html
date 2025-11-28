@@ -1,14 +1,28 @@
-<article class="d-flex gap-2">
-    <div>
-        <img src="{{ url_for('static', filename='' ~ (user.user_avatar_path if user.user_avatar_path else '/images/twitter_default.png')) }}"
-            alt="Profile">
-    </div>
+<article md="flex-row p-items-center"
+    class="d-flex j-content-between flex-col border-t-2 border-c-var(--color_tertiary) pt-.5rem">
+    <div class="d-flex gap-2 p-items-center">
+        <div class="img-container w-3rem">
+            <img class="rounded-xs"
+                src="{{ url_for('static', filename='' ~ (user.user_avatar_path if user.user_avatar_path else 'images/twitter_default.png')) }}"
+                alt="Profile">
+        </div>
 
-    <p>
-        {{ user.user_first_name }}
-    </p>
-    <p>
-        {{ user.user_email }}
-    </p>
-    <button class="">Delete user</button>
+        <p>
+            {{ user.user_first_name }}
+        </p>
+        <p>
+            {{ user.user_email }}
+        </p>
+    </div>
+    <div class="d-flex gap-2 p-self-end" md="p-self-center">
+        {% if user.user_deleted_at != 0 %}
+        <button class="button-secondary openDialog">open dialog</button>
+        <button class="button-secondary" mix-patch="/reactivate-user?user_id={{ user.user_pk }}"
+            mix-await="Reactivating user..." mix-default="Reactivate user">Reactivate
+            user</button>
+        {% else %}
+        <button class="button-primary" mix-patch="/delete-user?user_id={{ user.user_pk }}" mix-await="Deleting user..."
+            mix-default="Delete user">Delete user</button>
+        {% endif %}
+    </div>
 </article>
