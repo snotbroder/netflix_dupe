@@ -68,9 +68,9 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="header-profile-dropdown-item" href="">
-                                    <i class="fa-solid fa-pencil"></i>
-                                    <span>Manage Profiles</span>
+                                <a class="header-profile-dropdown-item" href="{{ url_for('view_mylikes') }}"">
+                                    <i class=" fa-solid fa-heart"></i>
+                                    <span>My liked movies</span>
                                 </a>
                             </li>
                             <li>
@@ -93,7 +93,6 @@
                     </div>
                 </li>
                 {% else %}
-
                 {% if request.endpoint not in ['login', 'view_admin', 'view_admin_login'] %}
                 <a class="button-primary ml-auto text-1rem" href="{{ url_for('login') }}">Log in</a>
 

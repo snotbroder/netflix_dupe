@@ -127,14 +127,15 @@ def signup():
             user_avatar_path = "images/twitter_default.png"
             user_verification_key = uuid.uuid4().hex
             user_verified_at = 0
+            user_deleted_at = 0
 
             user_hashed_password = generate_password_hash(user_password)
 
             # Connect to the database
-            q = "INSERT INTO users VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
+            q = "INSERT INTO users VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
             db, cursor = x.db()
             cursor.execute(q, (user_pk, user_email, user_hashed_password, 
-            user_first_name, user_last_name, user_avatar_path, user_verification_key, user_verified_at))
+            user_first_name, user_last_name, user_avatar_path, user_verification_key, user_verified_at, user_deleted_at))
             db.commit()
 
             # send verification email
@@ -277,7 +278,6 @@ def view_account():
 def api_update_account():
 
     try:
-
         user = session.get("user", "")
         if not user: return "invalid user"
 
@@ -489,3 +489,74 @@ def reactivate_user():
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
+
+## Like and unlike with ajax function ###
+@app.get("/ajax-heart")
+def view_ajax_heart():
+    try:
+        return render_template("ajax_heart.html")
+    except Exception as ex:
+        ic(ex)
+        return "Error"
+    finally:
+        pass
+
+@app.patch("/api-like-movie/<movie_id>")
+def api_like_movie(movie_id):
+    try:
+        user_session = session.get("user")
+        if not user_session:
+            return redirect(url_for("view_index"))
+
+        user_id = user_session.get("user_pk")
+        if not user_id:
+            return "No user id in session", 500
+
+        db, cursor = x.db()
+
+        # Check if the user already liked the movie
+        q = "SELECT movielike_pk FROM movielikes WHERE movielike_user_fk = %s AND movielike_movie_id = %s"
+        cursor.execute(q, (user_id, movie_id))
+        user_has_liked = cursor.fetchone()
+
+        # If result exists -> unlike (DELETE)
+        if user_has_liked:
+            # Unlike
+            q = "DELETE FROM movielikes WHERE movielike_pk = %s"
+            cursor.execute(q, (user_has_liked["movielike_pk"],))
+            db.commit()
+            like_status = False
+        else:
+            # Like
+            movielike_pk = uuid.uuid4().hex
+            created_at = int(time.time())
+            q = "INSERT INTO movielikes VALUES (%s, %s, %s, %s)"
+            cursor.execute(q, (movielike_pk, movie_id, user_id, created_at))
+            db.commit()
+            like_status = True
+
+        button_html = render_template("components/___like_movie_btn.html", movie_id=movie_id, like_status=like_status)
+
+        return f"<browser mix-update='#like-btn-{movie_id}'>liked!</browser>"
+
+    except Exception as ex:
+        ic(ex)
+        return "Error, could not like", 500
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+####################### 
+@app.route("/my-likes")
+def view_mylikes():
+    try:
+        user = session.get("user", "")
+        if not user: return redirect(url_for("view_index"))
+
+        return render_template("mylikes.html", user=user)
+    except Exception as ex:
+        ic(ex)
+        return "System under maintenance"
+    finally:
+        pass

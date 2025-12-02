@@ -4,6 +4,10 @@
     </div>
     <div class="card-content">
         <h3>{{ movie.title }}</h3>
+
+        <span>
+
+            {% include "components/___like_movie_btn.html" with context %}</span>
         <p>
             {% for genre in movie.genres %}
             {{ genre }}
