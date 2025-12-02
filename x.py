@@ -26,7 +26,8 @@ def db():
         return db, cursor
     except Exception as e:
         print(e, flush=True)
-        raise Exception("Netflix exception - Database under maintenance", 500)
+        raise Exception(f"Database error: {e}", 500)
+
 
 
 ##############################

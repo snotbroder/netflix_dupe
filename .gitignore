@@ -65,3 +65,7 @@ secrets.json
 *.pem
 *.key
 *.crt
+
+# --- Project files --- 
+#Due to database configs for pythonanywhere
+x.py
