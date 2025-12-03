@@ -37,7 +37,7 @@ header.header-global{
             
             &.selected{
                 color: var(--color_secondary);
-                font-family: var(--font_regular);
+                font-family: var(--font_semibold);
                 cursor: default;
             }
         }
@@ -112,7 +112,7 @@ header.header-global{
                 color: var(--color_secondary);
                 gap: 1rem;
                 >span{
-                    text-align: right;
+                    
                 }
                 &:hover span{
                     text-decoration: underline;

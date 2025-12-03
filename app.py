@@ -239,19 +239,15 @@ def logout():
 
     ##############################
 @app.route("/browse")
-@app.route("/browse/<lang>")
 @x.no_cache
-def view_browse(lang =None):
+def view_browse():
     try:
         user = session.get("user", "")
         if not user: 
             return redirect(url_for("view_index"))
         
-        if lang is None:
-            lang = user.get("user_language", "en")
-
-        # 2. Set global translation language
-        x.default_language = lang
+        # set page language
+        lang = user.get("user_language", "en")
 
         db, cursor = x.db()
 
@@ -291,7 +287,7 @@ def view_browse(lang =None):
                     for gid in movie.get("genre_ids", [])
                 ]
 
-        user["user_language"] = lang
+        
         return render_template("browse.html", user=user, movies_popular=movies_popular, movies_comedy=movies_comedy, movies_romance=movies_romance, lang=lang)
     except Exception as ex:
         ic(ex)
@@ -304,16 +300,19 @@ def view_browse(lang =None):
 @app.route("/account")
 @x.no_cache
 def view_account():
+    
     try:
         user = session.get("user", "")
         if not user: return redirect(url_for("view_index"))
+        # lang = x.default_language
+        lang = user.get("user_language", "en")
 
         q = "SELECT * FROM users WHERE user_pk = %s"
         db, cursor = x.db()
         cursor.execute(q, (user["user_pk"],))
         user = cursor.fetchone()
-        
-        return render_template("account.html", x=x, user=user)
+
+        return render_template("account.html", user=user, lang=lang)
     
     except Exception as ex:
         ic(ex)
@@ -595,13 +594,13 @@ def api_like_movie(movie_id):
         if "db" in locals(): db.close()
 
 ####################### 
-@app.route("/my-likes")
-def view_mylikes():
+@app.route("/my-list")
+def view_mylist():
     try:
         user = session.get("user", "")
         if not user: return redirect(url_for("view_index"))
-
-        return render_template("mylikes.html", user=user)
+        lang = user.get("user_language", "en")
+        return render_template("mylist.html", user=user, lang=lang)
     except Exception as ex:
         ic(ex)
         return "System under maintenance"
@@ -651,16 +650,11 @@ def get_data_from_sheet():
     finally:
         pass
 
-################
+###############
 @app.route("/update-user-language", methods=["GET"])
 def update_user_language():
+    # get selected language from form
     chosen_language = request.args.get("language_selector")
-
-    # Make sure the value is allowed
-    allowed_languages = x.allowed_languages
-
-    if chosen_language not in allowed_languages:
-        chosen_language = "en"   # Safe fallback
 
     # Update the user's session
     if "user" in session:
@@ -668,11 +662,12 @@ def update_user_language():
         user["user_language"] = chosen_language
         session["user"] = user
 
-    # Update your translation engine language
+    # Update translation engine language
     x.default_language = chosen_language
 
-    # Redirect back to the page the user was on
+    # Redirect back to the page the user was
     return redirect(request.headers.get("Referer", "/"))
+
 
 @app.get("/update-website-language")
 def update_website_language():

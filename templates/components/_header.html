@@ -29,12 +29,14 @@
                 </div>
                 {% if user %}
                 <ul class="header-menu">
-                    <li><a class="selected" href="#">{{ x.lans("nav_home") }}</a></li>
+                    <li><a {% if request.endpoint=='view_browse' %} class="selected" {% endif %} href="/browse">{{
+                            x.lans("nav_home") }}</a></li>
                     <li><a href="#">{{ x.lans("nav_series") }}</a></li>
                     <li><a href="#">{{ x.lans("nav_films") }}</a></li>
                     <li><a href="#">{{ x.lans("nav_games") }}</a></li>
                     <li><a href="#">{{ x.lans("nav_new_and_popular") }}</a></li>
-                    <li><a href="#">{{ x.lans("nav_my_list") }}</a></li>
+                    <li><a {% if request.endpoint=='view_mylist' %} class="selected" {% endif %} href="/my-list">{{
+                            x.lans("nav_my_list") }}</a></li>
                     <li><a href="#">{{ x.lans("nav_browse_by_language") }}</a></li>
                 </ul>
             </div>
@@ -58,47 +60,50 @@
                     <span class="header-caret-icon"><i class="fa-solid fa-caret-down icon"></i></span>
                     <div class="header-profile-dropdown">
                         <div class="header-profile-dropdown-hoverfield"></div>
-                        <p class="header-user-name">Hello {{ user.user_first_name }}</span>
+                        <p class="header-user-name">{{ x.lans("nav_hello") }}</a> {{ user.user_first_name }}</span>
                         </p>
                         <ul class="header-profile-dropdown-content">
                             <li class="mb-.5rem">
                                 <form action="{{ url_for('update_user_language') }}" method="get">
                                     <select class="button-secondary w-100% text-1rem" name="language_selector"
                                         id="language_selector" onchange="this.form.submit()">
-                                        <option value="en" {% if lang=="en" %}selected{% endif %}>English</option>
-                                        <option value="nl" {% if lang=="nl" %}selected{% endif %}>Dutch</option>
-                                        <option value="es" {% if lang=="es" %}selected{% endif %}>Español</option>
+                                        <option value="en" {% if lang=="en" %}selected{% endif %}>English
+                                        </option>
+                                        <option value="nl" {% if lang=="nl" %}selected{% endif %}>
+                                            Nederlands</option>
+                                        <option value="es" {% if lang=="es" %}selected{% endif %}>Español
+                                        </option>
                                     </select>
                                 </form>
                             </li>
                             <li>
                                 <a class="header-profile-dropdown-item" href="{{ url_for('view_account') }}">
                                     <i class="fa-solid fa-user"></i>
-                                    <span>Account</span>
+                                    <span>{{ x.lans("nav_account") }}</span>
                                 </a>
                             </li>
                             <li>
-                                <a class="header-profile-dropdown-item" href="{{ url_for('view_mylikes') }}"">
+                                <a class="header-profile-dropdown-item" href="{{ url_for('view_mylist') }}">
                                     <i class=" fa-solid fa-heart"></i>
-                                    <span>My liked movies</span>
+                                    <span>{{ x.lans("nav_my_list") }}</span>
                                 </a>
                             </li>
                             <li>
                                 <a class="header-profile-dropdown-item" href="">
                                     <i class="fa-solid fa-square-up-right"></i>
-                                    <span>Transfer Profile</span>
+                                    <span>{{ x.lans("nav_transfer_profile") }}</span>
                                 </a>
                             </li>
                             <li>
                                 <a class="header-profile-dropdown-item" href="">
                                     <i class="fa-regular fa-circle-question"></i>
-                                    <span>Help Centre</span>
+                                    <span>{{ x.lans("nav_help_centre") }}</span>
                                 </a>
                             </li>
                         </ul>
                         <div class="header-profile-dropdown-signout">
                             <a class="button-primary text-1rem w-100% text-a-center" href="/logout">
-                                Log out of Dupeflix</a>
+                                {{ x.lans("system_logout") }} {{ x.lans("nav_of_dupeflix") }}</a>
                         </div>
 
                     </div>
@@ -106,8 +111,8 @@
                 {% else %}
                 <section class="ml-auto d-flex gap-1rem p-items-center">
                     {% if request.endpoint not in ['login', 'view_admin', 'view_admin_login'] %}
-                    <a class="button-primary text-1rem" href="{{ url_for('login', lang=lang) }}">{{
-                        x.lans("system_login") }}</a>
+                    <a class="button-primary text-1rem" href="{{ url_for('login', lang=lang) }}">
+                        {{ x.lans("system_login") }}</a>
 
                     {% endif %}
                     {% if request.endpoint == 'view_admin' %}
@@ -117,7 +122,7 @@
                         <select class="button-secondary ml-auto text-1rem" name="language_selector"
                             id="language_selector" onchange="this.form.submit()">
                             <option value="en" {% if lang=="en" %}selected{% endif %}>English</option>
-                            <option value="nl" {% if lang=="nl" %}selected{% endif %}>Dutch</option>
+                            <option value="nl" {% if lang=="nl" %}selected{% endif %}>Nederlands</option>
                             <option value="es" {% if lang=="es" %}selected{% endif %}>Español</option>
                         </select>
                     </form>

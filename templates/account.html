@@ -2,8 +2,8 @@
 <section class="max-w-580px ma-auto">
     <div class="d-flex j-content-between flex-wrap gap-1rem mb-2rem">
         <header class=" ">
-            <h1 class="text-t-capitalize">Hello {{ user.user_first_name }}</h1>
-            <h2>Change account details</h2>
+            <h1 class="text-t-capitalize">{{ x.lans("account_header_1") }} {{ user.user_first_name }}</h1>
+            <h2>{{ x.lans("account_body_1") }}</h2>
         </header>
         <div class="img-container mx-auto max-w-30%" sm="mx-0 ml-auto">
             <img src="{{ url_for('static', filename='' ~ (user.user_avatar_path if user.user_avatar_path else '/images/twitter_default.png')) }}"
@@ -15,32 +15,35 @@
         enctype="multipart/form-data">
         <div class="form-handle-item">
             <label for="user_first_name">
-                First name <span class="text-c-var(--color_tertiary)">-
-                    {{ x.USER_FIRST_NAME_MIN }} to {{ x.USER_FIRST_NAME_MAX }} characters</span>
+                {{ x.lans("system_first_name") }} <span class="text-c-var(--color_tertiary)">-
+                    {{ x.USER_FIRST_NAME_MIN }} {{ x.lans("system_to") }} {{ x.USER_FIRST_NAME_MAX }} {{
+                    x.lans("system_characters") }}</span>
             </label>
             <input name="user_first_name" id="user_first_name" type="text" mix-check="{{ x.REGEX_USER_FIRST_NAME }}"
                 value="{{ user.user_first_name }}" required>
         </div>
         <div class="form-handle-item">
             <label for="user_email">
-                Email
+                {{ x.lans("system_email") }}
             </label>
             <input name="user_email" id="user_email" type="text" mix-check="{{ x.REGEX_EMAIL }}"
                 value="{{ user.user_email }}" required>
         </div>
         <div class="form-handle-item">
 
-            <label for="user_avatar_file_upload">Choose a profile picture
+            <label for="user_avatar_file_upload">{{ x.lans("system_choose_profile_picture") }}
                 <span class="text-c-var(--color_tertiary)">- {{ x.IMAGE_FILE_ALLOWED }}</span>
             </label>
-            <input type="file" id="file" name="user_avatar_file_upload" accept="{{ x.IMAGE_FILE_ALLOWED }}" />
-
+            <input type="file" id="file" name="user_avatar_file_upload" accept="{{ x.IMAGE_FILE_ALLOWED }}"
+                placeholder="{{ x.lans('system_choose_file') }}" />
+            <!--  -->
 
 
         </div>
         {{ x.lans("system_login") }}
-        <button class="button-primary w-100%" mix-default="Update account" mix-await="Updating account ...">
-            Update account details
+        <button class="button-primary w-100%" mix-default="{{ x.lans('account_cta_1') }}"
+            mix-await="{{ x.lans('system_loading') }}">
+            {{ x.lans("account_cta_1") }}
         </button>
     </form>
 </section>

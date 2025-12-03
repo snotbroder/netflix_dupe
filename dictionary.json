@@ -14,6 +14,11 @@
         "nl": "Maak account",
         "es": "Creado cuenta"
     },
+    "system_logout": {
+        "en": "Log out",
+        "nl": "Uitloggen",
+        "es": "Finalizar la Sesión"
+    },
     "system_email": {
         "en": "Email",
         "nl": "E-mail",
@@ -28,6 +33,16 @@
         "en": "First name",
         "nl": "Voornaam",
         "es": "Nombre primero "
+    },
+    "system_choose_profile_picture": {
+        "en": "Choose a profile picture",
+        "nl": "Kies een accountfoto",
+        "es": "Elige una imagen de cuenta"
+    },
+    "system_choose_file": {
+        "en": "Chooese file",
+        "nl": "Kies bestand",
+        "es": "Elegir archivo"
     },
     "system_characters": {
         "en": "characters",
@@ -203,5 +218,100 @@
         "en": "Browse by Language",
         "nl": "Ontdek op Taal",
         "es": "Navegar por Idioma"
+    },
+    "nav_hello": {
+        "en": "Hello",
+        "nl": "Hoi",
+        "es": "Hola"
+    },
+    "nav_account": {
+        "en": "Account",
+        "nl": "Account",
+        "es": "Cuenta"
+    },
+    "nav_transfer_profile": {
+        "en": "Transfer Profile",
+        "nl": "Profiel Overstappen",
+        "es": "Transferir al Perfil"
+    },
+    "nav_help_centre": {
+        "en": "Help Centre",
+        "nl": "Helpcentrum",
+        "es": "Centro de Ayuda"
+    },
+    "nav_of_dupeflix": {
+        "en": "of Dupeflix",
+        "nl": "van Dupeflix",
+        "es": "de Dupeflix"
+    },
+    "BROWSE": {
+        "en": "",
+        "nl": "",
+        "es": ""
+    },
+    "browse_feature_subheader_1": {
+        "en": "New season of:",
+        "nl": "Nieuw seizoen van:",
+        "es": "Nueva temporada de:"
+    },
+    "browse_feature_header_1": {
+        "en": "House of Love",
+        "nl": "T'huis vol Liefde",
+        "es": "Casa de Amar"
+    },
+    "browse_feature_body_1": {
+        "en": "Twelve hot and recently single people meet in the new season of House of Love. Watch drama unfold now on Dupeflix",
+        "nl": "Twaalf aantrekkelijke en recent vrijgezelle mensen ontmoeten elkaar in het nieuwe seizoen van House of Love. Bekijk het drama nu op Dupeflix.",
+        "es": "Doce personas atractivas y recién solteras se conocen en la nueva temporada de House of Love. ¡No te pierdas el drama ahora en Dupeflix!"
+    },
+    "browse_feature_cta_1": {
+        "en": "Watch now!",
+        "nl": "Kijk mee!",
+        "es": "¡Mira ahora!"
+    },
+    "browse_feature_cta_2": {
+        "en": "More info",
+        "nl": "Meer info",
+        "es": "Más información"
+    },
+    "browse_category_trending_right_now": {
+        "en": "Trending Right Now",
+        "nl": "Trending op Dit Moment",
+        "es": "Tendencia Ahora Mismo"
+    },
+    "browse_category_top_series_today": {
+        "en": "Top 10 Series In Denmark Today",
+        "nl": "Top 10 Series In Nederland Vandaag",
+        "es": "Las 10 Mejores Series de España Hoy"
+    },
+    "browse_category_hilarious_comedy": {
+        "en": "Hilarious Comedy",
+        "nl": "Hilarische Komedie",
+        "es": "Comedia Hilarante"
+    },
+    "browse_category_heart_warming_romance": {
+        "en": "Heart Warming Romance",
+        "nl": "Hartverwarmende Romantiek",
+        "es": "Romances Conmovedores"
+    },
+    "ACCOUNT": {
+        "en": "",
+        "nl": "",
+        "es": ""
+    },
+    "account_header_1": {
+        "en": "Hello",
+        "nl": "Hoi",
+        "es": "Hola"
+    },
+    "account_body_1": {
+        "en": "Change account details",
+        "nl": "Accountgegevens wijzigen",
+        "es": "Cambiar detalles de cuenta"
+    },
+    "account_cta_1": {
+        "en": "Update details",
+        "nl": "Gegevens wijzigen",
+        "es": "Actualizar detalles"
     }
 }
