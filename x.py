@@ -1,6 +1,7 @@
 from flask import request, make_response, render_template
 import mysql.connector
 import re 
+import json
 
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -11,7 +12,20 @@ from functools import wraps
 from icecream import ic
 ic.configureOutput(prefix=f'----- | ', includeContext=True)
 
+# User uploads
 UPLOAD_ITEM_FOLDER = './images'
+
+# Translations
+allowed_languages = ["en", "nl", "es"]
+google_spread_sheet_key = "1R0ohNnEnJoLsR796NALisFwyUE0CQ0nroX1VOqj0p7s"
+default_language = "en"
+
+def lans(key):
+    with open("dictionary.json", 'r', encoding='utf-8') as file:
+        data = json.load(file)
+    return data[key][default_language]
+
+
 
 ##############################
 def db():
@@ -45,33 +59,23 @@ def no_cache(view):
 ##############################
 REGEX_EMAIL = "^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$"
 
-def validate_user_email():
+def validate_user_email(lang = "en"):
     user_email = request.form.get("user_email", "").strip()
-    
     if not re.match(REGEX_EMAIL, user_email): 
-        raise Exception("Invalid email", 400)
-    
+        raise Exception(lans("feedback_invalid_email"), 400)
     return user_email
 
-##############################
-USER_USERNAME_MIN = 2
-USER_USERNAME_MAX = 20
-REGEX_USER_USERNAME = f"^.{{{USER_USERNAME_MIN},{USER_USERNAME_MAX}}}$"
-def validate_user_username():
-    user_username = request.form.get("user_username", "").strip()
-    error = f"username min {USER_USERNAME_MIN} max {USER_USERNAME_MAX} characters"
-    if len(user_username) < USER_USERNAME_MIN: raise Exception(error, 400)
-    if len(user_username) > USER_USERNAME_MAX: raise Exception(error, 400)
-    return user_username
 
 ##############################
 USER_FIRST_NAME_MIN = 2
 USER_FIRST_NAME_MAX = 20
 REGEX_USER_FIRST_NAME = f"^.{{{USER_FIRST_NAME_MIN},{USER_FIRST_NAME_MAX}}}$"
-def validate_user_first_name():
+
+def validate_user_first_name(lang ="en"):
     user_first_name = request.form.get("user_first_name", "").strip()
     error = f"first name min {USER_FIRST_NAME_MIN} max {USER_FIRST_NAME_MAX} characters"
-    if not re.match(REGEX_USER_FIRST_NAME, user_first_name): raise Exception(error, 400)
+    if not re.match(REGEX_USER_FIRST_NAME, user_first_name): 
+        raise Exception(lans("feedback_invalid_first_name"), 400)
     return user_first_name
 
 
@@ -79,18 +83,18 @@ def validate_user_first_name():
 USER_PASSWORD_MIN = 6
 USER_PASSWORD_MAX = 50
 REGEX_USER_PASSWORD = f"^.{{{USER_PASSWORD_MIN},{USER_PASSWORD_MAX}}}$"
-def validate_user_password():
+def validate_user_password(lang="en"):
     user_password = request.form.get("user_password", "").strip()
-    if not re.match(REGEX_USER_PASSWORD, user_password): raise Exception("Invalid password", 400)
+    if not re.match(REGEX_USER_PASSWORD, user_password): 
+        raise Exception(lans("feedback_invalid_password"), 400)
     return user_password
-
-
 
 
 ##############################
 def validate_user_password_confirm():
     user_password = request.form.get("user_password_confirm", "").strip()
-    if not re.match(REGEX_USER_PASSWORD, user_password): raise Exception("Twitter exception - Invalid confirm password", 400)
+    if not re.match(REGEX_USER_PASSWORD, user_password): 
+        raise Exception("Twitter exception - Invalid confirm password", 400)
     return user_password
 
 

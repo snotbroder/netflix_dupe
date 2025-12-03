@@ -1,0 +1,167 @@
+{
+    "SYSTEM & FEEDBACK": {
+        "en": "",
+        "nl": "",
+        "es": ""
+    },
+    "system_login": {
+        "en": "Log in",
+        "nl": "Inloggen",
+        "es": "Entrar"
+    },
+    "system_signup": {
+        "en": "Sign up",
+        "nl": "Maak account",
+        "es": "Creado cuenta"
+    },
+    "system_email": {
+        "en": "Email",
+        "nl": "E-mail",
+        "es": "Corredo electronica"
+    },
+    "system_password": {
+        "en": "Password",
+        "nl": "Wachtwoord",
+        "es": "Clave"
+    },
+    "system_first_name": {
+        "en": "First name",
+        "nl": "Voornaam",
+        "es": "Nombre primero "
+    },
+    "system_characters": {
+        "en": "characters",
+        "nl": "tekens",
+        "es": "caracteres"
+    },
+    "system_to": {
+        "en": "to",
+        "nl": "tot",
+        "es": "a"
+    },
+    "system_eg": {
+        "en": "e.g.",
+        "nl": "bijv.",
+        "es": "p.ej."
+    },
+    "system_loading": {
+        "en": "loading...",
+        "nl": "laden...",
+        "es": "cargando..."
+    },
+    "system_back": {
+        "en": "back",
+        "nl": "terug",
+        "es": "volver"
+    },
+    "feedback_user_not_found": {
+        "en": "User not found",
+        "nl": "Gebruiker bestaat niet",
+        "es": "Cuenta no existe"
+    },
+    "feedback_user_not_verified": {
+        "en": "User not verified. Please check your email",
+        "nl": "Gebruiker niet geverificeërd. Bekijk uw e-mail inbox",
+        "es": "Cuenta no verificado. Revisa tu correo electrónico por favor"
+    },
+    "feedback_email_already_registered": {
+        "en": "Email already registered",
+        "nl": "Email al geregistreerd",
+        "es": "Corredo electronia hay usado"
+    },
+    "feedback_system_maintenance": {
+        "en": "System under maintenance",
+        "nl": "Systeem in onderhoud",
+        "es": "Systema que maintenance"
+    },
+    "feedback_invalid_credentials": {
+        "en": "Invalid credentials",
+        "nl": "Ongeldig wachtwoord",
+        "es": "Clave invalido"
+    },
+    "feedback_invalid_email": {
+        "en": "Invalid email",
+        "nl": "Ongeldig email",
+        "es": "Corredo electronica invalido"
+    },
+    "feedback_invalid_first_name": {
+        "en": "Invalid first name",
+        "nl": "Ongeldig voornaam",
+        "es": "Nombre primero invalido"
+    },
+    "feedback_invalid_password": {
+        "en": "Invalid password",
+        "nl": "Ongeldig wachtwoord",
+        "es": "Clave invalido"
+    },
+    "LOGIN & SIGNUP": {
+        "en": "",
+        "nl": "",
+        "es": ""
+    },
+    "login_header_1": {
+        "en": "Enter your info to sign in",
+        "nl": "Vul uw gegevens in om in te loggen",
+        "es": "Ingresa ustedes información para entrar"
+    },
+    "login_body_1": {
+        "en": "Or get started with a new account",
+        "nl": "Of maak een nieuw account aan",
+        "es": "O comience con una nueva cuenta"
+    },
+    "login_splash_1": {
+        "en": "Not a user yet",
+        "nl": "Nog geen account",
+        "es": "No tienes una cuenta"
+    },
+    "login_link_1": {
+        "en": "Become a user",
+        "nl": "Maak een nieuw account",
+        "es": "Creer una cuenta nueva"
+    },
+    "signup_header_1": {
+        "en": "Create an account",
+        "nl": "Maak een account",
+        "es": "Creer una cuenta"
+    },
+    "signup_body_1": {
+        "en": "Just a few steps from great movies, series and more",
+        "nl": "Maar een paar stapjes van geweldige films, series en meer",
+        "es": "A solo unos pasos de grandes películas, series y mucho más"
+    },
+    "signup_splash_1": {
+        "en": "Already have an account",
+        "nl": "Heb je al een account",
+        "es": "Hay tienes una cuenta"
+    },
+    "signup_link_1": {
+        "en": "Log into your account",
+        "nl": "Inloggen in uw account",
+        "es": "Entrar su cuenta"
+    },
+    "INDEX": {
+        "en": "",
+        "nl": "",
+        "es": ""
+    },
+    "index_header_1": {
+        "en": "Unlimited films, series and more",
+        "nl": "Onbeperkt films, series en veel meer",
+        "es": "Películas, series y más sin límite"
+    },
+    "index_body_1": {
+        "en": "Starts at 89 kr.. Cancel at any time",
+        "nl": "Begint vanaf €11,90. Annuleren kan op ieder moment",
+        "es": "Empieza desde €11,90. Cancela en cualquier momento"
+    },
+    "index_body_2": {
+        "en": "Ready to watch? Enter your email to create or restart your membership",
+        "nl": "Klaar om mee te kijken? Vul in je e-mail of start opnieuw uw lidmaatschap",
+        "es": "¿Listo para ver? Ingresa tu correo electrónico para crear o reiniciar tu suscripción"
+    },
+    "index_cta_1": {
+        "en": "Get started",
+        "nl": "Begin hier",
+        "es": "Empezar aquí"
+    }
+}

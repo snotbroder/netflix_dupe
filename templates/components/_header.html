@@ -14,7 +14,7 @@
 
 
     <title>
-        Home | Netflix Dupe
+        Home | Dupeflix
     </title>
 </head>
 
@@ -93,18 +93,24 @@
                     </div>
                 </li>
                 {% else %}
-                {% if request.endpoint not in ['login', 'view_admin', 'view_admin_login'] %}
-                <a class="button-primary ml-auto text-1rem" href="{{ url_for('login') }}">Log in</a>
+                <section class="ml-auto">
+                    {% if request.endpoint not in ['login', 'view_admin', 'view_admin_login'] %}
+                    <a class="button-primary text-1rem" href="{{ url_for('login') }}">Log in</a>
 
-                {% endif %}
-                {% if request.endpoint == 'view_admin' %}
-                <a class="button-primary ml-auto text-1rem" href="/logout">Log out as Admin</a>
-
-                {% endif %}
-
-
-
-                {% endif %}
+                    {% endif %}
+                    {% if request.endpoint == 'view_admin' %}
+                    <a class="button-primary ml-auto text-1rem" href="/logout">Log out as Admin</a>
+                    {% endif %}
+                    {% endif %}
+                    <form action="/update-user-language" method="get">
+                        <select class="button-secondary ml-auto text-1rem" name="language_selector"
+                            id="language_selector">
+                            <option value="en">English</option>
+                            <option value="nl">Dutch</option>
+                            <option value="es">Español</option>
+                        </select>
+                    </form>
+                </section>
             </ul>
         </nav>
     </header>

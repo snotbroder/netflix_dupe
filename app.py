@@ -8,6 +8,9 @@ import x
 import time
 import uuid
 import os
+import io
+import csv
+import json
 
 load_dotenv()
 TMDB_API_KEY = os.getenv("TMDB_API_KEY")
@@ -25,6 +28,14 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
+
+##############################
+# Files that will be loaded in each template 
+@app.context_processor
+def global_variables():
+    return dict (
+        x = x
+    )
  
 
 ##############################
@@ -36,28 +47,32 @@ def _____USER_____(): pass
 ##############################
 
 @app.get("/")
-def view_index():
-    
-    return render_template("index.html", x=x)
+@app.route("/<lang>", methods=["GET", "POST"])
+def view_index(lang = "en"):
+    x.default_language = lang
+    return render_template("index.html")
 
 
 ##############################
 @app.route("/login", methods=["GET", "POST"])
+@app.route("/login/<lang>", methods=["GET", "POST"])
 @x.no_cache
-def login():
+def login( lang = "en"):
+    x.default_language = lang
 
     if request.method == "GET":
         if session.get("user", ""): return redirect(url_for("browse"))
-        return render_template("login.html", x=x)
+        return render_template("login.html", lang=lang)
 
     if request.method == "POST":
         try:
             # Validate           
-            user_email = x.validate_user_email()
-            user_password = x.validate_user_password()
+            user_email = x.validate_user_email(lang)
+            user_password = x.validate_user_password(lang)
 
-            if not user_email:
-                raise Exception("Please enter a valid email", 400)
+            # if not user_email:
+            #     raise Exception("Please enter a valid email", 400)
+
             # Connect to the database
             q = "SELECT * FROM users WHERE user_email = %s"
             db, cursor = x.db()
@@ -71,9 +86,12 @@ def login():
                 raise Exception("Invalid credentials", 400)
 
             if user["user_verification_key"] != "":
-                raise Exception("User not verified. Please check your email", 400)
-
+                raise Exception(x.lans("feedback_user_not_verified"), 400)
+            
             user.pop("user_password")
+
+            # Add the default language to the user
+            user["user_language"] = lang
             session["user"] = user
         
             return f"""<browser mix-redirect="/browse"></browser>"""
@@ -100,7 +118,7 @@ def login():
 def index_signup():
         try:
             email = request.form.get("user_email")
-            
+
             return redirect( url_for('signup', email=email))
         except Exception as ex:
             ic(ex)
@@ -109,11 +127,12 @@ def index_signup():
 
 ##############################
 @app.route("/signup", methods=["GET", "POST"])
-def signup():
-
+@app.route("/signup/<lang>", methods=["GET", "POST"])
+def signup(lang = "en"):
+    x.default_language = lang
     if request.method == "GET":
         user_email = request.args.get("email", "")
-        return render_template("signup.html", x=x, user_email=user_email)
+        return render_template("signup.html", user_email=user_email, lang=lang)
 
     if request.method == "POST":
         try:
@@ -354,7 +373,7 @@ def view_admin():
         deleted_users = cursor.fetchall()
         
 
-        return render_template("admin.html", x=x, active_users=active_users, deleted_users=deleted_users)
+        return render_template("admin.html", active_users=active_users, deleted_users=deleted_users)
 
     except Exception as ex:
         ic(ex)
@@ -370,7 +389,7 @@ def view_admin_login():
 
     if request.method == "GET":
         if session.get("admin_session", ""): return render_template("admin.html")
-        return render_template("adminlogin.html", x=x)
+        return render_template("adminlogin.html")
 
     if request.method == "POST":
         try:
@@ -558,5 +577,60 @@ def view_mylikes():
     except Exception as ex:
         ic(ex)
         return "System under maintenance"
+    finally:
+        pass
+
+
+####################### 
+@app.get("/api-update-dictionary")
+def get_data_from_sheet():
+    try:
+        # Check if the admin is running this end-point, else show error
+        # flaskwebmail
+        # Create a google sheet
+        # share and make it visible to "anyone with the link"
+        # In the link, find the ID of the sheet. Here: 1aPqzumjNp0BwvKuYPBZwel88UO-OC_c9AEMFVsCw1qU
+        # Replace the ID in the 2 places bellow
+        url= f"https://docs.google.com/spreadsheets/d/{x.google_spread_sheet_key}/export?format=csv&id={x.google_spread_sheet_key}"
+        res=requests.get(url=url)
+        # ic(res.text) # contains the csv text structure
+        csv_text = res.content.decode('utf-8')
+        csv_file = io.StringIO(csv_text) # Use StringIO to treat the string as a file
+        # Initialize an empty list to store the data
+        data = {}
+        # Read the CSV data
+        reader = csv.DictReader(csv_file)
+        ic(reader)
+        # Convert each row into the desired structure
+        for row in reader:
+            item = {
+                    'en': row['english'],
+                    'nl': row['dutch'],
+                    'es': row['spanish']
+            }
+            # Append the dictionary to the list
+            data[row['key']] = (item)
+        # Convert the data to JSON
+        json_data = json.dumps(data, ensure_ascii=False, indent=4)
+        # ic(data)
+        # Save data to the file
+        with open("dictionary.json", 'w', encoding='utf-8') as f:
+            f.write(json_data)
+        return "ok"
+    except Exception as ex:
+        ic(ex)
+        return str(ex)
+    finally:
+        pass
+
+################
+@app.route("/update-user-language", methods=["GET"])
+def update_user_language():
+    try:
+        chosen_language = request.args.get("language_selector")
+        ic(chosen_language)
+        return f"this is {chosen_language}"
+    except:
+        pass
     finally:
         pass
