@@ -48,9 +48,27 @@ def _____USER_____(): pass
 
 @app.get("/")
 @app.route("/<lang>", methods=["GET", "POST"])
-def view_index(lang = "en"):
+def view_index(lang = None):
+    # Default language
+    default_lang = "en"
+
+    # Check previous page
+    referer = request.headers.get("Referer", "")
+
+    if not lang:
+        # Extract last segment of previous URL
+        path = referer.split("?", 1)[0].rstrip("/")  # remove query string & trailing slash
+        last_segment = path.split("/")[-1] if path else ""
+        if last_segment in ["en", "nl", "es"]:
+            lang = last_segment
+        else:
+            lang = default_lang
+
+    # Set the translation engine
     x.default_language = lang
-    return render_template("index.html")
+
+    return render_template("index.html", lang=lang)
+
 
 
 ##############################
@@ -115,11 +133,11 @@ def login( lang = "en"):
 
 ##############################
 @app.post("/index-pass-email")
-def index_signup():
+def index_signup(lang= None):
         try:
             email = request.form.get("user_email")
 
-            return redirect( url_for('signup', email=email))
+            return redirect( url_for('signup', email=email, lang=lang))
         except Exception as ex:
             ic(ex)
         finally:
@@ -221,11 +239,20 @@ def logout():
 
     ##############################
 @app.route("/browse")
+@app.route("/browse/<lang>")
 @x.no_cache
-def view_browse():
+def view_browse(lang =None):
     try:
         user = session.get("user", "")
-        if not user: return redirect(url_for("view_index"))
+        if not user: 
+            return redirect(url_for("view_index"))
+        
+        if lang is None:
+            lang = user.get("user_language", "en")
+
+        # 2. Set global translation language
+        x.default_language = lang
+
         db, cursor = x.db()
 
         headers = {"Authorization": f"Bearer {TMDB_API_KEY}"}
@@ -264,7 +291,8 @@ def view_browse():
                     for gid in movie.get("genre_ids", [])
                 ]
 
-        return render_template("browse.html", user=user, movies_popular=movies_popular, movies_comedy=movies_comedy, movies_romance=movies_romance)
+        user["user_language"] = lang
+        return render_template("browse.html", user=user, movies_popular=movies_popular, movies_comedy=movies_comedy, movies_romance=movies_romance, lang=lang)
     except Exception as ex:
         ic(ex)
         return f"error {ex}"
@@ -626,11 +654,47 @@ def get_data_from_sheet():
 ################
 @app.route("/update-user-language", methods=["GET"])
 def update_user_language():
-    try:
-        chosen_language = request.args.get("language_selector")
-        ic(chosen_language)
-        return f"this is {chosen_language}"
-    except:
-        pass
-    finally:
-        pass
+    chosen_language = request.args.get("language_selector")
+
+    # Make sure the value is allowed
+    allowed_languages = x.allowed_languages
+
+    if chosen_language not in allowed_languages:
+        chosen_language = "en"   # Safe fallback
+
+    # Update the user's session
+    if "user" in session:
+        user = session["user"]
+        user["user_language"] = chosen_language
+        session["user"] = user
+
+    # Update your translation engine language
+    x.default_language = chosen_language
+
+    # Redirect back to the page the user was on
+    return redirect(request.headers.get("Referer", "/"))
+
+@app.get("/update-website-language")
+def update_website_language():
+    lang = request.args.get("language_selector", "en")
+    
+    # Get referring URL path (e.g., /about/en)
+    referer = request.headers.get("Referer", "/")
+    path = referer.split("?", 1)[0]  # remove query if present
+
+    # Remove trailing "/" if exists
+    path = path.rstrip("/")
+
+    # Split into directory parts
+    parts = path.split("/")
+
+    # Replace last part with the new language code
+    if parts[-1] in ["en", "nl", "es"]:
+        parts[-1] = lang
+    else:
+        parts.append(lang)
+
+    # Build new URL
+    new_path = "/".join(parts)
+
+    return redirect(new_path)

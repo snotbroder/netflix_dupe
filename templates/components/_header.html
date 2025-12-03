@@ -29,13 +29,13 @@
                 </div>
                 {% if user %}
                 <ul class="header-menu">
-                    <li><a class="selected" href="#">Home</a></li>
-                    <li><a href="#">Series</a></li>
-                    <li><a href="#">Films</a></li>
-                    <li><a href="#">Games</a></li>
-                    <li><a href="#">New and Popular</a></li>
-                    <li><a href="#">My List</a></li>
-                    <li><a href="#">Browse by language</a></li>
+                    <li><a class="selected" href="#">{{ x.lans("nav_home") }}</a></li>
+                    <li><a href="#">{{ x.lans("nav_series") }}</a></li>
+                    <li><a href="#">{{ x.lans("nav_films") }}</a></li>
+                    <li><a href="#">{{ x.lans("nav_games") }}</a></li>
+                    <li><a href="#">{{ x.lans("nav_new_and_popular") }}</a></li>
+                    <li><a href="#">{{ x.lans("nav_my_list") }}</a></li>
+                    <li><a href="#">{{ x.lans("nav_browse_by_language") }}</a></li>
                 </ul>
             </div>
             <ul class="header-utility">
@@ -61,6 +61,16 @@
                         <p class="header-user-name">Hello {{ user.user_first_name }}</span>
                         </p>
                         <ul class="header-profile-dropdown-content">
+                            <li class="mb-.5rem">
+                                <form action="{{ url_for('update_user_language') }}" method="get">
+                                    <select class="button-secondary w-100% text-1rem" name="language_selector"
+                                        id="language_selector" onchange="this.form.submit()">
+                                        <option value="en" {% if lang=="en" %}selected{% endif %}>English</option>
+                                        <option value="nl" {% if lang=="nl" %}selected{% endif %}>Dutch</option>
+                                        <option value="es" {% if lang=="es" %}selected{% endif %}>Español</option>
+                                    </select>
+                                </form>
+                            </li>
                             <li>
                                 <a class="header-profile-dropdown-item" href="{{ url_for('view_account') }}">
                                     <i class="fa-solid fa-user"></i>
@@ -87,33 +97,36 @@
                             </li>
                         </ul>
                         <div class="header-profile-dropdown-signout">
-                            <a class="button-primary ml-auto text-1rem" href="/logout">Log out of Dupeflix</a>
+                            <a class="button-primary text-1rem w-100% text-a-center" href="/logout">
+                                Log out of Dupeflix</a>
                         </div>
 
                     </div>
                 </li>
                 {% else %}
-                <section class="ml-auto">
+                <section class="ml-auto d-flex gap-1rem p-items-center">
                     {% if request.endpoint not in ['login', 'view_admin', 'view_admin_login'] %}
-                    <a class="button-primary text-1rem" href="{{ url_for('login') }}">Log in</a>
+                    <a class="button-primary text-1rem" href="{{ url_for('login', lang=lang) }}">{{
+                        x.lans("system_login") }}</a>
 
                     {% endif %}
                     {% if request.endpoint == 'view_admin' %}
                     <a class="button-primary ml-auto text-1rem" href="/logout">Log out as Admin</a>
                     {% endif %}
-                    {% endif %}
-                    <form action="/update-user-language" method="get">
+                    <form action="{{ url_for('update_website_language') }}" method="get">
                         <select class="button-secondary ml-auto text-1rem" name="language_selector"
-                            id="language_selector">
-                            <option value="en">English</option>
-                            <option value="nl">Dutch</option>
-                            <option value="es">Español</option>
+                            id="language_selector" onchange="this.form.submit()">
+                            <option value="en" {% if lang=="en" %}selected{% endif %}>English</option>
+                            <option value="nl" {% if lang=="nl" %}selected{% endif %}>Dutch</option>
+                            <option value="es" {% if lang=="es" %}selected{% endif %}>Español</option>
                         </select>
                     </form>
+                    {% endif %}
                 </section>
             </ul>
         </nav>
     </header>
 
     <div id="toast"></div>
-    <main class="min-h-75vh max-w-1620px mx-auto">
+    <!-- <main class="min-h-75vh max-w-1620px mx-auto"> -->
+    <main class="overflow-x-hidden">

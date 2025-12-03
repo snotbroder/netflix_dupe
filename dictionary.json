@@ -163,5 +163,45 @@
         "en": "Get started",
         "nl": "Begin hier",
         "es": "Empezar aquí"
+    },
+    "COMP. NAV": {
+        "en": "",
+        "nl": "",
+        "es": ""
+    },
+    "nav_home": {
+        "en": "Home",
+        "nl": "Begin",
+        "es": "Casa"
+    },
+    "nav_series": {
+        "en": "Series",
+        "nl": "Series",
+        "es": "Series"
+    },
+    "nav_films": {
+        "en": "Films",
+        "nl": "Films",
+        "es": "Películas"
+    },
+    "nav_games": {
+        "en": "Games",
+        "nl": "Spelletjes",
+        "es": "Juegos"
+    },
+    "nav_new_and_popular": {
+        "en": "New and Popular",
+        "nl": "Nieuw en Populair",
+        "es": "Nuevo y Popular"
+    },
+    "nav_my_list": {
+        "en": "My List",
+        "nl": "Mijn Lijst",
+        "es": "Mi Lista"
+    },
+    "nav_browse_by_language": {
+        "en": "Browse by Language",
+        "nl": "Ontdek op Taal",
+        "es": "Navegar por Idioma"
     }
 }
