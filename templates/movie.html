@@ -4,6 +4,7 @@
 <section>
     <div class="img-container w-100% p-absolute top-0 left-0 z-0 brightness-40">
         <img src="https://image.tmdb.org/t/p/w500{{ data.backdrop_path }}" alt="{{ data.title }}">
+        <div class="start-trending p-aboslute bottom-0 mt--1rem"></div>
     </div>
 
 
@@ -12,7 +13,7 @@
         <div>
             {% include "components/___back_btn.html" %}
         </div>
-        <section class="d-flex flex-col max-w-1000px ma-auto mb-5rem gap-3rem" md="flex-row j-content-between">
+        <section class="d-flex flex-col max-w-1000px ma-auto my-5rem gap-3rem " md="flex-row j-content-between">
             <div class="" md="w-50%">
                 <h1>{{ data.title }}</h1>
                 <p>Overview {{ data.overview }} </p>
@@ -32,9 +33,13 @@
                             {% include "components/___review_container.html" %}
                         </div>
                         <div id="reviews" class="d-flex flex-col gap-2rem my-1rem">
+                            {% if reviews %}
                             {% for review in reviews %}
                             {% include "components/_review.html" %}
                             {% endfor %}
+                            {% else %}
+                            <p>Be the first to write a review!</p>
+                            {% endif %}
                         </div>
                     </section>
                 </section>

@@ -369,6 +369,7 @@ def view_movie():
             reviews.review_movie_id = %s
             AND reviews.review_deleted_at = 0
             AND users.user_deleted_at = 0
+        LIMIT 5
         """ # reviews.review_count,
         cursor.execute(q, (movie_id,))
         reviews = cursor.fetchall()
