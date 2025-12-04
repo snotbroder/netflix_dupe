@@ -148,6 +148,7 @@ def index_signup(lang ="en"):
 ##############################
 @app.route("/signup", methods=["GET", "POST"])
 @app.route("/signup/<lang>", methods=["GET", "POST"])
+@x.no_cache
 def signup(lang = "en"):
     x.default_language = lang
     if request.method == "GET":
@@ -297,6 +298,34 @@ def view_browse():
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
+
+################## 
+@app.route("/movie", methods=["GET"])
+@x.no_cache
+def view_movie():
+    try:
+        user = session.get("user", "")
+        if not user: 
+            return redirect(url_for("view_index"))
+        
+        
+        
+        movie_id = request.args.get("movie_id")
+
+        #Fallback
+        if not movie_id:
+            return redirect(url_for("view_browse"))
+        
+        #Get specific movie details
+        headers = {"Authorization": f"Bearer {TMDB_API_KEY}"}
+        url_movie = f"https://api.themoviedb.org/3/movie/{movie_id}?language=en-US"
+        response = requests.get(url_movie, headers=headers)
+        data = response.json()
+
+        return render_template("movie.html", user=user, data=data)
+    except Exception as ex:
+        ic(ex)
+    finally: pass
 
 ################## 
 @app.route("/account")

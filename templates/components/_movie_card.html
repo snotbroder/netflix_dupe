@@ -1,20 +1,22 @@
 <article class="card-container shadow-lg">
-    <div class="img-container w-100%">
-        <img src="https://image.tmdb.org/t/p/w500{{movie.backdrop_path}}" alt="">
-    </div>
-    <div class="card-content">
-        <h3>{{ movie.title }}</h3>
+    <a href="/movie?movie_id={{movie.id}}">
+        <div class="img-container w-100%">
+            <img src="https://image.tmdb.org/t/p/w500{{movie.backdrop_path}}" alt="">
+        </div>
+        <div class="card-content">
+            <h3>{{ movie.title }}</h3>
 
-        <span>
+            <span>
 
-            {% include "components/___like_movie_btn.html" with context %}</span>
-        <p>
-            {% for genre in movie.genres %}
-            {{ genre }}
-            {% if not loop.last %}
-            <i class="fa-solid fa-circle fa-2xs text-5px text-c-var(--color_tertiary) mx-.25rem"></i>
-            {% endif %}
-            {% endfor %}
-        </p>
-    </div>
+                {% include "components/___like_movie_btn.html" with context %}</span>
+            <p>
+                {% for genre in movie.genres %}
+                {{ genre }}
+                {% if not loop.last %}
+                <i class="fa-solid fa-circle fa-2xs text-5px text-c-var(--color_tertiary) mx-.25rem"></i>
+                {% endif %}
+                {% endfor %}
+            </p>
+        </div>
+    </a>
 </article>

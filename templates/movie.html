@@ -1,0 +1,55 @@
+{% include "components/_header.html" %}
+{% include "components/___back_btn.html" %}
+
+<section>
+    <div class="img-container w-100% p-absolute top-0 left-0 z-0 brightness-40">
+        <img src="https://image.tmdb.org/t/p/w500{{ data.backdrop_path }}" alt="{{ data.title }}">
+    </div>
+
+    <section class="p-relative">
+        <section></section>
+        <h1>{{ data.title }}</h1>
+        <p>Overview {{ data.overview }} </p>
+        <div class="d-flex gap-1rem a-items-center">
+            <p>Released {{ data.release_date }} </p>
+            |
+            <p>{{ data.runtime }} minutes</p>
+        </div>
+
+    </section>
+
+    <section
+        class="p-relative bottom-0 pa-2rem rounded-sm bg-c-var(--color_main_bg85) d-flex color_main_bg85 flex-col j-content-between gap-1rem max-w-840px mx-auto"
+        md="flex-row">
+        <div>
+            <h3>Country</h3>
+            <div>
+                {% for country in data.production_countries %}
+                {{ country["name"] }}
+                {% if not loop.last %}
+                <i class="fa-solid fa-circle fa-2xs text-5px text-c-var(--color_tertiary) mx-.25rem"></i>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div>
+            <h3>Genres</h3>
+            {% for genre in data.genres %}
+            {{ genre["name"] }}
+            {% if not loop.last %}
+            <i class="fa-solid fa-circle fa-2xs text-5px text-c-var(--color_tertiary) mx-.25rem"></i>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div>
+            <h3>Production companies</h3>
+            {% for production in data.production_companies %}
+            {{ production["name"] }}
+            {% if not loop.last %}
+            <i class="fa-solid fa-circle fa-2xs text-5px text-c-var(--color_tertiary) mx-.25rem"></i>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </section>
+</section>
+{% include "components/_footer.html" %}
