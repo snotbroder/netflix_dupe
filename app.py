@@ -308,8 +308,6 @@ def view_movie():
         if not user: 
             return redirect(url_for("view_index"))
         
-        
-        
         movie_id = request.args.get("movie_id")
 
         #Fallback
@@ -323,10 +321,25 @@ def view_movie():
         data = response.json()
         lang = user.get("user_language", "en")
 
-        return render_template("movie.html", user=user, data=data, lang=lang)
+        # Connect to the database
+        db, cursor = x.db()
+        q = """
+        SELECT reviews.review_pk, reviews.review_text, users.user_first_name, users.user_avatar_path FROM reviews JOIN users ON users.user_pk = reviews.review_user_fk WHERE reviews.review_movie_id = %s
+        """ # reviews.review_count,
+        cursor.execute(q, (movie_id,))
+        reviews = cursor.fetchall()
+
+        # q = "SELECT * FROM users WHERE review_user_fk = %s"
+        # cursor.execute(q, (movie_id,))
+        # review_users_data = cursor.fetchall()
+
+
+        return render_template("movie.html", user=user, data=data, lang=lang, reviews=reviews, movie_id=movie_id)
     except Exception as ex:
         ic(ex)
-    finally: pass
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
 
 ################## 
 @app.route("/account")
@@ -725,3 +738,53 @@ def update_website_language():
     new_path = "/".join(parts)
 
     return redirect(new_path)
+
+
+#####################
+@app.route("/api-create-review/<movie_id>", methods=["POST"])
+def api_create_review(movie_id):
+    try:
+        user = session.get("user", "")
+        if not user: return "invalid user"
+
+        user_pk = user["user_pk"]        
+        review_text = x.validate_post(request.form.get("post", ""))
+        review_pk = uuid.uuid4().hex
+        # Fallbcak
+        if not movie_id:
+            return redirect(url_for("browse"))
+
+        #review_count = 0
+        db, cursor = x.db()
+        q = "INSERT INTO reviews VALUES(%s, %s, %s, %s)"
+        cursor.execute(q, (review_pk, user_pk, movie_id, review_text))
+        db.commit()
+        label_ok = render_template("components/toast/___label_ok.html", message="The world is reading your post !")
+        review = {
+            "user_first_name": user["user_first_name"],
+            #"user_avatar_path": user["user_avatar_path"],
+            "review_text": review_text,
+        }
+        html_review_container = render_template("components/___post_container.html")
+        html_review = render_template("components/_review.html", review=review)
+        return f"""
+            <browser mix-bottom="#error_container">{label_ok}</browser>
+            <browser mix-top="#reviews">{html_review}</browser>
+            <browser mix-replace="#review_container">{html_review_container}</browser>
+        """
+    except Exception as ex:
+        ic("An error accured while creating a review:", ex)
+        if "db" in locals(): db.rollback()
+
+        # User errors
+        # if "x-error post" in str(ex):
+        #     toast_error = render_template("___toast_error.html", message=f"Post - {x.POST_MIN_LEN} to {x.POST_MAX_LEN} characters")
+        #     return f"""<browser mix-bottom="#toast">{toast_error}</browser>"""
+
+        # System or developer error
+        label_error = render_template("components/toast/___label_error.html", message="System under maintenance")
+        return f"""<browser mix-bottom="#error_container">{ label_error }</browser>""", 500
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()   
