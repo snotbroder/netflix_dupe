@@ -13,16 +13,57 @@
         <div>
             {% include "components/___back_btn.html" %}
         </div>
-        <section class="d-flex flex-col max-w-1000px ma-auto my-5rem gap-3rem " md="flex-row j-content-between">
-            <div class="" md="w-50%">
+        <section class="d-flex flex-col max-w-1000px ma-auto my-5rem gap-3rem " md="flex-row">
+            <div class="d-flex flex-col gap-1rem" md="w-100%">
                 <h1>{{ data.title }}</h1>
-                <p>Overview {{ data.overview }} </p>
-
-                <div class="d-flex gap-1rem a-items-center">
-                    <p>Released {{ data.release_date }} </p>
-                    |
-                    <p>{{ data.runtime }} minutes</p>
+                <div>
+                    <div class="d-flex gap-1rem">
+                        <button class="button-secondary">Add to My List</button>
+                        <button class="button-primary">Watch now</button>
+                    </div>
+                    <p class="mt-1rem">Overview {{ data.overview }} </p>
+                    <div class="d-flex gap-1rem a-items-center p-self-end mt-1rem">
+                        <p>{{ data.runtime }} minutes</p>
+                        |
+                        <p>Released {{ data.release_date }} </p>
+                    </div>
                 </div>
+                <section
+                    class="p-relative bottom-0 pa-2rem rounded-sm bg-c-var(--color_main_bg85) d-flex color_main_bg85 flex-col gap-2rem mt-2rem"
+                    md="flex-col">
+                    <div class="d-grid cols-2 gap-1rem">
+                        <div>
+                            <h3>Country</h3>
+                            <div>
+                                {% for country in data.production_countries %}
+                                {{ country["name"] }}
+                                {% if not loop.last %}
+                                <i
+                                    class="fa-solid fa-circle fa-2xs text-5px text-c-var(--color_tertiary) mx-.25rem"></i>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div>
+                            <h3>Genres</h3>
+                            {% for genre in data.genres %}
+                            {{ genre["name"] }}
+                            {% if not loop.last %}
+                            <i class="fa-solid fa-circle fa-2xs text-5px text-c-var(--color_tertiary) mx-.25rem"></i>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div>
+                        <h3>Production companies</h3>
+                        {% for production in data.production_companies %}
+                        {{ production["name"] }}
+                        {% if not loop.last %}
+                        <i class="fa-solid fa-circle fa-2xs text-5px text-c-var(--color_tertiary) mx-.25rem"></i>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </section>
             </div>
             <div>
                 <section class="w-100% pa-2rem rounded-sm bg-c-var(--color_main_bg85) d-flex flex-col" md="min-w-400px">
@@ -45,39 +86,7 @@
                 </section>
             </div>
         </section>
-        <section
-            class="p-relative bottom-0 pa-2rem rounded-sm bg-c-var(--color_main_bg85) d-flex color_main_bg85 flex-col j-content-between gap-1rem max-w-1000px mx-auto"
-            md="flex-row">
-            <div>
-                <h3>Country</h3>
-                <div>
-                    {% for country in data.production_countries %}
-                    {{ country["name"] }}
-                    {% if not loop.last %}
-                    <i class="fa-solid fa-circle fa-2xs text-5px text-c-var(--color_tertiary) mx-.25rem"></i>
-                    {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-            <div>
-                <h3>Genres</h3>
-                {% for genre in data.genres %}
-                {{ genre["name"] }}
-                {% if not loop.last %}
-                <i class="fa-solid fa-circle fa-2xs text-5px text-c-var(--color_tertiary) mx-.25rem"></i>
-                {% endif %}
-                {% endfor %}
-            </div>
-            <div>
-                <h3>Production companies</h3>
-                {% for production in data.production_companies %}
-                {{ production["name"] }}
-                {% if not loop.last %}
-                <i class="fa-solid fa-circle fa-2xs text-5px text-c-var(--color_tertiary) mx-.25rem"></i>
-                {% endif %}
-                {% endfor %}
-            </div>
-        </section>
+
 
     </section>
 
