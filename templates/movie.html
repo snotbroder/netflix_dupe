@@ -1,5 +1,5 @@
 {% include "components/_header.html" %}
-{% include "components/___back_btn.html" %}
+
 
 <section>
     <div class="img-container w-100% p-absolute top-0 left-0 z-0 brightness-40">
@@ -7,7 +7,9 @@
     </div>
 
     <section class="p-relative">
-        <section></section>
+        <section>
+            {% include "components/___back_btn.html" %}
+        </section>
         <h1>{{ data.title }}</h1>
         <p>Overview {{ data.overview }} </p>
         <div class="d-flex gap-1rem a-items-center">
