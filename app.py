@@ -321,8 +321,9 @@ def view_movie():
         url_movie = f"https://api.themoviedb.org/3/movie/{movie_id}?language=en-US"
         response = requests.get(url_movie, headers=headers)
         data = response.json()
+        lang = user.get("user_language", "en")
 
-        return render_template("movie.html", user=user, data=data)
+        return render_template("movie.html", user=user, data=data, lang=lang)
     except Exception as ex:
         ic(ex)
     finally: pass
