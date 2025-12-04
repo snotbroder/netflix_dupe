@@ -11,6 +11,7 @@ import os
 import io
 import csv
 import json
+from datetime import datetime
 
 load_dotenv()
 TMDB_API_KEY = os.getenv("TMDB_API_KEY")
@@ -36,7 +37,37 @@ def global_variables():
     return dict (
         x = x
     )
- 
+
+# Generated with chatGPT
+@app.template_filter("timeago")
+def timeago(timestamp):
+    now = datetime.now()
+    dt = datetime.fromtimestamp(timestamp)
+    diff = now - dt
+
+    seconds = diff.total_seconds()
+    minutes = seconds // 60
+    hours = minutes // 60
+    days = hours // 24
+    weeks = days // 7
+    months = days // 30
+    years = days // 365
+
+    if seconds < 60:
+        return "just now"
+    elif minutes < 60:
+        return f"{int(minutes)} minute{'s' if minutes > 1 else ''}"
+    elif hours < 24:
+        return f"{int(hours)} hour{'s' if hours > 1 else ''}"
+    elif days < 7:
+        return f"{int(days)} day{'s' if days > 1 else ''}"
+    elif weeks < 4:
+        return f"{int(weeks)} week{'s' if weeks > 1 else ''}"
+    elif months < 12:
+        return f"{int(months)} month{'s' if months > 1 else ''}"
+    else:
+        return f"{int(years)} year{'s' if years > 1 else ''}"
+
 
 ##############################
 ##############################
@@ -324,7 +355,20 @@ def view_movie():
         # Connect to the database
         db, cursor = x.db()
         q = """
-        SELECT reviews.review_pk, reviews.review_text, users.user_first_name, users.user_avatar_path FROM reviews JOIN users ON users.user_pk = reviews.review_user_fk WHERE reviews.review_movie_id = %s
+        SELECT 
+            reviews.review_pk, 
+            reviews.review_text, 
+            reviews.review_created_at, 
+            users.user_first_name, 
+            users.user_avatar_path,
+            users.user_verified_at
+        FROM reviews
+        JOIN users 
+            ON users.user_pk = reviews.review_user_fk
+        WHERE 
+            reviews.review_movie_id = %s
+            AND reviews.review_deleted_at = 0
+            AND users.user_deleted_at = 0
         """ # reviews.review_count,
         cursor.execute(q, (movie_id,))
         reviews = cursor.fetchall()
@@ -750,22 +794,25 @@ def api_create_review(movie_id):
         user_pk = user["user_pk"]        
         review_text = x.validate_post(request.form.get("post", ""))
         review_pk = uuid.uuid4().hex
+        review_created_at = int(time.time()) 
+        review_deleted_at = 0
         # Fallbcak
         if not movie_id:
             return redirect(url_for("browse"))
 
         #review_count = 0
         db, cursor = x.db()
-        q = "INSERT INTO reviews VALUES(%s, %s, %s, %s)"
-        cursor.execute(q, (review_pk, user_pk, movie_id, review_text))
+        q = "INSERT INTO reviews VALUES(%s, %s, %s, %s, %s, %s)"
+        cursor.execute(q, (review_pk, user_pk, movie_id, review_text, review_created_at, review_deleted_at))
         db.commit()
         label_ok = render_template("components/toast/___label_ok.html", message="The world is reading your post !")
         review = {
             "user_first_name": user["user_first_name"],
-            #"user_avatar_path": user["user_avatar_path"],
+            "user_avatar_path": user["user_avatar_path"],
             "review_text": review_text,
+            "review_created_at": review_created_at,
         }
-        html_review_container = render_template("components/___post_container.html")
+        html_review_container = render_template("components/___review_container.html")
         html_review = render_template("components/_review.html", review=review)
         return f"""
             <browser mix-bottom="#error_container">{label_ok}</browser>

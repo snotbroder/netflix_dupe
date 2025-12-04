@@ -202,3 +202,17 @@ dialog{
         opacity: .75;
     }
 }
+
+.slide-in{
+    animation: slide_in_kf .5s both ease;
+}
+@keyframes slide_in_kf{
+    from{
+        transform: translateX(10px);
+        opacity: 0;
+    }
+    to{
+        transform: translateX(0px);
+        opacity: 1;
+    }
+}

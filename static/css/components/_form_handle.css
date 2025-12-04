@@ -11,10 +11,12 @@
         label{
             font-family: var(--font_regular);
         }
-        input{
-            height: 3rem;
+        input,textarea{
             padding: 1rem;
             border-radius: .25rem;
+            &:not(textarea){
+                height: 3rem;
+            }
             background-color: var(--color_input);
             border: solid var(--color_input_border) 1px;
             color: var(--color_secondary);
