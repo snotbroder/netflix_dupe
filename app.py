@@ -48,21 +48,21 @@ def _____USER_____(): pass
 
 @app.get("/")
 @app.route("/<lang>", methods=["GET", "POST"])
-def view_index(lang = None):
-    # Default language
-    default_lang = "en"
+def view_index(lang = "en"):
+    # # Default language
+    # default_lang = "en"
 
-    # Check previous page
-    referer = request.headers.get("Referer", "")
+    # # Check previous page
+    # referer = request.headers.get("Referer", "")
 
-    if not lang:
-        # Extract last segment of previous URL
-        path = referer.split("?", 1)[0].rstrip("/")  # remove query string & trailing slash
-        last_segment = path.split("/")[-1] if path else ""
-        if last_segment in ["en", "nl", "es"]:
-            lang = last_segment
-        else:
-            lang = default_lang
+    # if not lang:
+    #     # Extract last segment of previous URL
+    #     path = referer.split("?", 1)[0].rstrip("/")  # remove query string & trailing slash
+    #     last_segment = path.split("/")[-1] if path else ""
+    #     if last_segment in ["en", "nl", "es"]:
+    #         lang = last_segment
+    #     else:
+    #         lang = default_lang
 
     # Set the translation engine
     x.default_language = lang
@@ -133,8 +133,10 @@ def login( lang = "en"):
 
 ##############################
 @app.post("/index-pass-email")
-def index_signup(lang= None):
+@app.post("/index-pass-email/<lang>")
+def index_signup(lang ="en"):
         try:
+            x.default_language = lang
             email = request.form.get("user_email")
 
             return redirect( url_for('signup', email=email, lang=lang))

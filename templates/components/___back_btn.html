@@ -1,4 +1,5 @@
-<a class="text-c-var(--color_secondary) ts-200" hover="text-c-var(--color_primary)" href="{{ url_for('view_index')}}">
+<a class="text-c-var(--color_secondary) ts-200" hover="text-c-var(--color_primary)"
+    href="{% if not user %}{{ url_for('view_index', lang=lang) }}{% else %}{{ url_for('view_browse') }}{% endif %}">
     <i class="fa-solid fa-chevron-left fa-lg text-1.15rem mr-.5rem"></i>
     <span class="text-w-bold text-t-capitalize">{{ x.lans("system_back") }}</span>
 </a>
