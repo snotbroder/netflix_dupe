@@ -822,7 +822,8 @@ def api_create_review(movie_id):
         }
         html_review_container = render_template("components/___review_container.html")
         html_review = render_template("components/_review.html", review=review, user=user)
-        label_ok = render_template("components/toast/___label_ok.html", message="Successfully created review")
+        #label_ok = render_template("components/toast/___label_ok.html", message="Successfully created review")
+        label_ok = render_template("components/toast/___label_ok.html", message=x.lans("system_characters"))
         return f"""
             <browser mix-bottom="#error_container">{label_ok}</browser>
             <browser mix-top="#reviews">{html_review}</browser>
@@ -862,8 +863,6 @@ def api_delete_review(review_pk):
         cursor.execute(q, (review_deleted_at, review_pk))
         db.commit()
         label_ok = render_template("components/toast/___label_ok.html", message="Deleted review!")
-
-        #html_review = render_template("components/_review.html", review=review)
     
         return f"""
             <browser mix-bottom="#error_container">{label_ok}</browser>
