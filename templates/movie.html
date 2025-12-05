@@ -68,11 +68,11 @@
             <div>
                 <section class="w-100% pa-2rem rounded-sm bg-c-var(--color_main_bg85) d-flex flex-col" md="min-w-400px">
                     <h2>Write a review</h2>
-                    <div id="error_container"></div>
                     <section class="p-relative">
                         <div>
                             {% include "components/___review_container.html" %}
                         </div>
+                        <div id="error_container" class="p-relative top-0"></div>
                         <div id="reviews" class="d-flex flex-col gap-2rem my-1rem">
                             {% if reviews %}
                             {% for review in reviews %}

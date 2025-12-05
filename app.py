@@ -54,7 +54,7 @@ def timeago(timestamp):
     years = days // 365
 
     if seconds < 60:
-        return "just now"
+        return "just moments"
     elif minutes < 60:
         return f"{int(minutes)} minute{'s' if minutes > 1 else ''}"
     elif hours < 24:
@@ -358,6 +358,7 @@ def view_movie():
         q = """
         SELECT 
             reviews.review_pk, 
+            reviews.review_user_fk,
             reviews.review_text, 
             reviews.review_created_at, 
             users.user_first_name, 
@@ -370,6 +371,7 @@ def view_movie():
             reviews.review_movie_id = %s
             AND reviews.review_deleted_at = 0
             AND users.user_deleted_at = 0
+        ORDER BY review_created_at DESC
         LIMIT 5
         """
         cursor.execute(q, (movie_id,))
@@ -811,7 +813,7 @@ def api_create_review(movie_id):
         q = "INSERT INTO reviews VALUES(%s, %s, %s, %s, %s, %s)"
         cursor.execute(q, (review_pk, user_pk, movie_id, review_text, review_created_at, review_deleted_at))
         db.commit()
-        label_ok = render_template("components/toast/___label_ok.html", message="The world is reading your post !")
+
         review = {
             "user_first_name": user["user_first_name"],
             "user_avatar_path": user["user_avatar_path"],
@@ -819,7 +821,8 @@ def api_create_review(movie_id):
             "review_created_at": review_created_at,
         }
         html_review_container = render_template("components/___review_container.html")
-        html_review = render_template("components/_review.html", review=review)
+        html_review = render_template("components/_review.html", review=review, user=user)
+        label_ok = render_template("components/toast/___label_ok.html", message="Successfully created review")
         return f"""
             <browser mix-bottom="#error_container">{label_ok}</browser>
             <browser mix-top="#reviews">{html_review}</browser>
@@ -829,10 +832,46 @@ def api_create_review(movie_id):
         ic("An error accured while creating a review:", ex)
         if "db" in locals(): db.rollback()
 
-        # User errors
-        # if "x-error post" in str(ex):
-        #     toast_error = render_template("___toast_error.html", message=f"Post - {x.POST_MIN_LEN} to {x.POST_MAX_LEN} characters")
-        #     return f"""<browser mix-bottom="#toast">{toast_error}</browser>"""
+       # User errors
+        if "x-error post" in str(ex):
+            label_error = render_template("components/toast/___label_error.html", message=f"Review - {x.POST_MIN_LEN} to {x.POST_MAX_LEN} characters")
+            return f"""<browser mix-bottom="#error_container">{label_error}</browser>"""
+
+        # System or developer error
+        label_error = render_template("components/toast/___label_error.html", message="System under maintenance")
+        return f"""<browser mix-bottom="#error_container">{ label_error }</browser>""", 500
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()   
+
+###############
+@app.patch("/api-delete-review/<review_pk>")
+def api_delete_review(review_pk):
+    try:
+        user = session.get("user", "")
+        if not user: return "invalid user"
+
+        review_deleted_at = int(time.time()) 
+        # Fallbcak
+        if not review_pk:
+            return redirect(url_for("browse"))
+
+        db, cursor = x.db()
+        q = "UPDATE reviews SET review_deleted_at = %s WHERE review_pk = %s AND review_deleted_at = 0"
+        cursor.execute(q, (review_deleted_at, review_pk))
+        db.commit()
+        label_ok = render_template("components/toast/___label_ok.html", message="Deleted review!")
+
+        #html_review = render_template("components/_review.html", review=review)
+    
+        return f"""
+            <browser mix-bottom="#error_container">{label_ok}</browser>
+            <browser mix-remove="#review-{review_pk}"></browser>
+        """
+    except Exception as ex:
+        ic("An error accured while deleting a review:", ex)
+        if "db" in locals(): db.rollback()
 
         # System or developer error
         label_error = render_template("components/toast/___label_error.html", message="System under maintenance")
