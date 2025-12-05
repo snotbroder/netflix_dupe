@@ -375,13 +375,14 @@ def view_movie():
         cursor.execute(q, (movie_id,))
         reviews = cursor.fetchall()
 
+        #check if the user has liked the movie
         q = "SELECT * FROM mylists WHERE mylist_user_fk = %s AND mylist_movie_id = %s"
         cursor.execute(q, (user_pk, movie_id,))
-        has_user_liked = False
-
         mylist_existing_row = cursor.fetchone()
-        # If row exists
-        if mylist_existing_row["mylist_deleted_at"] == 0:
+
+        #display the correct button in each case
+        has_user_liked = False
+        if mylist_existing_row and mylist_existing_row.get("mylist_deleted_at") == 0:
             has_user_liked = True
 
 
