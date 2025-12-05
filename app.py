@@ -277,6 +277,7 @@ def logout():
 def view_browse():
     try:
         user = session.get("user", "")
+        user_pk = user.get("user_pk", "")
         if not user: 
             return redirect(url_for("view_index"))
         
@@ -321,7 +322,6 @@ def view_browse():
                     for gid in movie.get("genre_ids", [])
                 ]
 
-        
         return render_template("browse.html", user=user, movies_popular=movies_popular, movies_comedy=movies_comedy, movies_romance=movies_romance, lang=lang)
     except Exception as ex:
         ic(ex)
@@ -336,6 +336,7 @@ def view_browse():
 def view_movie():
     try:
         user = session.get("user", "")
+        user_pk = user.get("user_pk")
         if not user: 
             return redirect(url_for("view_index"))
         
@@ -351,7 +352,7 @@ def view_movie():
         response = requests.get(url_movie, headers=headers)
         data = response.json()
         lang = user.get("user_language", "en")
-
+    
         # Connect to the database
         db, cursor = x.db()
         q = """
@@ -370,16 +371,22 @@ def view_movie():
             AND reviews.review_deleted_at = 0
             AND users.user_deleted_at = 0
         LIMIT 5
-        """ # reviews.review_count,
+        """
         cursor.execute(q, (movie_id,))
         reviews = cursor.fetchall()
 
-        # q = "SELECT * FROM users WHERE review_user_fk = %s"
-        # cursor.execute(q, (movie_id,))
-        # review_users_data = cursor.fetchall()
+        q = "SELECT * FROM mylists WHERE mylist_user_fk = %s AND mylist_movie_id = %s"
+        cursor.execute(q, (user_pk, movie_id,))
+        has_user_liked = False
+
+        mylist_existing_row = cursor.fetchone()
+        # If row exists
+        if mylist_existing_row["mylist_deleted_at"] == 0:
+            has_user_liked = True
 
 
-        return render_template("movie.html", user=user, data=data, lang=lang, reviews=reviews, movie_id=movie_id)
+
+        return render_template("movie.html", user=user, data=data, lang=lang, reviews=reviews, movie_id=movie_id, has_user_liked=has_user_liked)
     except Exception as ex:
         ic(ex)
     finally:
@@ -407,7 +414,8 @@ def view_account():
     except Exception as ex:
         ic(ex)
     finally:
-        pass
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
 
 ################## 
 @app.route("/api-update-account", methods=["POST"])
@@ -626,54 +634,50 @@ def reactivate_user():
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
 
-## Like and unlike with ajax function ###
-@app.get("/ajax-heart")
-def view_ajax_heart():
-    try:
-        return render_template("ajax_heart.html")
-    except Exception as ex:
-        ic(ex)
-        return "Error"
-    finally:
-        pass
-
+#################
 @app.patch("/api-like-movie/<movie_id>")
 def api_like_movie(movie_id):
     try:
-        user_session = session.get("user")
-        if not user_session:
-            return redirect(url_for("view_index"))
-
-        user_id = user_session.get("user_pk")
-        if not user_id:
+        user = session.get("user")
+        user_pk = user.get("user_pk")
+        if not user_pk:
             return "No user id in session", 500
 
         db, cursor = x.db()
-
-        # Check if the user already liked the movie
-        q = "SELECT movielike_pk FROM movielikes WHERE movielike_user_fk = %s AND movielike_movie_id = %s"
-        cursor.execute(q, (user_id, movie_id))
-        user_has_liked = cursor.fetchone()
+        q = "SELECT * FROM mylists WHERE mylist_user_fk = %s AND mylist_movie_id = %s"
+        cursor.execute(q, (user_pk, movie_id))
+        existing_row = cursor.fetchone()
 
         # If result exists -> unlike (DELETE)
-        if user_has_liked:
-            # Unlike
-            q = "DELETE FROM movielikes WHERE movielike_pk = %s"
-            cursor.execute(q, (user_has_liked["movielike_pk"],))
-            db.commit()
-            like_status = False
+        if existing_row:
+            if existing_row["mylist_deleted_at"] == 0:
+                # Unlike
+                mylist_deleted_at = int(time.time())
+                q = "UPDATE mylists SET mylist_deleted_at = %s WHERE mylist_user_fk = %s AND mylist_movie_id = %s"
+                cursor.execute(q, (mylist_deleted_at, user_pk, movie_id))
+                db.commit()
+                has_user_liked = False
+                button_html = render_template("components/___add_mylist_btn.html", movie_id=movie_id)
+            else:
+                # Re-like
+                mylist_deleted_at = 0
+                q = "UPDATE mylists SET mylist_deleted_at = %s WHERE mylist_user_fk = %s AND mylist_movie_id = %s"
+                cursor.execute(q, (mylist_deleted_at, user_pk, movie_id))
+                db.commit()
+                has_user_liked = True
+                button_html = render_template("components/___remove_mylist_btn.html", movie_id=movie_id)
         else:
-            # Like
-            movielike_pk = uuid.uuid4().hex
-            created_at = int(time.time())
-            q = "INSERT INTO movielikes VALUES (%s, %s, %s, %s)"
-            cursor.execute(q, (movielike_pk, movie_id, user_id, created_at))
+            # Create like
+            mylist_created_at = int(time.time())
+            mylist_deleted_at = 0
+            q = "INSERT INTO mylists VALUES (%s, %s, %s, %s)"
+            cursor.execute(q, (user_pk, movie_id, mylist_created_at, mylist_deleted_at))
             db.commit()
-            like_status = True
+            has_user_liked = True
 
-        button_html = render_template("components/___like_movie_btn.html", movie_id=movie_id, like_status=like_status)
+        button_html = render_template("components/___mylist_container.html", movie_id=movie_id, has_user_liked=has_user_liked)
 
-        return f"<browser mix-update='#like-btn-{movie_id}'>liked!</browser>"
+        return f"<browser mix-replace='#mylist_btn_container'>{button_html}</browser>"
 
     except Exception as ex:
         ic(ex)

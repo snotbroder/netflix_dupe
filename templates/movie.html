@@ -7,8 +7,6 @@
         <div class="start-trending p-aboslute bottom-0 mt--1rem"></div>
     </div>
 
-
-
     <section class="p-relative">
         <div>
             {% include "components/___back_btn.html" %}
@@ -18,10 +16,12 @@
                 <h1>{{ data.title }}</h1>
                 <div>
                     <div class="d-flex gap-1rem">
-                        <button class="button-secondary">Add to My List</button>
+                        <section>
+                            {% include "components/___mylist_container.html" %}
+                        </section>
                         <button class="button-primary">Watch now</button>
                     </div>
-                    <p class="mt-1rem">Overview {{ data.overview }} </p>
+                    <p class="mt-1rem">{{ data.overview }} </p>
                     <div class="d-flex gap-1rem a-items-center p-self-end mt-1rem">
                         <p>{{ data.runtime }} minutes</p>
                         |
