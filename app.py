@@ -54,19 +54,19 @@ def timeago(timestamp):
     years = days // 365
 
     if seconds < 60:
-        return "just moments"
+        return f"{x.lans('time_moments')}"
     elif minutes < 60:
-        return f"{int(minutes)} minute{'s' if minutes > 1 else ''}"
+        return f"{int(minutes)} {x.lans('time_minute')}{x.lans('time_plural_suffix') if minutes > 1 else ''}"
     elif hours < 24:
-        return f"{int(hours)} hour{'s' if hours > 1 else ''}"
+        return f"{int(hours)} {x.lans('time_hour')}{x.lans('time_plural_suffix') if hours > 1 else ''}"
     elif days < 7:
-        return f"{int(days)} day{'s' if days > 1 else ''}"
+        return f"{int(days)} {x.lans('time_day')}{x.lans('time_plural_suffix') if days > 1 else ''}"
     elif weeks < 4:
-        return f"{int(weeks)} week{'s' if weeks > 1 else ''}"
+        return f"{int(weeks)} {x.lans('time_week')}{x.lans('time_plural_suffix') if weeks > 1 else ''}"
     elif months < 12:
-        return f"{int(months)} month{'s' if months > 1 else ''}"
+        return f"{int(months)} {x.lans('time_month')}{x.lans('time_plural_suffix') if months > 1 else ''}"
     else:
-        return f"{int(years)} year{'s' if years > 1 else ''}"
+        return f"{int(years)} {x.lans('time_year')}{x.lans('time_plural_suffix') if years > 1 else ''}"
 
 
 ##############################

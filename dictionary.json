@@ -19,6 +19,16 @@
         "nl": "Uitloggen",
         "es": "Finalizar la Sesión"
     },
+    "system_delete": {
+        "en": "Delete",
+        "nl": "Verwijder",
+        "es": "Borrar"
+    },
+    "system_report": {
+        "en": "Report",
+        "nl": "Rapporteer",
+        "es": "Reporta"
+    },
     "system_email": {
         "en": "Email",
         "nl": "E-mail",
@@ -54,15 +64,25 @@
         "nl": "tot",
         "es": "a"
     },
+    "system_ago": {
+        "en": "ago",
+        "nl": "tot",
+        "es": "atrás"
+    },
     "system_eg": {
         "en": "e.g.",
         "nl": "bijv.",
         "es": "p.ej."
     },
     "system_loading": {
-        "en": "loading...",
-        "nl": "laden...",
-        "es": "cargando..."
+        "en": "Loading...",
+        "nl": "Laden...",
+        "es": "Cargando..."
+    },
+    "system_updating": {
+        "en": "Updating...",
+        "nl": "Updaten...",
+        "es": "Actualizando..."
     },
     "system_back": {
         "en": "back",
@@ -313,5 +333,110 @@
         "en": "Update details",
         "nl": "Gegevens wijzigen",
         "es": "Actualizar detalles"
+    },
+    "COMP. REVIEW": {
+        "en": "",
+        "nl": "",
+        "es": ""
+    },
+    "review_container_header_1": {
+        "en": "Write a review",
+        "nl": "Schrijf een recensie",
+        "es": "Escribe una reseña"
+    },
+    "review_container_input_placeholder": {
+        "en": "What did you think of the movie",
+        "nl": "Wat vondt je van de film",
+        "es": "¿Qué te pareció la película"
+    },
+    "review_container_cta_1": {
+        "en": "Create review",
+        "nl": "Maak recensie",
+        "es": "Creer reseña"
+    },
+    "review_container_be_the_first": {
+        "en": "Be the first to write a review!",
+        "nl": "Schrijf als de eerste een recensie",
+        "es": "Sé el primero en escribir una reseña"
+    },
+    "review_body_ago_2": {
+        "en": "",
+        "nl": "",
+        "es": "Hace"
+    },
+    "review_body_ago_1": {
+        "en": "ago",
+        "nl": "geleden",
+        "es": ""
+    },
+    "MOVIE": {
+        "en": "",
+        "nl": "",
+        "es": ""
+    },
+    "movie_cta_1": {
+        "en": "Watch now",
+        "nl": "Kijk nu",
+        "es": "Mira ahora"
+    },
+    "movie_list_btn_add": {
+        "en": "Add to My List",
+        "nl": "Toevoegen aan Mijn Lijst",
+        "es": "Agregar a Mi Lista"
+    },
+    "movie_list_btn_remove": {
+        "en": "Remove from My List",
+        "nl": "Verwijderen van Mijn Lijst",
+        "es": "Eliminar de Mi Lista"
+    },
+    "movie_runtime": {
+        "en": "minutes",
+        "nl": "minuten",
+        "es": "minutos"
+    },
+    "movie_release": {
+        "en": "Released",
+        "nl": "Vrijgegeven",
+        "es": "Liberado"
+    },
+    "movie_country": {
+        "en": "Country",
+        "nl": "Land",
+        "es": "País"
+    },
+    "movie_genres": {
+        "en": "Genres",
+        "nl": "Genres",
+        "es": "Géneros"
+    },
+    "movie_prod_company": {
+        "en": "Production companies",
+        "nl": "Productie bedrijven",
+        "es": "Empresas productoras"
+    },
+    "UTIL. TIME": {
+        "en": "",
+        "nl": "",
+        "es": ""
+    },
+    "time_plural_suffix": {
+        "en": "s",
+        "nl": "en",
+        "es": "s"
+    },
+    "time_moments": {
+        "en": "moments",
+        "nl": "momenten",
+        "es": "momentos"
+    },
+    "time_minute": {
+        "en": "minute",
+        "nl": "minuut",
+        "es": "minuto"
+    },
+    "time_hour": {
+        "en": "hour",
+        "nl": "uur",
+        "es": "hora"
     }
 }

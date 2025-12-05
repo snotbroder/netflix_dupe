@@ -1,9 +1,10 @@
 <form id="review_container" action="/api-create-review/{{movie_id}}" mix-post class="form-handle">
     <div class="form-handle-item">
-        <textarea name="post" placeholder="What did you think of the movie?"
+        <textarea name="post" placeholder="{{ x.lans('review_container_input_placeholder')}}?"
             class="w-full outline-color-var(color_input_border) outline-1 min-h-3rem pa-2"></textarea>
     </div>
-    <button mix-default="Create review" mix-await="Posting ..." class="button-primary p-self-end">
-        Create review
+    <button mix-default="{{ x.lans('review_container_cta_1')}}" mix-await="{{ x.lans('system_loading')}}"
+        class="button-primary p-self-end">
+        {{ x.lans("review_container_cta_1")}}
     </button>
 </form>

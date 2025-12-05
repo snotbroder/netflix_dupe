@@ -13,19 +13,20 @@
         </div>
         <section class="d-flex flex-col max-w-1000px ma-auto my-5rem gap-3rem " md="flex-row">
             <div class="d-flex flex-col gap-1rem" md="w-100%">
+
                 <h1>{{ data.title }}</h1>
                 <div>
                     <div class="d-flex gap-1rem">
                         <section>
                             {% include "components/___mylist_container.html" %}
                         </section>
-                        <button class="button-primary">Watch now</button>
+                        <button class="button-primary">{{ x.lans("movie_cta_1")}}</button>
                     </div>
                     <p class="mt-1rem">{{ data.overview }} </p>
                     <div class="d-flex gap-1rem a-items-center p-self-end mt-1rem">
-                        <p>{{ data.runtime }} minutes</p>
+                        <p>{{ data.runtime }} {{ x.lans("movie_runtime")}}</p>
                         |
-                        <p>Released {{ data.release_date }} </p>
+                        <p>{{ x.lans("movie_release")}} {{ data.release_date }} </p>
                     </div>
                 </div>
                 <section
@@ -33,7 +34,7 @@
                     md="flex-col">
                     <div class="d-grid cols-2 gap-1rem">
                         <div>
-                            <h3>Country</h3>
+                            <h3>{{ x.lans("movie_country")}}</h3>
                             <div>
                                 {% for country in data.production_countries %}
                                 {{ country["name"] }}
@@ -45,7 +46,7 @@
                             </div>
                         </div>
                         <div>
-                            <h3>Genres</h3>
+                            <h3>{{ x.lans("movie_genres")}}</h3>
                             {% for genre in data.genres %}
                             {{ genre["name"] }}
                             {% if not loop.last %}
@@ -55,7 +56,7 @@
                         </div>
                     </div>
                     <div>
-                        <h3>Production companies</h3>
+                        <h3>{{ x.lans("movie_prod_company")}}</h3>
                         {% for production in data.production_companies %}
                         {{ production["name"] }}
                         {% if not loop.last %}
@@ -67,7 +68,7 @@
             </div>
             <div>
                 <section class="w-100% pa-2rem rounded-sm bg-c-var(--color_main_bg85) d-flex flex-col" md="min-w-400px">
-                    <h2>Write a review</h2>
+                    <h2>{{ x.lans("review_container_header_1") }}</h2>
                     <section class="p-relative">
                         <div>
                             {% include "components/___review_container.html" %}
@@ -79,7 +80,7 @@
                             {% include "components/_review.html" %}
                             {% endfor %}
                             {% else %}
-                            <p>Be the first to write a review!</p>
+                            <p>{{ x.lans("review_container_be_the_first")}}</p>
                             {% endif %}
                         </div>
                     </section>
