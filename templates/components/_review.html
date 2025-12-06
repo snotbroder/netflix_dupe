@@ -14,7 +14,7 @@
     <div class="p-absolute top-0 right-0">
         {% if review.review_user_fk == user.user_pk %}
         <button class="button-secondary-small"
-            mix-patch="{{ url_for('api_delete_review', review_pk=review.review_pk) }}">{{x.lans("system_delete")}}</button>
+            mix-patch="{{ url_for('api_actions.api_delete_review', review_pk=review.review_pk) }}">{{x.lans("system_delete")}}</button>
         {% endif %}
         {% if review.review_user_fk != user.user_pk %}
         <button class="button-secondary-small"

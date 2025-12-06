@@ -129,6 +129,11 @@
         "nl": "Ongeldig wachtwoord",
         "es": "Clave invalido"
     },
+    "feedback_invalid_password_repeat": {
+        "en": "Invalid repeated password",
+        "nl": "Ongeldig herhaalend wachtwoord",
+        "es": "Clave repetido invalido"
+    },
     "feedback_invalid_review": {
         "en": "Review must be",
         "nl": "Recencie moet minstens",
@@ -385,9 +390,9 @@
         "es": "¿Qué te pareció la película"
     },
     "review_container_cta_1": {
-        "en": "Create review",
-        "nl": "Maak recensie",
-        "es": "Creer reseña"
+        "en": "Post review",
+        "nl": "Plaats recensie",
+        "es": "Publicar reseña"
     },
     "review_container_be_the_first": {
         "en": "Be the first to write a review!",

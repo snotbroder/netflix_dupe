@@ -59,8 +59,7 @@
 
 /* Styling for system feedback component */
 .label-error{
-    transform: translateY(0px);
-    animation: fade_in_kf .5s both ease;
+    animation: fade_in_kf .25s both ease;
 }
 
 @keyframes fade_in_kf{

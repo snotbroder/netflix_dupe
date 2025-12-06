@@ -15,9 +15,10 @@ ic.configureOutput(prefix=f'----- | ', includeContext=True)
 
 api_actions = Blueprint("api_actions", __name__)
 
+
 ### SIGN UP ###
 @api_actions.post("/api-signup")
-@api_actions.post("/api-signup/<lang>") # , methods=["GET", "POST"]
+@api_actions.post("/api-signup/<lang>")
 @x.no_cache
 def signup(lang = "en"):
     try:
@@ -69,6 +70,7 @@ def signup(lang = "en"):
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
 
+
 ### LOGIN ###
 @api_actions.post("/api-login")
 @api_actions.post("/api-login/<lang>")
@@ -116,6 +118,7 @@ def login( lang = "en"):
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
 
+
 ### LOGOUT ###
 @api_actions.get("/logout")
 def api_logout():
@@ -128,6 +131,7 @@ def api_logout():
     finally:
         pass
 
+
 ### BLOCK USER ###
 @api_actions.patch("/api-block-user/<blocking_user_fk>/<blocker_user_fk>")
 def block_user(blocking_user_fk, blocker_user_fk):
@@ -139,7 +143,34 @@ def block_user(blocking_user_fk, blocker_user_fk):
     finally:
         pass
 
-### CREATE REVIEW ###
+
+### VERIFY ACCOUNT ###
+@api_actions.route("/verify-account", methods=["GET"])
+def api_verify_account():
+    try:
+        user_verification_key = x.validate_uuid4_without_dashes(request.args.get("key", ""))
+        user_verified_at = int(time.time())
+        db, cursor = x.db()
+        q = "UPDATE users SET user_verification_key = '', user_verified_at = %s WHERE user_verification_key = %s"
+        cursor.execute(q, (user_verified_at, user_verification_key))
+        db.commit()
+        if cursor.rowcount != 1: raise Exception("Invalid key", 400)
+        return redirect( url_for('login') )
+    except Exception as ex:
+        ic(ex)
+        if "db" in locals(): db.rollback()
+        # User errors
+        if ex.args[1] == 400: return ex.args[0], 400    
+
+        # System or developer error
+        return "Cannot verify user"
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+
+### REVIEW CREATE ###
 @api_actions.route("/api-create-review/<movie_id>", methods=["POST"])
 def create_review(movie_id):
     try:
@@ -153,7 +184,7 @@ def create_review(movie_id):
         review_deleted_at = 0
         # Fallbcak
         if not movie_id:
-            return redirect(url_for("browse"))
+            return redirect(url_for("view_browse"))
 
         db, cursor = x.db()
         q = "INSERT INTO reviews VALUES(%s, %s, %s, %s, %s, %s)"
@@ -190,3 +221,135 @@ def create_review(movie_id):
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()   
+
+
+### REVIEW DELETE ###
+@api_actions.patch("/api-delete-review/<review_pk>")
+def api_delete_review(review_pk):
+    try:
+        user = session.get("user", "")
+        if not user: return "invalid user"
+
+        review_deleted_at = int(time.time()) 
+        # Fallbcak
+        if not review_pk:
+            return redirect(url_for("view_browse"))
+
+        db, cursor = x.db()
+        q = "UPDATE reviews SET review_deleted_at = %s WHERE review_pk = %s AND review_deleted_at = 0"
+        cursor.execute(q, (review_deleted_at, review_pk))
+        db.commit()
+        label_ok = render_template("components/toast/___label_ok.html", message="Deleted review!")
+    
+        return f"""
+            <browser mix-bottom="#error_container">{label_ok}</browser>
+            <browser mix-remove="#review-{review_pk}"></browser>
+        """
+    except Exception as ex:
+        ic("An error accured while deleting a review:", ex)
+        if "db" in locals(): db.rollback()
+
+        # System or developer error
+        label_error = render_template("components/toast/___label_error.html", message="System under maintenance")
+        return f"""<browser mix-bottom="#error_container">{ label_error }</browser>""", 500
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close() 
+
+
+### FORGOT PASSWORD ###
+@api_actions.post("/forgot-password")
+@api_actions.post("/forgot-password/<lang>")
+def api_forgot_password(lang = "en"):
+    try:
+        user_email = x.validate_user_email(lang)
+
+        db, cursor = x.db()
+        q = "SELECT * FROM users WHERE user_email = %s"
+        cursor.execute(q, (user_email,))
+        user = cursor.fetchone()
+        ic(user)
+        if not user:
+            raise Exception(x.lans("feedback_user_not_found"), 400)
+
+        if user["user_verification_key"] != "":
+            raise Exception(x.lans("feedback_user_not_verified"), 400)
+        
+        if user["user_new_password_key"] != "":
+            raise Exception(x.lans("feedback_pass_email_already_sent"), 400)
+
+        #Create new password key for email and system
+        user_new_password_key = uuid.uuid4().hex
+
+        q = "UPDATE users SET user_new_password_key = %s WHERE user_email = %s"
+        cursor.execute(q, (user_new_password_key, user_email,))
+        db.commit()
+
+        # send email with link and key
+        email_new_password = render_template("components/email/_email_forgot_password.html", user_new_password_key=user_new_password_key)
+        x.send_email(user_email, "Forgot password | Dupeflix", email_new_password)
+
+        label_ok = render_template("components/toast/___label_ok.html", message=x.lans('feedback_check_email'))
+
+        return f"""
+            <browser mix-replace="#error_container">{label_ok}</browser>
+        """
+    except Exception as ex: 
+        ic(ex)
+        #User errors
+        if ex.args[1] == 400:
+            label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
+            ic("An error occured in Email")
+            return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 400
+        
+        # System or developer error
+        label_error = render_template("components/toast/___label_error.html", message=x.lans('feedback_system_maintenance'))
+        return f"""<browser mix-bottom="#error_container">{ label_error }</browser>""", 500
+
+    finally: 
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+
+### PASSWORD UPDATE ###
+@api_actions.route("/api-update-password", methods=["POST"])
+@x.no_cache
+def api_update_password():
+    try: 
+        user_new_password_key = x.validate_uuid4_without_dashes(request.args.get("key"))
+
+        if user_new_password_key == '':
+            raise redirect(url_for("index.html"))
+
+        user_new_password = x.validate_user_password()
+        user_confirm_new_password = x.validate_user_password_confirm()
+
+        if user_new_password != user_confirm_new_password:
+            raise Exception(x.lans('feedback_pass_must_match'), 400)
+        
+        user_hashed_new_password = generate_password_hash(user_new_password)
+        db, cursor = x.db()
+        q = "UPDATE users SET user_new_password_key = '', user_password = %s WHERE user_new_password_key = %s"
+        cursor.execute(q, (user_hashed_new_password, user_new_password_key))
+        db.commit()
+
+        #label_ok = render_template("components/toast/___label_ok.html", message=x.lans('feedback_pass_updated_success'))
+        #<browser mix-update="#error_container">{label_ok}</browser>
+        return f"""
+                <browser mix-redirect="/login"></browser>
+                """
+    except Exception as ex:
+        ic(ex)
+        if "db" in locals(): db.rollback()
+        # User errors
+        if ex.args[1] == 400:
+            label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
+            return f"""<browser mix-update="#error_container">{label_error}</browser>""", 400
+
+        # System or developer error
+        label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
+        return f"""<browser mix-update="#error_container">{label_error}</browser>""", 400
+    finally: 
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
