@@ -28,7 +28,8 @@
         </button>
     </form>
 
-    <p class="mt-4">{{ x.lans("login_splash_1") }}? <a class="hyperlink" href="{{ url_for('signup') }}">{{
+    <p class="mt-4">{{ x.lans("login_splash_1") }}? <a class="hyperlink"
+            href="{{ url_for('view_signup', lang=lang) }}">{{
             x.lans("login_link_1") }}</a>.</p>
     <a class="hyperlink" href="/forgot-password/{{lang}}">{{ x.lans("login_forgot_password") }}?</a>
 

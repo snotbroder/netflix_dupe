@@ -103,7 +103,8 @@
                             </li>
                         </ul>
                         <div class="header-profile-dropdown-signout">
-                            <a class="button-primary text-1rem w-100% text-a-center" href="/logout">
+                            <a class="button-primary text-1rem w-100% text-a-center"
+                                href="{{ url_for('api_actions.api_logout') }}">
                                 {{ x.lans("system_logout") }} {{ x.lans("nav_of_dupeflix") }}</a>
                         </div>
 
@@ -117,7 +118,9 @@
 
                     {% endif %}
                     {% if request.endpoint == 'view_admin' %}
-                    <a class="button-primary ml-auto text-1rem" href="/logout">Log out as Admin</a>
+                    <a class="button-primary ml-auto text-1rem" href="{{ url_for('api_actions.api_logout') }}">Log out
+                        as
+                        Admin</a>
                     {% endif %}
                     <form action="{{ url_for('update_website_language') }}" method="get">
                         <select class="button-secondary ml-auto text-1rem" name="language_selector"
@@ -134,5 +137,6 @@
     </header>
 
     <div id="toast"></div>
+    <div id="global_toast_container"></div>
     <!-- <main class="min-h-75vh max-w-1620px mx-auto"> -->
     <main class="overflow-x-hidden mb-20rem">

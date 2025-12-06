@@ -177,78 +177,87 @@ def view_login( lang = "en"):
 #             if "db" in locals(): db.close()
 
 ##############################
-@app.post("/index-pass-email")
-@app.post("/index-pass-email/<lang>")
+@app.route("/index-pass-email", methods=["POST"])
+@app.route("/index-pass-email/<lang>", methods=["POST"])
 def index_signup(lang ="en"):
-        try:
-            x.default_language = lang
-            email = request.form.get("user_email")
+    try:
+        x.default_language = lang
+        email = request.form.get("user_email")
 
-            return redirect( url_for('signup', email=email, lang=lang))
-        except Exception as ex:
-            ic(ex)
-        finally:
-            pass
+        return redirect( url_for('view_signup', email=email, lang=lang))
+    except Exception as ex:
+        ic(ex)
+    finally:
+        pass
 
 ##############################
-@app.route("/signup", methods=["GET", "POST"])
-@app.route("/signup/<lang>", methods=["GET", "POST"])
+@app.route("/signup", methods=["GET"])
+@app.route("/signup/<lang>", methods=["GET"])
 @x.no_cache
-def signup(lang = "en"):
+def view_signup(lang = "en"):
     x.default_language = lang
-    if request.method == "GET":
-        user_email = request.args.get("email", "")
-        return render_template("signup.html", user_email=user_email, lang=lang)
 
-    if request.method == "POST":
-        try:
-            # Validate
-            user_email = x.validate_user_email()
-            user_password = x.validate_user_password()
-            user_first_name = x.validate_user_first_name()
+    user_email = request.args.get("email", "")
+    return render_template("signup.html", user_email=user_email, lang=lang)
 
-            user_pk = uuid.uuid4().hex
-            user_last_name = ""
-            user_avatar_path = "images/twitter_default.png"
-            user_verification_key = uuid.uuid4().hex
-            user_verified_at = 0
-            user_new_password_key = 0
-            user_deleted_at = 0
+# @app.route("/signup", methods=["GET", "POST"])
+# @app.route("/signup/<lang>", methods=["GET", "POST"])
+# @x.no_cache
+# def signup(lang = "en"):
+#     x.default_language = lang
+#     if request.method == "GET":
+#         user_email = request.args.get("email", "")
+#         return render_template("signup.html", user_email=user_email, lang=lang)
 
-            user_hashed_password = generate_password_hash(user_password)
+#     if request.method == "POST":
+#         try:
+#             # Validate
+#             user_email = x.validate_user_email()
+#             user_password = x.validate_user_password()
+#             user_first_name = x.validate_user_first_name()
 
-            # Connect to the database
-            q = "INSERT INTO users VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            db, cursor = x.db()
-            cursor.execute(q, (user_pk, user_email, user_hashed_password, 
-            user_first_name, user_last_name, user_avatar_path, user_verification_key, user_verified_at, user_new_password_key, user_deleted_at))
-            db.commit()
+#             user_pk = uuid.uuid4().hex
+#             user_last_name = ""
+#             user_avatar_path = "images/twitter_default.png"
+#             user_verification_key = uuid.uuid4().hex
+#             user_verified_at = 0
+#             user_new_password_key = 0
+#             user_deleted_at = 0
 
-            # send verification email
-            email_verify_account = render_template("components/email/_email_verify_account.html", user_verification_key=user_verification_key)
-            ic(email_verify_account)
-            x.send_email(user_email, "Verify your account", email_verify_account)
+#             user_hashed_password = generate_password_hash(user_password)
 
-            return f"""<mixhtml mix-redirect="{ url_for('login') }"></mixhtml>""", 400
-        except Exception as ex:
-            ic(ex)
-            # User errors
-            if ex.args[1] == 400:
-                label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
-                return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 400
+#             # Connect to the database
+#             q = "INSERT INTO users VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+#             db, cursor = x.db()
+#             cursor.execute(q, (user_pk, user_email, user_hashed_password, 
+#             user_first_name, user_last_name, user_avatar_path, user_verification_key, user_verified_at, user_new_password_key, user_deleted_at))
+#             db.commit()
+
+#             # send verification email
+#             email_verify_account = render_template("components/email/_email_verify_account.html", user_verification_key=user_verification_key)
+#             ic(email_verify_account)
+#             x.send_email(user_email, "Verify your account", email_verify_account)
+
+#             return f"""<mixhtml mix-redirect="{ url_for('login') }"></mixhtml>""", 400
+#         except Exception as ex:
+#             ic(ex)
+#             # User errors
+#             if ex.args[1] == 400:
+#                 label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
+#                 return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 400
             
-            # Database errors
-            if "Duplicate entry" and user_email in str(ex): 
-                label_error = render_template("components/toast/___label_error.html", message="Email already registered")
-                return f"""<mixhtml mix-update="#error_container">{ label_error }</mixhtml>""", 400
+#             # Database errors
+#             if "Duplicate entry" and user_email in str(ex): 
+#                 label_error = render_template("components/toast/___label_error.html", message="Email already registered")
+#                 return f"""<mixhtml mix-update="#error_container">{ label_error }</mixhtml>""", 400
             
-            # System or developer error 
-            label_error = render_template("components/toast/___label_error.html", message="System under maintenance")
-            return f"""<mixhtml mix-bottom="#error_container">{ label_error }</mixhtml>""", 500
+#             # System or developer error 
+#             label_error = render_template("components/toast/___label_error.html", message="System under maintenance")
+#             return f"""<mixhtml mix-bottom="#error_container">{ label_error }</mixhtml>""", 500
 
-        finally:
-            if "cursor" in locals(): cursor.close()
-            if "db" in locals(): db.close()
+#         finally:
+#             if "cursor" in locals(): cursor.close()
+#             if "db" in locals(): db.close()
 
 @app.route("/verify-account", methods=["GET"])
 def verify_account():
@@ -275,16 +284,16 @@ def verify_account():
         if "db" in locals(): db.close()
 
 ##############################
-@app.get("/logout")
-def logout():
-    try:
-        session.clear()
-        return redirect(url_for("view_index"))
-    except Exception as ex:
-        ic(ex)
-        return "error"
-    finally:
-        pass
+# @app.get("/logout")
+# def logout():
+#     try:
+#         session.clear()
+#         return redirect(url_for("view_index"))
+#     except Exception as ex:
+#         ic(ex)
+#         return "error"
+#     finally:
+#         pass
 
     ##############################
 @app.route("/browse")

@@ -8,7 +8,7 @@
         <p class="mb-4 text-c-var(--color_tertiary50)">{{ x.lans('signup_body_1') }}.</p>
     </div>
     <div id="error_container"></div>
-    <form class="form-handle" action="{{ url_for('signup') }}" mix-post autocomplete="off">
+    <form class="form-handle" action="{{ url_for('api_actions.signup', lang=lang) }}" mix-post autocomplete="off">
         <div class="form-handle-item">
             <label for="user_first_name">{{ x.lans("system_first_name") }}</label>
             <input class="required" name="user_first_name" id="user_first_name" type="text"
@@ -33,7 +33,8 @@
             {{ x.lans("system_signup") }}
         </button>
     </form>
-    <p class="mt-4">{{ x.lans("signup_splash_1") }}? <a class="hyperlink" href="{{ url_for('login') }}" class="">{{
+    <p class="mt-4">{{ x.lans("signup_splash_1") }}? <a class="hyperlink" href="{{ url_for('view_login', lang=lang) }}"
+            class="">{{
             x.lans("signup_link_1") }}</a>.</p>
 </section>
 
