@@ -1,29 +1,31 @@
 {% include "components/_header.html" %}
-<header>
+<header class="d-flex gap-1rem j-content-between">
     <h1>Admin panel</h1>
+    <div id="error_container"></div>
 </header>
-<div id="error_container">
-</div>
 <p>Here you find active and deleted users within the system. You can suspend and reactivate their status.</p>
 
 <section class="max-w-1280px mx-auto mb-4">
-    <h3>Dictionary </h3>
-    <button class="button-secondary" mix-default="Update dictionary" mix-await="updating..."
+    <button class="button-secondary d-flex p-self-end" mix-default="Update dictionary" mix-await="updating..."
         mix-get="/api-update-dictionary">Update dictionary</button>
 </section>
-<section id="admin_users_lists" class="max-w-1280px mx-auto">
-    <h3>Active users</h3>
-    <div class=" d-flex flex-col gap-2 mb-4">
-        {% for user in active_users %}
-        {% include "components/_admin_account_card.html" %}
-        {% endfor %}
-    </div>
-    <h3>Deleted users</h3>
-    <div class="d-flex flex-col gap-2 mb-4">
-        {% for user in deleted_users %}
-        {% include "components/_admin_account_card.html" %}
-        {% endfor %}
-    </div>
+<section id="admin_users_lists" class="max-w-1080px mx-auto" lg="max-w-full d-grid cols-2 gap-2rem">
+    <section>
+        <h2>Active users</h2>
+        <div class=" d-flex flex-col gap-2 mb-4">
+            {% for user in active_users %}
+            {% include "components/_admin_account_card.html" %}
+            {% endfor %}
+        </div>
+    </section>
+    <section>
+        <h2>Deleted users</h2>
+        <div class="d-flex flex-col gap-2 mb-4">
+            {% for user in deleted_users %}
+            {% include "components/_admin_account_card.html" %}
+            {% endfor %}
+        </div>
+    </section>
 </section>
 <dialog>
     <h2>Are you sure?</h2>

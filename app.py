@@ -518,17 +518,16 @@ def view_admin():
         cursor.execute(q)
         active_users = cursor.fetchall()
 
-         #Active uses in database
+         #Inactive uses in database
         q = "SELECT * FROM users WHERE user_deleted_at != '0'"
         cursor.execute(q)
         deleted_users = cursor.fetchall()
         
-
         return render_template("admin.html", active_users=active_users, deleted_users=deleted_users)
 
     except Exception as ex:
         ic(ex)
-        return "An error occured", 500
+        return f"An error occured {ex}", 500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -578,87 +577,87 @@ def view_admin_login():
             pass
 
 ################## 
-@app.patch("/delete-user")
-def delete_user():
-    try:
-            user_id = request.args.get("user_id")
-            if not user_id:
-                return "User not found", 400
+# @app.patch("/delete-user")
+# def delete_user():
+#     try:
+#             user_id = request.args.get("user_id")
+#             if not user_id:
+#                 return "User not found", 400
 
-            db, cursor = x.db()
+#             db, cursor = x.db()
 
-            # Fetch the users email
-            q = "SELECT user_email FROM users WHERE user_pk = %s"
-            cursor.execute(q, (user_id,))
-            result = cursor.fetchone()
-            if not result:
-                return "User not found", 404
+#             # Fetch the users email
+#             q = "SELECT user_email FROM users WHERE user_pk = %s"
+#             cursor.execute(q, (user_id,))
+#             result = cursor.fetchone()
+#             if not result:
+#                 return "User not found", 404
 
-            # extract email
-            # If fetchone() returns a dict - Chatgpt helped me here
-            user_email = result['user_email'] if 'user_email' in result else result[0]
+#             # extract email
+#             # If fetchone() returns a dict - Chatgpt helped me here
+#             user_email = result['user_email'] if 'user_email' in result else result[0]
 
-            #delete user
-            user_deleted_at = int(time.time())
-            q = "UPDATE users SET user_deleted_at = %s WHERE user_pk = %s"
-            cursor.execute(q, (user_deleted_at, user_id))
-            db.commit()
+#             #delete user
+#             user_deleted_at = int(time.time())
+#             q = "UPDATE users SET user_deleted_at = %s WHERE user_pk = %s"
+#             cursor.execute(q, (user_deleted_at, user_id))
+#             db.commit()
 
-            # send email letting user know
-            email_user_deleted = render_template("components/email/_email_user_deleted.html")
-            x.send_email(user_email, "Dupeflix account suspended", email_user_deleted)
+#             # send email letting user know
+#             email_user_deleted = render_template("components/email/_email_user_deleted.html")
+#             x.send_email(user_email, "Dupeflix account suspended", email_user_deleted)
 
-            label_ok = render_template("components/toast/___label_ok.html", message="Successfully deleted user")
-            return f"""
-            <browser mix-update="#error_container">{ label_ok }</browser>
-            """, 200
-    except Exception as ex:
-        ic(ex)
-        return "An error occured", 500
-    finally:
-        if "cursor" in locals(): cursor.close()
-        if "db" in locals(): db.close()
+#             label_ok = render_template("components/toast/___label_ok.html", message="Successfully deleted user")
+#             return f"""
+#             <browser mix-update="#error_container">{ label_ok }</browser>
+#             """, 200
+#     except Exception as ex:
+#         ic(ex)
+#         return "An error occured", 500
+#     finally:
+#         if "cursor" in locals(): cursor.close()
+#         if "db" in locals(): db.close()
 
 ################## 
-@app.patch("/reactivate-user")
-def reactivate_user():
-    try:
-        user_id = request.args.get("user_id")
-        if not user_id:
-            return "User not found", 400
+# @app.patch("/reactivate-user")
+# def reactivate_user():
+#     try:
+#         user_id = request.args.get("user_id")
+#         if not user_id:
+#             return "User not found", 400
         
-        db, cursor = x.db()
-        # Fetch the users email
-        q = "SELECT user_email FROM users WHERE user_pk = %s"
-        cursor.execute(q, (user_id,))
-        result = cursor.fetchone()
-        if not result:
-            return "User not found", 404
+#         db, cursor = x.db()
+#         # Fetch the users email
+#         q = "SELECT user_email FROM users WHERE user_pk = %s"
+#         cursor.execute(q, (user_id,))
+#         result = cursor.fetchone()
+#         if not result:
+#             return "User not found", 404
 
-        # extract email
-        # If fetchone() returns a dict - Chatgpt helped me here
-        user_email = result['user_email'] if 'user_email' in result else result[0]
+#         # extract email
+#         # If fetchone() returns a dict - Chatgpt helped me here
+#         user_email = result['user_email'] if 'user_email' in result else result[0]
 
-        #Update user to deleted in database
-        user_deleted_at = 0
-        q = "UPDATE users SET user_deleted_at = %s WHERE user_pk = %s"
-        cursor.execute(q, (user_deleted_at, user_id))
-        db.commit()
+#         #Update user to deleted in database
+#         user_deleted_at = 0
+#         q = "UPDATE users SET user_deleted_at = %s WHERE user_pk = %s"
+#         cursor.execute(q, (user_deleted_at, user_id))
+#         db.commit()
         
-        # send email letting user know
-        email_user_reactivated = render_template("components/email/_email_user_reactivated.html")
-        x.send_email(user_email, "Dupeflix account reactivated", email_user_reactivated)
+#         # send email letting user know
+#         email_user_reactivated = render_template("components/email/_email_user_reactivated.html")
+#         x.send_email(user_email, "Dupeflix account reactivated", email_user_reactivated)
 
-        label_ok = render_template("components/toast/___label_ok.html", message="Successfully reactivated user")
-        return f"""
-        <browser mix-update="#error_container">{ label_ok }</browser>
-        """, 200
-    except Exception as ex:
-        ic(ex)
-        return "An error occured", 500
-    finally:
-        if "cursor" in locals(): cursor.close()
-        if "db" in locals(): db.close()
+#         label_ok = render_template("components/toast/___label_ok.html", message="Successfully reactivated user")
+#         return f"""
+#         <browser mix-update="#error_container">{ label_ok }</browser>
+#         """, 200
+#     except Exception as ex:
+#         ic(ex)
+#         return "An error occured", 500
+#     finally:
+#         if "cursor" in locals(): cursor.close()
+#         if "db" in locals(): db.close()
 
 #################
 @app.patch("/api-like-movie/<movie_id>")
