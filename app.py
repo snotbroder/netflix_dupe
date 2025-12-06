@@ -1051,3 +1051,15 @@ def new_password():
     finally: 
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
+
+
+####################
+@app.patch("/api-block-user/<blocking_user_fk>/<blocker_user_fk>")
+def api_block_user(blocking_user_fk, blocker_user_fk):
+    try: 
+        ic(blocking_user_fk)
+        ic(blocker_user_fk)
+    except Exception as ex: 
+        ic(ex)
+    finally:
+        pass

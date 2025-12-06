@@ -1,4 +1,4 @@
-<article id="review-{{review.review_pk}}" class="d-flex flex-col slide-in">
+<article id="review-{{review.review_pk}}" class="d-flex flex-col slide-in ">
     <div class="d-flex gap-1rem">
         <div class="img-container w-20% max-w-50px">
             <img class="rounded-sm"
@@ -14,10 +14,17 @@
     <div class="p-absolute top-0 right-0">
         {% if review.review_user_fk == user.user_pk %}
         <button class="button-secondary-small"
-            mix-patch="/api-delete-review/{{review.review_pk}}">{{x.lans("system_delete")}}</button>
-        {% else %}
-        <button>{{x.lans("system_report")}}</button>
+            mix-patch="{{ url_for('api_delete_review', review_pk=review.review_pk) }}">{{x.lans("system_delete")}}</button>
+        {% endif %}
+        {% if review.review_user_fk != user.user_pk %}
+        <!-- <button>{{x.lans("system_report")}}</button> -->
+        <button class="button-secondary-small"
+            mix-patch="{{ url_for('api_block_user', blocking_user_fk=review.review_user_fk, blocker_user_fk=user.user_pk)}}">
+            Block {{review.user_first_name}}</button>
         {% endif %}
     </div>
     <p class="mt-0">{{review.review_text}}</p>
 </article>
+<!-- {{ url_for('view_forgot_password', lang=lang) }} -->
+<!-- /api-delete-review/{{review.review_pk}} -->
+<!-- {{ url_for('api_delete_review', review_pk=review.review_pk) }} -->
