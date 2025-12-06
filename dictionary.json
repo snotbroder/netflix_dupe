@@ -91,12 +91,12 @@
     },
     "feedback_user_not_found": {
         "en": "User not found",
-        "nl": "Gebruiker bestaat niet",
+        "nl": "Account bestaat niet",
         "es": "Cuenta no existe"
     },
     "feedback_user_not_verified": {
         "en": "User not verified. Please check your email",
-        "nl": "Gebruiker niet geverificeërd. Bekijk uw e-mail inbox",
+        "nl": "Account niet geverificeërd. Bekijk uw e-mail inbox",
         "es": "Cuenta no verificado. Revisa tu correo electrónico por favor"
     },
     "feedback_email_already_registered": {
@@ -129,6 +129,26 @@
         "nl": "Ongeldig wachtwoord",
         "es": "Clave invalido"
     },
+    "feedback_check_email": {
+        "en": "Please check your email",
+        "nl": "Controleer uw e-mail",
+        "es": "Por favor revisa tu correo electrónico"
+    },
+    "feedback_pass_email_already_sent": {
+        "en": "An email has already been sent to create a new password. Check you email",
+        "nl": "Er is al een e-mail verzonden om een ​​nieuw wachtwoord aan te maken. Controleer uw e-mail.",
+        "es": "Ya se ha enviado un correo electrónico para crear una nueva contraseña. Revisa tu correo electrónico."
+    },
+    "feedback_pass_must_match": {
+        "en": "Passwords do not match",
+        "nl": "Wachtwoorden komen niet overeen",
+        "es": "Las contraseñas no coinciden"
+    },
+    "feedback_pass_updated_success": {
+        "en": "Password created successfully",
+        "nl": "Wachtwoord succesvol aangemaakt",
+        "es": "Contraseña creada exitosamente"
+    },
     "LOGIN & SIGNUP": {
         "en": "",
         "nl": "",
@@ -153,6 +173,11 @@
         "en": "Become a user",
         "nl": "Maak een nieuw account",
         "es": "Creer una cuenta nueva"
+    },
+    "login_forgot_password": {
+        "en": "Forgot password",
+        "nl": "Wachtwoord vergeten?",
+        "es": "¿Has olvidado tu contraseña"
     },
     "signup_header_1": {
         "en": "Create an account",
@@ -438,5 +463,65 @@
         "en": "hour",
         "nl": "uur",
         "es": "hora"
+    },
+    "time_day": {
+        "en": "day",
+        "nl": "dag",
+        "es": "día"
+    },
+    "time_week": {
+        "en": "week",
+        "nl": "week",
+        "es": "semana"
+    },
+    "time_month": {
+        "en": "month",
+        "nl": "maand",
+        "es": "mes"
+    },
+    "time_year": {
+        "en": "year",
+        "nl": "jaar",
+        "es": "año"
+    },
+    "PASSWORD": {
+        "en": "",
+        "nl": "",
+        "es": ""
+    },
+    "pass_forgot_header_1": {
+        "en": "I forgot my password",
+        "nl": "Ik ben mijn wachtwoord vergeten",
+        "es": "Olvidé mi contraseña"
+    },
+    "pass_forgot_body_1": {
+        "en": "We'll send an email with a link, to create a new password",
+        "nl": "Wij stuuren u een e-mail met een link om een nieuw wachtwoord aan te maken",
+        "es": "Le enviaremos un correo electrónico con un enlace para crear una nueva contraseña."
+    },
+    "pass_forgot_cta_1": {
+        "en": "Send email",
+        "nl": "Stuur e-mail",
+        "es": "Enviar correo electrónico"
+    },
+    "pass_new_header_1": {
+        "en": "New password",
+        "nl": "Nieuw wachtwoord",
+        "es": "Nueva contraseña"
+    },
+    "pass_new_body_1": {
+        "en": "Create a new password for yor Dupelix account",
+        "nl": "Maak een nieuw wachtwoord aan voor uw Dupelix-account",
+        "es": "Crea una nueva contraseña para tu cuenta Dupelix"
+    },
+    "pass_new_repeat": {
+        "en": "Repeat",
+        "nl": "Herhaal",
+        "es": "Repetir"
+    },
+    "pass_new_cta_1": {
+        "en": "Create new password",
+        "nl": "Nieuw wachtwoord aanmaken",
+        "es": "Crear nueva contraseña"
     }
 }

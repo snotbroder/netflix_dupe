@@ -278,10 +278,10 @@ def logout():
 def view_browse():
     try:
         user = session.get("user", "")
-        user_pk = user.get("user_pk", "")
         if not user: 
             return redirect(url_for("view_index"))
         
+        user_pk = user.get("user_pk", "")
         # set page language
         lang = user.get("user_language", "en")
 
@@ -337,10 +337,10 @@ def view_browse():
 def view_movie():
     try:
         user = session.get("user", "")
-        user_pk = user.get("user_pk")
         if not user: 
             return redirect(url_for("view_index"))
         
+        user_pk = user.get("user_pk")
         movie_id = request.args.get("movie_id")
 
         #Fallback
@@ -765,31 +765,63 @@ def update_user_language():
     # Redirect back to the page the user was
     return redirect(request.headers.get("Referer", "/"))
 
-
 @app.get("/update-website-language")
 def update_website_language():
     lang = request.args.get("language_selector", "en")
-    
-    # Get referring URL path (e.g., /about/en)
+
+    # Get the referring URL
     referer = request.headers.get("Referer", "/")
-    path = referer.split("?", 1)[0]  # remove query if present
 
-    # Remove trailing "/" if exists
-    path = path.rstrip("/")
-
-    # Split into directory parts
-    parts = path.split("/")
-
-    # Replace last part with the new language code
-    if parts[-1] in ["en", "nl", "es"]:
-        parts[-1] = lang
+    # Split into path and query
+    if "?" in referer:
+        path, query = referer.split("?", 1)
+        query = "?" + query  # keep the ? for later
     else:
-        parts.append(lang)
+        path, query = referer, ""
 
-    # Build new URL
-    new_path = "/".join(parts)
+    # Split the path into parts
+    path_parts = path.rstrip("/").split("/")
 
-    return redirect(new_path)
+    # Replace last part if it's a language code, else append
+    if path_parts[-1] in ["en", "nl", "es"]:
+        path_parts[-1] = lang
+    else:
+        path_parts.append(lang)
+
+    # Rebuild the new path
+    new_path = "/".join(path_parts)
+
+    # Combine new path with original query
+    new_url = new_path + query
+
+    return redirect(new_url)
+
+
+
+# @app.get("/update-website-language")
+# def update_website_language():
+#     lang = request.args.get("language_selector", "en")
+    
+#     # Get referring URL path (e.g., /about/en)
+#     referer = request.headers.get("Referer", "/")
+#     path = referer.split("?", 1)[0]  # remove query if present
+
+#     # Remove trailing "/" if exists
+#     path = path.rstrip("/")
+
+#     # Split into directory parts
+#     parts = path.split("/")
+
+#     # Replace last part with the new language code
+#     if parts[-1] in ["en", "nl", "es"]:
+#         parts[-1] = lang
+#     else:
+#         parts.append(lang)
+
+#     # Build new URL
+#     new_path = "/".join(parts)
+
+#     return redirect(new_path)
 
 
 #####################
@@ -897,13 +929,13 @@ def view_forgot_password(lang = "en"):
             user = cursor.fetchone()
             ic(user)
             if not user:
-                raise Exception("User not found, please check spelling", 400)
+                raise Exception(x.lans("feedback_user_not_found"), 400)
 
             if user["user_verification_key"] != "":
                 raise Exception(x.lans("feedback_user_not_verified"), 400)
             
             if user["user_new_password_key"] != "":
-                raise Exception("An email has already been sent to create a new password. Check you email", 400)
+                raise Exception(x.lans("feedback_pass_email_already_sent"), 400)
 
             #Create new password key for email and system
             user_new_password_key = uuid.uuid4().hex
@@ -916,7 +948,7 @@ def view_forgot_password(lang = "en"):
             email_new_password = render_template("components/email/_email_forgot_password.html", user_new_password_key=user_new_password_key)
             x.send_email(user_email, "Forgot password | Dupeflix", email_new_password)
 
-            label_ok = render_template("components/toast/___label_ok.html", message="Please check your email")
+            label_ok = render_template("components/toast/___label_ok.html", message={{ x.lans('feedback_check_email') }})
 
             return f"""
                 <browser mix-replace="#error_container">{label_ok}</browser>
@@ -930,7 +962,7 @@ def view_forgot_password(lang = "en"):
                 return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 400
             
             # System or developer error
-            label_error = render_template("components/toast/___label_error.html", message="System under maintenance")
+            label_error = render_template("components/toast/___label_error.html", message={{ x.lans('feedback_system_maintenance') }})
             return f"""<browser mix-bottom="#error_container">{ label_error }</browser>""", 500
     
         finally: 
@@ -941,6 +973,7 @@ def view_forgot_password(lang = "en"):
 
 ##############
 @app.route("/new-password", methods=["GET", "POST"])
+@app.route("/new-password/<lang>", methods=["GET", "POST"])
 def view_new_password(lang = "en"):
     x.default_language = lang
     try: 
@@ -971,11 +1004,7 @@ def view_new_password(lang = "en"):
             ic("An error occured in Email")
             return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 400
 
-    # User-defined errors
-        if len(ex.args) > 1 and ex.args[1] == 400:
-            return ex.args[0], 400
-        
-
+    
         # System or developer error
         return "An error occured", 500
 
@@ -993,7 +1022,7 @@ def new_password():
         user_confirm_new_password = x.validate_user_password_confirm()
 
         if user_new_password != user_confirm_new_password:
-            raise Exception("Passwords do not match", 400)
+            raise Exception({{ x.lans('feedback_pass_must_match') }}, 400)
         if not user_new_password_key:
             raise Exception("Invalid key", 400)
         
@@ -1003,14 +1032,18 @@ def new_password():
         cursor.execute(q, (user_hashed_new_password, user_new_password_key))
         db.commit()
 
-        label_ok = render_template("components/toast/___label_ok.html", message=f"Password updated successfully")
-        return f"""<browser mix-bottom="#error_container">{label_ok}</browser>"""
+        label_ok = render_template("components/toast/___label_ok.html", message={{ x.lans('feedback_pass_updated_success') }})
+        return f"""
+        <browser mix-redirect="/login"></browser>
+        <browser mix-update="#error_container">{label_ok}</browser>
+        """
     except Exception as ex:
         ic(ex)
         if "db" in locals(): db.rollback()
         # User errors
-        label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
-        return f"""<browser mix-update="#error_container">{label_error}</browser>""", 400
+        if ex.args[1] == 400:
+            label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
+            return f"""<browser mix-update="#error_container">{label_error}</browser>""", 400
 
         # System or developer error
         label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
