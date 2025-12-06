@@ -129,6 +129,11 @@
         "nl": "Ongeldig wachtwoord",
         "es": "Clave invalido"
     },
+    "feedback_invalid_review": {
+        "en": "Review must be",
+        "nl": "Recencie moet minstens",
+        "es": "La reseña debe ser"
+    },
     "feedback_check_email": {
         "en": "Please check your email",
         "nl": "Controleer uw e-mail",
@@ -148,6 +153,11 @@
         "en": "Password created successfully",
         "nl": "Wachtwoord succesvol aangemaakt",
         "es": "Contraseña creada exitosamente"
+    },
+    "feedback_success_created_review": {
+        "en": "Successfully created review",
+        "nl": "Recensie is aangemaakt",
+        "es": "Reseña creada exitosamente"
     },
     "LOGIN & SIGNUP": {
         "en": "",
@@ -176,7 +186,7 @@
     },
     "login_forgot_password": {
         "en": "Forgot password",
-        "nl": "Wachtwoord vergeten?",
+        "nl": "Wachtwoord vergeten",
         "es": "¿Has olvidado tu contraseña"
     },
     "signup_header_1": {

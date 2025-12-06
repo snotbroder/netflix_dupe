@@ -17,14 +17,10 @@
             mix-patch="{{ url_for('api_delete_review', review_pk=review.review_pk) }}">{{x.lans("system_delete")}}</button>
         {% endif %}
         {% if review.review_user_fk != user.user_pk %}
-        <!-- <button>{{x.lans("system_report")}}</button> -->
         <button class="button-secondary-small"
-            mix-patch="{{ url_for('api_block_user', blocking_user_fk=review.review_user_fk, blocker_user_fk=user.user_pk)}}">
+            mix-patch="{{ url_for('api_actions.block_user', blocking_user_fk=review.review_user_fk, blocker_user_fk=user.user_pk)}}">
             Block {{review.user_first_name}}</button>
         {% endif %}
     </div>
     <p class="mt-0">{{review.review_text}}</p>
 </article>
-<!-- {{ url_for('view_forgot_password', lang=lang) }} -->
-<!-- /api-delete-review/{{review.review_pk}} -->
-<!-- {{ url_for('api_delete_review', review_pk=review.review_pk) }} -->

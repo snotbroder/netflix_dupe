@@ -1,4 +1,5 @@
-<form id="review_container" action="/api-create-review/{{movie_id}}" mix-post class="form-handle">
+<form id="review_container" action="{{ url_for('api_actions.create_review', movie_id=movie_id) }}" mix-post
+    class="form-handle">
     <div class="form-handle-item">
         <textarea name="post" placeholder="{{ x.lans('review_container_input_placeholder')}}?"
             class="w-full outline-color-var(color_input_border) outline-1 min-h-3rem pa-2"></textarea>

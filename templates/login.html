@@ -10,7 +10,7 @@
         <!-- {% include "components/toast/___label_error.html" with context%} -->
     </div>
 
-    <form action="{{ url_for('login', lang=lang) }}" mix-post class="form-handle" autocomplete="off">
+    <form action="{{ url_for('api_actions.login', lang=lang) }}" mix-post class="form-handle" autocomplete="off">
         <div class="form-handle-item">
             <label for="user_email">{{ x.lans("system_email") }}</label>
             <input class="required" name="user_email" type="text"
