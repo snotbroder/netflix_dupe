@@ -144,6 +144,11 @@
         "nl": "",
         "es": ""
     },
+    "feedback_invalid_user_deleted": {
+        "en": "User deleted from Dupeflix, contact admin to request reactivation",
+        "nl": "",
+        "es": ""
+    },
     "feedback_check_email": {
         "en": "Please check your email",
         "nl": "Controleer uw e-mail",

@@ -83,7 +83,7 @@ def login( lang = "en"):
         user_password = x.validate_user_password(lang)
 
         # Connect to the database
-        q = "SELECT * FROM users WHERE user_email = %s"
+        q = "SELECT * FROM users WHERE user_email = %s AND user_deleted_at != '0'"
         db, cursor = x.db()
         cursor.execute(q, (user_email,))
         user = cursor.fetchone()
@@ -96,6 +96,9 @@ def login( lang = "en"):
 
         if user["user_verification_key"] != "":
             raise Exception(x.lans("feedback_user_not_verified"), 400)
+        
+        if user["user_deleted_at"] != "0":
+            raise Exception (x.lans("feedback_invalid_user_deleted"), 400)
         
         user.pop("user_password")
 
