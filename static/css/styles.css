@@ -262,3 +262,13 @@ dialog{
         opacity: 0;
     }
 }
+
+textarea {
+  resize: none;
+  width: 100%;
+  height: 5rem;
+}
+
+.profile-icon{
+    aspect-ratio: 1/1;
+}

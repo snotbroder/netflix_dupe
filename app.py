@@ -501,8 +501,11 @@ def api_update_account():
         db.commit()
 
         # Response to the browser
-        label_ok = render_template("components/toast/___label_ok.html", message="Account details updated successfully")
-        return f"""<browser mix-update="#error_container">{label_ok}</browser>""", 200
+        label_ok = render_template("components/toast/___label_ok.html", message=x.lans("feedback_success_account_updated"))
+        return f"""
+        <browser mix-update="#error_container">{label_ok}</browser>
+        <browser mix-update="#header-profile-icon"></browser>
+        """, 200
     
     except Exception as ex:
         ic(ex)

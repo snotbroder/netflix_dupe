@@ -189,6 +189,11 @@
         "nl": "",
         "es": ""
     },
+    "feedback_success_account_updated": {
+        "en": "Successfully updated account details",
+        "nl": "",
+        "es": ""
+    },
     "LOGIN & SIGNUP": {
         "en": "",
         "nl": "",
@@ -438,6 +443,16 @@
         "en": "Me",
         "nl": "Ik",
         "es": "Yo"
+    },
+    "review_block": {
+        "en": "Block",
+        "nl": "Blok",
+        "es": "Bloquear"
+    },
+    "review_recent": {
+        "en": "Recent reviews",
+        "nl": "Recente recensies",
+        "es": "Reseñas reciente"
     },
     "MOVIE": {
         "en": "",

@@ -74,13 +74,15 @@
                             {% include "components/___review_container.html" %}
                         </div>
                         <div id="error_container" class="p-relative top-0"></div>
-                        <div id="reviews" class="d-flex flex-col gap-2rem my-1rem">
+
+                        <div id="reviews" class="d-flex flex-col gap-2rem my-1rem mt-2rem">
+                            <h3>{{ x.lans("review_recent") }}</h3>
                             {% if reviews %}
                             {% for review in reviews %}
                             {% include "components/_review.html" %}
                             {% endfor %}
                             {% else %}
-                            <p>{{ x.lans("review_container_be_the_first")}}</p>
+                            <p class="text-c-var(--color_tertiary)">{{ x.lans("review_container_be_the_first")}}...</p>
                             {% endif %}
                         </div>
                     </section>
