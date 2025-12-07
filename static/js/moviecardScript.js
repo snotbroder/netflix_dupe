@@ -1,4 +1,3 @@
-// Select cards
 const cards = document.querySelectorAll('.card-container');
 
 cards.forEach(card => {

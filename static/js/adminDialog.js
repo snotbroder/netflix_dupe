@@ -13,3 +13,4 @@ showButtons.forEach(button => {
 closeButton.addEventListener("click", () => {
   dialog.close();
 });
+

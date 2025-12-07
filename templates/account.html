@@ -2,7 +2,7 @@
 {% include "components/___back_btn.html"%}
 <section class="max-w-580px ma-auto">
     <div class="d-flex j-content-between flex-wrap gap-1rem mb-2rem">
-        <header class=" ">
+        <header>
             <h1 class="text-t-capitalize">{{ x.lans("account_header_1") }} {{ user.user_first_name }}</h1>
             <h2>{{ x.lans("account_body_1") }}</h2>
         </header>
@@ -37,18 +37,15 @@
             </label>
             <input type="file" id="file" name="user_avatar_file_upload" accept="{{ x.IMAGE_FILE_ALLOWED }}"
                 placeholder="{{ x.lans('system_choose_file') }}" />
-            <!--  -->
-
 
         </div>
-        {{ x.lans("system_login") }}
         <button class="button-primary w-100%" mix-default="{{ x.lans('account_cta_1') }}"
             mix-await="{{ x.lans('system_loading') }}">
             {{ x.lans("account_cta_1") }}
         </button>
     </form>
 </section>
-<section id="block_list">
+<section id="block_list" class="my-4rem max-w-580px ma-auto">
     <h2>Block list</h2>
     {% if blocked_users %}
     {% for blocked in blocked_users %}
@@ -58,4 +55,30 @@
     <p>You have not blocked anyone</p>
     {% endif %}
 </section>
+<section class="max-w-580px ma-auto">
+    <div class="d-flex j-content-between flex-wrap gap-1rem mb-2rem">
+        <h2 class="bg-c-var(--color_system_error) w-100% pa-2rem rounded-sm">Danger Zone</h2>
+        <div class="d-flex j-content-between w-100%">
+            <p class="text-c-var(--color_tertiary)">I want to delete my Dupeflix account</p>
+            <div>
+                <button class="button-primary" id="fakeButton">Delete account</button>
+                <button class="button-primary d-none" mix-patch="/delete-user?user_id={{ user.user_pk }}"
+                    mix-await="Deleting account..." mix-default="Delete my account" id="confirmButton">Confirm delete
+                    account</button>
+            </div>
+        </div>
+    </div>
+</section>
 {% include "components/_footer.html" %}
+<script>
+    //Confirmation button script
+    const fakeButton = document.querySelector("#fakeButton");
+    const confirmButton = document.querySelector("#confirmButton");
+
+    fakeButton.addEventListener("click", () => {
+
+        fakeButton.style.display = "none";
+
+        confirmButton.style.display = "inline-block";
+    });
+</script>

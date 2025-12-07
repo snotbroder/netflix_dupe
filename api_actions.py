@@ -48,8 +48,10 @@ def signup(lang = "en"):
         email_verify_account = render_template("components/email/_email_verify_account.html", user_verification_key=user_verification_key)
         ic(email_verify_account)
         x.send_email(user_email, "Verify your account", email_verify_account)
-
-        return f"""<mixhtml mix-redirect="{ url_for('view_login') }"></mixhtml>""", 400
+        
+        label_ok = render_template("components/toast/___label_ok.html", message=x.lans("feedback_success_signup_email_sent"))
+        return f"""<mixhtml mix-update="#error_container">{ label_ok }</mixhtml>""", 200
+    
     except Exception as ex:
         ic(ex)
         # User errors
@@ -143,7 +145,7 @@ def api_verify_account():
         cursor.execute(q, (user_verified_at, user_verification_key))
         db.commit()
         if cursor.rowcount != 1: raise Exception("Invalid key", 400)
-        return redirect( url_for('login') )
+        return redirect( url_for('view_login') )
     except Exception as ex:
         ic(ex)
         if "db" in locals(): db.rollback()
@@ -151,7 +153,7 @@ def api_verify_account():
         if ex.args[1] == 400: return ex.args[0], 400    
 
         # System or developer error
-        return "Cannot verify user"
+        return "Cannot verify user", 500
 
     finally:
         if "cursor" in locals(): cursor.close()
@@ -372,6 +374,14 @@ def api_delete_user():
             # send email letting user know
             email_user_deleted = render_template("components/email/_email_user_deleted.html")
             x.send_email(user_email, "Dupeflix account suspended", email_user_deleted)
+
+            # Check if the deletion comes from the logged in user
+            user = session.get("user")
+            logged_in_user = user.get("user_pk")
+
+            if logged_in_user == user_id:
+                session.clear()
+                return "<browser mix-redirect='/logout'></browser>"
 
             label_ok = render_template("components/toast/___label_ok.html", message="Successfully deleted user")
             return f"""

@@ -112,7 +112,7 @@ def view_login( lang = "en"):
     x.default_language = lang
 
     if request.method == "GET":
-        if session.get("user", ""): return redirect(url_for("browse"))
+        if session.get("user", ""): return redirect(url_for("view_browse"))
         return render_template("login.html", lang=lang)
 
     

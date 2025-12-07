@@ -179,6 +179,11 @@
         "nl": "",
         "es": ""
     },
+    "feedback_success_signup_email_sent": {
+        "en": "Please verify your account, check your email",
+        "nl": "",
+        "es": ""
+    },
     "LOGIN & SIGNUP": {
         "en": "",
         "nl": "",
