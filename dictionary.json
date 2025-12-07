@@ -139,6 +139,11 @@
         "nl": "Recencie moet minstens",
         "es": "La reseña debe ser"
     },
+    "feedback_invalid_already_blocked": {
+        "en": "User already blocked",
+        "nl": "",
+        "es": ""
+    },
     "feedback_check_email": {
         "en": "Please check your email",
         "nl": "Controleer uw e-mail",
@@ -163,6 +168,16 @@
         "en": "Successfully created review",
         "nl": "Recensie is aangemaakt",
         "es": "Reseña creada exitosamente"
+    },
+    "feedback_success_blocked_user": {
+        "en": "Successfully blocked user. Unblock them under My Account",
+        "nl": "",
+        "es": ""
+    },
+    "feedback_success_unblocked_user": {
+        "en": "Successfully unblocked user",
+        "nl": "",
+        "es": ""
     },
     "LOGIN & SIGNUP": {
         "en": "",
@@ -285,9 +300,9 @@
         "es": "Hola"
     },
     "nav_account": {
-        "en": "Account",
-        "nl": "Account",
-        "es": "Cuenta"
+        "en": "My Account",
+        "nl": "Mijn Account",
+        "es": "Mi Cuenta"
     },
     "nav_transfer_profile": {
         "en": "Transfer Profile",
@@ -408,6 +423,11 @@
         "en": "ago",
         "nl": "geleden",
         "es": ""
+    },
+    "review_me": {
+        "en": "Me",
+        "nl": "Ik",
+        "es": "Yo"
     },
     "MOVIE": {
         "en": "",

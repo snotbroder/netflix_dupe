@@ -382,27 +382,27 @@ def view_movie():
         db, cursor = x.db()
         q = """
         SELECT 
-            reviews.review_pk,
-            reviews.review_user_fk,
-            reviews.review_text,
-            reviews.review_created_at,
-            users.user_first_name,
-            users.user_avatar_path,
-            users.user_verified_at
+        reviews.review_pk,
+        reviews.review_user_fk,
+        reviews.review_text,
+        reviews.review_created_at,
+        users.user_first_name,
+        users.user_avatar_path,
+        users.user_verified_at
         FROM reviews
         JOIN users 
-            ON users.user_pk = reviews.review_user_fk
+        ON users.user_pk = reviews.review_user_fk
         LEFT JOIN blocks
-            ON (
-                (blocks.block_blocker_user_fk = %s AND blocks.block_blocking_user_fk = reviews.review_user_fk)
-                OR
-                (blocks.block_blocker_user_fk = reviews.review_user_fk AND blocks.block_blocking_user_fk = %s)
-            )
+        ON (
+        (blocks.block_blocker_user_fk = %s AND blocks.block_blocking_user_fk = reviews.review_user_fk)
+        OR
+        (blocks.block_blocker_user_fk = reviews.review_user_fk AND blocks.block_blocking_user_fk = %s)
+        )
         WHERE 
-            reviews.review_movie_id = %s
-            AND reviews.review_deleted_at = 0
-            AND users.user_deleted_at = 0
-            AND blocks.block_blocker_user_fk IS NULL
+        reviews.review_movie_id = %s
+        AND reviews.review_deleted_at = 0
+        AND users.user_deleted_at = 0
+        AND blocks.block_blocker_user_fk IS NULL
         ORDER BY reviews.review_created_at DESC
         LIMIT 5;
         """
@@ -438,15 +438,28 @@ def view_account():
         # lang = x.default_language
         lang = user.get("user_language", "en")
 
-        q = "SELECT * FROM users WHERE user_pk = %s"
+        #Get account data
         db, cursor = x.db()
+        q = "SELECT * FROM users WHERE user_pk = %s"
         cursor.execute(q, (user["user_pk"],))
         user = cursor.fetchone()
 
-        return render_template("account.html", user=user, lang=lang)
+        #Get blocklist
+        q = """
+        SELECT users.user_pk, users.user_first_name 
+        FROM blocks
+        JOIN users 
+        ON blocks.block_blocking_user_fk = users.user_pk
+        WHERE blocks.block_blocker_user_fk = %s 
+        """
+        cursor.execute(q, (user["user_pk"],))
+        blocked_users = cursor.fetchall()
+
+        return render_template("account.html", user=user, lang=lang, blocked_users=blocked_users)
     
     except Exception as ex:
         ic(ex)
+        return "An error occured", 500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()

@@ -1,0 +1,23 @@
+<article id="blocked-{{blocked.user_pk}}" md="flex-row p-items-center"
+    class="d-flex j-content-between flex-col border-t-2 border-c-var(--color_tertiary) pt-.5rem">
+    <div class="d-grid gap-2 cols-3 w-30% a-items-center">
+        <div class="img-container w-3rem a-self-center">
+            <img class="rounded-xs"
+                src="{{ url_for('static', filename=blocked.user_avatar_path or 'images/twitter_default.png') }}"
+                alt="Profile">
+        </div>
+        <div class="d-flex flex-col j-content-between">
+            <p>
+                {{ blocked.user_first_name }}
+            </p>
+            <p class="text-c-var(--color_tertiary)">
+                {{ blocked.user_email }}
+            </p>
+        </div>
+    </div>
+    <div class="d-flex gap-2 p-self-end" md="p-self-center">
+        <button class="button-secondary-small"
+            mix-patch="{{ url_for('api_actions.api_unblock_user', blocked_user_fk=blocked.user_pk, blocker_user_fk=user.user_pk)}}">
+            Unblock {{blocked.user_first_name}}</button>
+    </div>
+</article>

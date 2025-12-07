@@ -20,9 +20,6 @@
         <button class="button-secondary-small"
             mix-patch="{{ url_for('api_actions.api_block_user', blocking_user_fk=review.review_user_fk, blocker_user_fk=user.user_pk, review_pk=review.review_pk)}}">
             Block {{review.user_first_name}}</button>
-        <button class="button-secondary-small"
-            mix-patch="{{ url_for('api_actions.api_unblock_user', blocking_user_fk=review.review_user_fk, blocker_user_fk=user.user_pk)}}">
-            Unblock {{review.user_first_name}}</button>
         {% endif %}
     </div>
     <p class="mt-0">{{review.review_text}}</p>

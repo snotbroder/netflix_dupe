@@ -48,4 +48,14 @@
         </button>
     </form>
 </section>
+<section id="block_list">
+    <h2>Block list</h2>
+    {% if blocked_users %}
+    {% for blocked in blocked_users %}
+    {% include "components/___blocked_user_card.html" %}
+    {% endfor %}
+    {% else %}
+    <p>You have not blocked anyone</p>
+    {% endif %}
+</section>
 {% include "components/_footer.html" %}

@@ -438,12 +438,17 @@ def api_block_user(blocking_user_fk, blocker_user_fk, review_pk):
         cursor.execute(q, (blocker_user_fk, blocking_user_fk))
         db.commit()
 
-        #button_html = render_template("components/___mylist_container.html", movie_id=movie_id, has_user_liked=has_user_liked)
-
-        return f"<browser mix-top='#review-{review_pk}'>You have blocked this user</browser>"
-
+        label_ok = render_template("components/toast/___label_ok.html", message=x.lans("feedback_success_blocked_user"))
+        return f"""
+        <browser mix-replace='#review-{review_pk}'></browser>
+        <browser mix-replace='#error_container'>{label_ok}</browser>
+        """
+    
     except Exception as ex:
         ic(ex)
+        if "Duplicate entry" in str(ex): 
+            label_error = render_template("components/toast/___label_error.html", message=x.lans("feedback_invalid_already_blocked"))
+            return f"""<mixhtml mix-update="#error_container">{ label_error }</mixhtml>""", 400
         return "Error, could not like", 500
 
     finally:
@@ -451,8 +456,8 @@ def api_block_user(blocking_user_fk, blocker_user_fk, review_pk):
         if "db" in locals(): db.close()
 
 ### UNBLOCK USER ###
-@api_actions.patch("/api-block-user/<blocking_user_fk>/<blocker_user_fk>")
-def api_unblock_user(blocking_user_fk, blocker_user_fk):
+@api_actions.patch("/api-block-user/<blocked_user_fk>/<blocker_user_fk>")
+def api_unblock_user(blocked_user_fk, blocker_user_fk):
     try:
         user = session.get("user")
         user_pk = user.get("user_pk")
@@ -460,17 +465,21 @@ def api_unblock_user(blocking_user_fk, blocker_user_fk):
             return "No user id in session", 500
 
         db, cursor = x.db()
-        q = "DELETE FROM blocks WHERE %s AND %s"
-        cursor.execute(q, (blocker_user_fk, blocking_user_fk))
+        q = "DELETE FROM blocks WHERE block_blocker_user_fk = %s AND block_blocking_user_fk = %s"
+        cursor.execute(q, (blocker_user_fk, blocked_user_fk))
         db.commit()
 
         #button_html = render_template("components/___mylist_container.html", movie_id=movie_id, has_user_liked=has_user_liked)
         #f"<browser mix-replace='#review-{review_pk}'>You have blocke this user</browser>"
-        return "You have unblocked user"
+        label_ok = render_template("components/toast/___label_ok.html", message=x.lans("feedback_success_unblocked_user"))
+        return f"""
+        <browser mix-update="#error_container">{ label_ok }</browser>
+        <browser mix-replace="#blocked-{blocked_user_fk}"></browser>
+        """, 200
 
     except Exception as ex:
         ic(ex)
-        return "Error, could not like", 500
+        return "Error, could not unblock", 500
 
     finally:
         if "cursor" in locals(): cursor.close()
