@@ -132,18 +132,6 @@ def api_logout():
         pass
 
 
-### BLOCK USER ###
-@api_actions.patch("/api-block-user/<blocking_user_fk>/<blocker_user_fk>")
-def block_user(blocking_user_fk, blocker_user_fk):
-    try: 
-        ic(blocking_user_fk)
-        ic(blocker_user_fk)
-    except Exception as ex: 
-        ic(ex)
-    finally:
-        pass
-
-
 ### VERIFY ACCOUNT ###
 @api_actions.route("/verify-account", methods=["GET"])
 def api_verify_account():
@@ -432,6 +420,58 @@ def api_reactivate_user():
     except Exception as ex:
         ic(ex)
         return "An error occured", 500
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+### BLOCK USER ###
+@api_actions.patch("/api-block-user/<blocking_user_fk>/<blocker_user_fk>/<review_pk>")
+def api_block_user(blocking_user_fk, blocker_user_fk, review_pk):
+    try:
+        user = session.get("user")
+        user_pk = user.get("user_pk")
+        if not user_pk:
+            return "No user id in session", 500
+
+        db, cursor = x.db()
+        q = "INSERT INTO blocks (block_blocker_user_fk, block_blocking_user_fk) VALUES(%s, %s)"
+        cursor.execute(q, (blocker_user_fk, blocking_user_fk))
+        db.commit()
+
+        #button_html = render_template("components/___mylist_container.html", movie_id=movie_id, has_user_liked=has_user_liked)
+
+        return f"<browser mix-top='#review-{review_pk}'>You have blocked this user</browser>"
+
+    except Exception as ex:
+        ic(ex)
+        return "Error, could not like", 500
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+### UNBLOCK USER ###
+@api_actions.patch("/api-block-user/<blocking_user_fk>/<blocker_user_fk>")
+def api_unblock_user(blocking_user_fk, blocker_user_fk):
+    try:
+        user = session.get("user")
+        user_pk = user.get("user_pk")
+        if not user_pk:
+            return "No user id in session", 500
+
+        db, cursor = x.db()
+        q = "DELETE FROM blocks WHERE %s AND %s"
+        cursor.execute(q, (blocker_user_fk, blocking_user_fk))
+        db.commit()
+
+        #button_html = render_template("components/___mylist_container.html", movie_id=movie_id, has_user_liked=has_user_liked)
+        #f"<browser mix-replace='#review-{review_pk}'>You have blocke this user</browser>"
+        return "You have unblocked user"
+
+    except Exception as ex:
+        ic(ex)
+        return "Error, could not like", 500
+
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()

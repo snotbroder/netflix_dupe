@@ -382,24 +382,31 @@ def view_movie():
         db, cursor = x.db()
         q = """
         SELECT 
-            reviews.review_pk, 
+            reviews.review_pk,
             reviews.review_user_fk,
-            reviews.review_text, 
-            reviews.review_created_at, 
-            users.user_first_name, 
+            reviews.review_text,
+            reviews.review_created_at,
+            users.user_first_name,
             users.user_avatar_path,
             users.user_verified_at
         FROM reviews
         JOIN users 
             ON users.user_pk = reviews.review_user_fk
+        LEFT JOIN blocks
+            ON (
+                (blocks.block_blocker_user_fk = %s AND blocks.block_blocking_user_fk = reviews.review_user_fk)
+                OR
+                (blocks.block_blocker_user_fk = reviews.review_user_fk AND blocks.block_blocking_user_fk = %s)
+            )
         WHERE 
             reviews.review_movie_id = %s
             AND reviews.review_deleted_at = 0
             AND users.user_deleted_at = 0
-        ORDER BY review_created_at DESC
-        LIMIT 5
+            AND blocks.block_blocker_user_fk IS NULL
+        ORDER BY reviews.review_created_at DESC
+        LIMIT 5;
         """
-        cursor.execute(q, (movie_id,))
+        cursor.execute(q, (user_pk, user_pk, movie_id))
         reviews = cursor.fetchall()
 
         #check if the user has liked the movie
@@ -415,6 +422,7 @@ def view_movie():
         return render_template("movie.html", user=user, data=data, lang=lang, reviews=reviews, movie_id=movie_id, has_user_liked=has_user_liked)
     except Exception as ex:
         ic(ex)
+        return "An error occured", 500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
