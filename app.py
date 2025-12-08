@@ -82,27 +82,10 @@ def _____USER_____(): pass
 @app.get("/")
 @app.route("/<lang>", methods=["GET", "POST"])
 def view_index(lang = "en"):
-    # # Default language
-    # default_lang = "en"
-
-    # # Check previous page
-    # referer = request.headers.get("Referer", "")
-
-    # if not lang:
-    #     # Extract last segment of previous URL
-    #     path = referer.split("?", 1)[0].rstrip("/")  # remove query string & trailing slash
-    #     last_segment = path.split("/")[-1] if path else ""
-    #     if last_segment in ["en", "nl", "es"]:
-    #         lang = last_segment
-    #     else:
-    #         lang = default_lang
-
-    # Set the translation engine
+    # Set language
     x.default_language = lang
 
     return render_template("index.html", lang=lang)
-
-
 
 ##############################
 @app.route("/login", methods=["GET", "POST"])
@@ -114,67 +97,7 @@ def view_login( lang = "en"):
     if request.method == "GET":
         if session.get("user", ""): return redirect(url_for("view_browse"))
         return render_template("login.html", lang=lang)
-
     
-
-# @app.route("/login", methods=["GET", "POST"])
-# @app.route("/login/<lang>", methods=["GET", "POST"])
-# @x.no_cache
-# def login( lang = "en"):
-#     x.default_language = lang
-
-#     if request.method == "GET":
-#         if session.get("user", ""): return redirect(url_for("browse"))
-#         return render_template("login.html", lang=lang)
-
-#     if request.method == "POST":
-#         try:
-#             # Validate           
-#             user_email = x.validate_user_email(lang)
-#             user_password = x.validate_user_password(lang)
-
-#             # if not user_email:
-#             #     raise Exception("Please enter a valid email", 400)
-
-#             # Connect to the database
-#             q = "SELECT * FROM users WHERE user_email = %s"
-#             db, cursor = x.db()
-#             cursor.execute(q, (user_email,))
-#             user = cursor.fetchone()
-
-#             if not user: 
-#                 raise Exception("User not found, please check for spelling", 400)
-
-#             if not check_password_hash(user["user_password"], user_password):
-#                 raise Exception("Invalid credentials", 400)
-
-#             if user["user_verification_key"] != "":
-#                 raise Exception(x.lans("feedback_user_not_verified"), 400)
-            
-#             user.pop("user_password")
-
-#             # Add the default language to the user
-#             user["user_language"] = lang
-#             session["user"] = user
-        
-#             return f"""<browser mix-redirect="/browse"></browser>"""
-
-#         except Exception as ex:
-#             ic(ex)
-            
-#             # User errors
-#             if ex.args[1] == 400:
-#                 label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
-#                 ic("An error occured in Email")
-#                 return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 400
-            
-#             # System or developer error
-#             toast_error = render_template("components/toast/___toast_error.html", message="System under maintenance")
-#             return f"""<browser mix-bottom="#toast">{ toast_error }</browser>""", 500
-    
-#         finally:
-#             if "cursor" in locals(): cursor.close()
-#             if "db" in locals(): db.close()
 
 ##############################
 @app.route("/index-pass-email", methods=["POST"])
@@ -199,102 +122,6 @@ def view_signup(lang = "en"):
 
     user_email = request.args.get("email", "")
     return render_template("signup.html", user_email=user_email, lang=lang)
-
-# @app.route("/signup", methods=["GET", "POST"])
-# @app.route("/signup/<lang>", methods=["GET", "POST"])
-# @x.no_cache
-# def signup(lang = "en"):
-#     x.default_language = lang
-#     if request.method == "GET":
-#         user_email = request.args.get("email", "")
-#         return render_template("signup.html", user_email=user_email, lang=lang)
-
-#     if request.method == "POST":
-#         try:
-#             # Validate
-#             user_email = x.validate_user_email()
-#             user_password = x.validate_user_password()
-#             user_first_name = x.validate_user_first_name()
-
-#             user_pk = uuid.uuid4().hex
-#             user_last_name = ""
-#             user_avatar_path = "images/twitter_default.png"
-#             user_verification_key = uuid.uuid4().hex
-#             user_verified_at = 0
-#             user_new_password_key = 0
-#             user_deleted_at = 0
-
-#             user_hashed_password = generate_password_hash(user_password)
-
-#             # Connect to the database
-#             q = "INSERT INTO users VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-#             db, cursor = x.db()
-#             cursor.execute(q, (user_pk, user_email, user_hashed_password, 
-#             user_first_name, user_last_name, user_avatar_path, user_verification_key, user_verified_at, user_new_password_key, user_deleted_at))
-#             db.commit()
-
-#             # send verification email
-#             email_verify_account = render_template("components/email/_email_verify_account.html", user_verification_key=user_verification_key)
-#             ic(email_verify_account)
-#             x.send_email(user_email, "Verify your account", email_verify_account)
-
-#             return f"""<mixhtml mix-redirect="{ url_for('login') }"></mixhtml>""", 400
-#         except Exception as ex:
-#             ic(ex)
-#             # User errors
-#             if ex.args[1] == 400:
-#                 label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
-#                 return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 400
-            
-#             # Database errors
-#             if "Duplicate entry" and user_email in str(ex): 
-#                 label_error = render_template("components/toast/___label_error.html", message="Email already registered")
-#                 return f"""<mixhtml mix-update="#error_container">{ label_error }</mixhtml>""", 400
-            
-#             # System or developer error 
-#             label_error = render_template("components/toast/___label_error.html", message="System under maintenance")
-#             return f"""<mixhtml mix-bottom="#error_container">{ label_error }</mixhtml>""", 500
-
-#         finally:
-#             if "cursor" in locals(): cursor.close()
-#             if "db" in locals(): db.close()
-
-
-# @app.route("/verify-account", methods=["GET"])
-# def api_verify_account():
-#     try:
-#         user_verification_key = x.validate_uuid4_without_dashes(request.args.get("key", ""))
-#         user_verified_at = int(time.time())
-#         db, cursor = x.db()
-#         q = "UPDATE users SET user_verification_key = '', user_verified_at = %s WHERE user_verification_key = %s"
-#         cursor.execute(q, (user_verified_at, user_verification_key))
-#         db.commit()
-#         if cursor.rowcount != 1: raise Exception("Invalid key", 400)
-#         return redirect( url_for('login') )
-#     except Exception as ex:
-#         ic(ex)
-#         if "db" in locals(): db.rollback()
-#         # User errors
-#         if ex.args[1] == 400: return ex.args[0], 400    
-
-#         # System or developer error
-#         return "Cannot verify user"
-
-#     finally:
-#         if "cursor" in locals(): cursor.close()
-#         if "db" in locals(): db.close()
-
-##############################
-# @app.get("/logout")
-# def logout():
-#     try:
-#         session.clear()
-#         return redirect(url_for("view_index"))
-#     except Exception as ex:
-#         ic(ex)
-#         return "error"
-#     finally:
-#         pass
 
     ##############################
 @app.route("/browse")
@@ -464,7 +291,7 @@ def view_account():
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
 
-################## 
+################## I wanted this api to be in the api_actions file, but I cant get the validation for the upload file to work
 @app.route("/api-update-account", methods=["POST"])
 def api_update_account():
 
@@ -479,7 +306,7 @@ def api_update_account():
         file = request.files.get('user_avatar_file_upload')
         file_path = None
 
-        # Check if user has uploaded a file, then validate
+        # Check if user has uploaded a file, then validate, got help from ChatGPT
         if file and x.validate_avatar_file(file.filename):
             filetype = os.path.splitext(file.filename)[1].lower()
             filename = f"{uuid.uuid4().hex}{filetype}"
@@ -605,88 +432,6 @@ def view_admin_login():
         finally:
             pass
 
-################## 
-# @app.patch("/delete-user")
-# def delete_user():
-#     try:
-#             user_id = request.args.get("user_id")
-#             if not user_id:
-#                 return "User not found", 400
-
-#             db, cursor = x.db()
-
-#             # Fetch the users email
-#             q = "SELECT user_email FROM users WHERE user_pk = %s"
-#             cursor.execute(q, (user_id,))
-#             result = cursor.fetchone()
-#             if not result:
-#                 return "User not found", 404
-
-#             # extract email
-#             # If fetchone() returns a dict - Chatgpt helped me here
-#             user_email = result['user_email'] if 'user_email' in result else result[0]
-
-#             #delete user
-#             user_deleted_at = int(time.time())
-#             q = "UPDATE users SET user_deleted_at = %s WHERE user_pk = %s"
-#             cursor.execute(q, (user_deleted_at, user_id))
-#             db.commit()
-
-#             # send email letting user know
-#             email_user_deleted = render_template("components/email/_email_user_deleted.html")
-#             x.send_email(user_email, "Dupeflix account suspended", email_user_deleted)
-
-#             label_ok = render_template("components/toast/___label_ok.html", message="Successfully deleted user")
-#             return f"""
-#             <browser mix-update="#error_container">{ label_ok }</browser>
-#             """, 200
-#     except Exception as ex:
-#         ic(ex)
-#         return "An error occured", 500
-#     finally:
-#         if "cursor" in locals(): cursor.close()
-#         if "db" in locals(): db.close()
-
-################## 
-# @app.patch("/reactivate-user")
-# def reactivate_user():
-#     try:
-#         user_id = request.args.get("user_id")
-#         if not user_id:
-#             return "User not found", 400
-        
-#         db, cursor = x.db()
-#         # Fetch the users email
-#         q = "SELECT user_email FROM users WHERE user_pk = %s"
-#         cursor.execute(q, (user_id,))
-#         result = cursor.fetchone()
-#         if not result:
-#             return "User not found", 404
-
-#         # extract email
-#         # If fetchone() returns a dict - Chatgpt helped me here
-#         user_email = result['user_email'] if 'user_email' in result else result[0]
-
-#         #Update user to deleted in database
-#         user_deleted_at = 0
-#         q = "UPDATE users SET user_deleted_at = %s WHERE user_pk = %s"
-#         cursor.execute(q, (user_deleted_at, user_id))
-#         db.commit()
-        
-#         # send email letting user know
-#         email_user_reactivated = render_template("components/email/_email_user_reactivated.html")
-#         x.send_email(user_email, "Dupeflix account reactivated", email_user_reactivated)
-
-#         label_ok = render_template("components/toast/___label_ok.html", message="Successfully reactivated user")
-#         return f"""
-#         <browser mix-update="#error_container">{ label_ok }</browser>
-#         """, 200
-#     except Exception as ex:
-#         ic(ex)
-#         return "An error occured", 500
-#     finally:
-#         if "cursor" in locals(): cursor.close()
-#         if "db" in locals(): db.close()
 
 #################
 @app.patch("/api-like-movie/<movie_id>")
@@ -772,8 +517,7 @@ def view_mylist():
                 movie_list.append(response.json())
             if response.status_code != 200:
                 return "Fetching failed"
-
-
+            
         return render_template("mylist.html", user=user, lang=lang, movie_list=movie_list)
 
     except Exception as ex:
@@ -788,8 +532,6 @@ def view_mylist():
 @app.get("/api-update-dictionary")
 def get_data_from_sheet():
     try:
-        # Check if the admin is running this end-point, else show error
-        # flaskwebmail
         # Create a google sheet
         # share and make it visible to "anyone with the link"
         # In the link, find the ID of the sheet. Here: 1aPqzumjNp0BwvKuYPBZwel88UO-OC_c9AEMFVsCw1qU
@@ -875,122 +617,6 @@ def update_website_language():
 
     return redirect(new_url)
 
-
-
-# @app.get("/update-website-language")
-# def update_website_language():
-#     lang = request.args.get("language_selector", "en")
-    
-#     # Get referring URL path (e.g., /about/en)
-#     referer = request.headers.get("Referer", "/")
-#     path = referer.split("?", 1)[0]  # remove query if present
-
-#     # Remove trailing "/" if exists
-#     path = path.rstrip("/")
-
-#     # Split into directory parts
-#     parts = path.split("/")
-
-#     # Replace last part with the new language code
-#     if parts[-1] in ["en", "nl", "es"]:
-#         parts[-1] = lang
-#     else:
-#         parts.append(lang)
-
-#     # Build new URL
-#     new_path = "/".join(parts)
-
-#     return redirect(new_path)
-
-
-#####################
-# @app.route("/api-create-review/<movie_id>", methods=["POST"])
-# def api_create_review(movie_id):
-#     try:
-#         user = session.get("user", "")
-#         if not user: return "invalid user"
-
-#         user_pk = user["user_pk"]        
-#         review_text = x.validate_post(request.form.get("post", ""))
-#         review_pk = uuid.uuid4().hex
-#         review_created_at = int(time.time()) 
-#         review_deleted_at = 0
-#         # Fallbcak
-#         if not movie_id:
-#             return redirect(url_for("browse"))
-
-#         #review_count = 0
-#         db, cursor = x.db()
-#         q = "INSERT INTO reviews VALUES(%s, %s, %s, %s, %s, %s)"
-#         cursor.execute(q, (review_pk, user_pk, movie_id, review_text, review_created_at, review_deleted_at))
-#         db.commit()
-
-#         review = {
-#             "user_first_name": user["user_first_name"],
-#             "user_avatar_path": user["user_avatar_path"],
-#             "review_text": review_text,
-#             "review_created_at": review_created_at,
-#         }
-#         html_review_container = render_template("components/___review_container.html")
-#         html_review = render_template("components/_review.html", review=review, user=user)
-#         #label_ok = render_template("components/toast/___label_ok.html", message="Successfully created review")
-#         label_ok = render_template("components/toast/___label_ok.html", message=x.lans("system_characters"))
-#         return f"""
-#             <browser mix-bottom="#error_container">{label_ok}</browser>
-#             <browser mix-top="#reviews">{html_review}</browser>
-#             <browser mix-replace="#review_container">{html_review_container}</browser>
-#         """
-#     except Exception as ex:
-#         ic("An error accured while creating a review:", ex)
-#         if "db" in locals(): db.rollback()
-
-#        # User errors
-#         if "x-error post" in str(ex):
-#             label_error = render_template("components/toast/___label_error.html", message=f"Review - {x.POST_MIN_LEN} to {x.POST_MAX_LEN} characters")
-#             return f"""<browser mix-bottom="#error_container">{label_error}</browser>"""
-
-#         # System or developer error
-#         label_error = render_template("components/toast/___label_error.html", message="System under maintenance")
-#         return f"""<browser mix-bottom="#error_container">{ label_error }</browser>""", 500
-
-#     finally:
-#         if "cursor" in locals(): cursor.close()
-#         if "db" in locals(): db.close()   
-
-###############
-# @app.patch("/api-delete-review/<review_pk>")
-# def api_delete_review(review_pk):
-#     try:
-#         user = session.get("user", "")
-#         if not user: return "invalid user"
-
-#         review_deleted_at = int(time.time()) 
-#         # Fallbcak
-#         if not review_pk:
-#             return redirect(url_for("browse"))
-
-#         db, cursor = x.db()
-#         q = "UPDATE reviews SET review_deleted_at = %s WHERE review_pk = %s AND review_deleted_at = 0"
-#         cursor.execute(q, (review_deleted_at, review_pk))
-#         db.commit()
-#         label_ok = render_template("components/toast/___label_ok.html", message="Deleted review!")
-    
-#         return f"""
-#             <browser mix-bottom="#error_container">{label_ok}</browser>
-#             <browser mix-remove="#review-{review_pk}"></browser>
-#         """
-#     except Exception as ex:
-#         ic("An error accured while deleting a review:", ex)
-#         if "db" in locals(): db.rollback()
-
-#         # System or developer error
-#         label_error = render_template("components/toast/___label_error.html", message="System under maintenance")
-#         return f"""<browser mix-bottom="#error_container">{ label_error }</browser>""", 500
-
-#     finally:
-#         if "cursor" in locals(): cursor.close()
-#         if "db" in locals(): db.close()   
-
 ##########
 @app.route("/forgot-password", methods=["GET", "POST"])
 @app.route("/forgot-password/<lang>", methods=["GET", "POST"])
@@ -998,66 +624,6 @@ def view_forgot_password(lang = "en"):
     x.default_language = lang
 
     return render_template("forgotpassword.html", lang=lang)
-
-
-    
-# @app.route("/forgot-password", methods=["GET", "POST"])
-# @app.route("/forgot-password/<lang>", methods=["GET", "POST"])
-# def view_forgot_password(lang = "en"):
-#     x.default_language = lang
-
-
-#     if request.method == "POST":
-#         try:
-#             user_email = x.validate_user_email(lang)
-
-#             db, cursor = x.db()
-#             q = "SELECT * FROM users WHERE user_email = %s"
-#             cursor.execute(q, (user_email,))
-#             user = cursor.fetchone()
-#             ic(user)
-#             if not user:
-#                 raise Exception(x.lans("feedback_user_not_found"), 400)
-
-#             if user["user_verification_key"] != "":
-#                 raise Exception(x.lans("feedback_user_not_verified"), 400)
-            
-#             if user["user_new_password_key"] != "":
-#                 raise Exception(x.lans("feedback_pass_email_already_sent"), 400)
-
-#             #Create new password key for email and system
-#             user_new_password_key = uuid.uuid4().hex
-
-#             q = "UPDATE users SET user_new_password_key = %s WHERE user_email = %s"
-#             cursor.execute(q, (user_new_password_key, user_email,))
-#             db.commit()
-
-#             # send email with link and key
-#             email_new_password = render_template("components/email/_email_forgot_password.html", user_new_password_key=user_new_password_key)
-#             x.send_email(user_email, "Forgot password | Dupeflix", email_new_password)
-
-#             label_ok = render_template("components/toast/___label_ok.html", message={{ x.lans('feedback_check_email') }})
-
-#             return f"""
-#                 <browser mix-replace="#error_container">{label_ok}</browser>
-#             """
-#         except Exception as ex: 
-#             ic(ex)
-#             #User errors
-#             if ex.args[1] == 400:
-#                 label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
-#                 ic("An error occured in Email")
-#                 return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 400
-            
-#             # System or developer error
-#             label_error = render_template("components/toast/___label_error.html", message={{ x.lans('feedback_system_maintenance') }})
-#             return f"""<browser mix-bottom="#error_container">{ label_error }</browser>""", 500
-    
-#         finally: 
-#             if "cursor" in locals(): cursor.close()
-#             if "db" in locals(): db.close()
-
-#     return render_template("forgotpassword.html", lang=lang)
 
 ##############
 @app.route("/new-password", methods=["GET", "POST"])
@@ -1100,54 +666,3 @@ def view_new_password(lang = "en"):
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
 
-#########
-# @app.route("/api-update-password", methods=["POST"])
-# def new_password():
-#     try: 
-#         user_new_password_key = x.validate_uuid4_without_dashes(request.args.get("key", ""))
-
-#         user_new_password = x.validate_user_password()
-#         user_confirm_new_password = x.validate_user_password_confirm()
-
-#         if user_new_password != user_confirm_new_password:
-#             raise Exception({{ x.lans('feedback_pass_must_match') }}, 400)
-#         if not user_new_password_key:
-#             raise Exception("Invalid key", 400)
-        
-#         user_hashed_new_password = generate_password_hash(user_new_password)
-#         db, cursor = x.db()
-#         q = "UPDATE users SET user_new_password_key = '', user_password = %s WHERE user_new_password_key = %s"
-#         cursor.execute(q, (user_hashed_new_password, user_new_password_key))
-#         db.commit()
-
-#         label_ok = render_template("components/toast/___label_ok.html", message={{ x.lans('feedback_pass_updated_success') }})
-#         return f"""
-#         <browser mix-redirect="/login"></browser>
-#         <browser mix-update="#error_container">{label_ok}</browser>
-#         """
-#     except Exception as ex:
-#         ic(ex)
-#         if "db" in locals(): db.rollback()
-#         # User errors
-#         if ex.args[1] == 400:
-#             label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
-#             return f"""<browser mix-update="#error_container">{label_error}</browser>""", 400
-
-#         # System or developer error
-#         label_error = render_template("components/toast/___label_error.html", message=ex.args[0])
-#         return f"""<browser mix-update="#error_container">{label_error}</browser>""", 400
-#     finally: 
-#         if "cursor" in locals(): cursor.close()
-#         if "db" in locals(): db.close()
-
-
-####################
-# @app.patch("/api-block-user/<blocking_user_fk>/<blocker_user_fk>")
-# def api_block_user(blocking_user_fk, blocker_user_fk):
-#     try: 
-#         ic(blocking_user_fk)
-#         ic(blocker_user_fk)
-#     except Exception as ex: 
-#         ic(ex)
-#     finally:
-#         pass

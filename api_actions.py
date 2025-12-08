@@ -354,8 +354,6 @@ def api_update_password():
         cursor.execute(q, (user_hashed_new_password, user_new_password_key))
         db.commit()
 
-        #label_ok = render_template("components/toast/___label_ok.html", message=x.lans('feedback_pass_updated_success'))
-        #<browser mix-update="#error_container">{label_ok}</browser>
         return f"""
                 <browser mix-redirect="/login"></browser>
                 """
@@ -497,6 +495,7 @@ def api_block_user(blocking_user_fk, blocker_user_fk, review_pk):
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
 
+
 ### UNBLOCK USER ###
 @api_actions.patch("/api-block-user/<blocked_user_fk>/<blocker_user_fk>")
 def api_unblock_user(blocked_user_fk, blocker_user_fk):
@@ -511,8 +510,6 @@ def api_unblock_user(blocked_user_fk, blocker_user_fk):
         cursor.execute(q, (blocker_user_fk, blocked_user_fk))
         db.commit()
 
-        #button_html = render_template("components/___mylist_container.html", movie_id=movie_id, has_user_liked=has_user_liked)
-        #f"<browser mix-replace='#review-{review_pk}'>You have blocke this user</browser>"
         label_ok = render_template("components/toast/___label_ok.html", message=x.lans("feedback_success_unblocked_user"))
         return f"""
         <browser mix-update="#error_container">{ label_ok }</browser>
