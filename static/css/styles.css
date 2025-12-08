@@ -194,7 +194,7 @@ main{
         content: '';
         position: absolute;
         top: 0;
-        left: 0;
+        left: 4%;
         background: var(--gradient_fade_right);
         z-index: 10;
         width: 100%;

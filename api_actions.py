@@ -61,11 +61,11 @@ def signup(lang = "en"):
         
         # Database errors
         if "Duplicate entry" and user_email in str(ex): 
-            label_error = render_template("components/toast/___label_error.html", message="Email already registered")
+            label_error = render_template("components/toast/___label_error.html", message=x.lans("feedback_invalid_already_blocked"))
             return f"""<mixhtml mix-update="#error_container">{ label_error }</mixhtml>""", 400
         
         # System or developer error 
-        label_error = render_template("components/toast/___label_error.html", message="System under maintenance")
+        label_error = render_template("components/toast/___label_error.html", message=x.lans("feedback_system_maintenance"))
         return f"""<mixhtml mix-bottom="#error_container">{ label_error }</mixhtml>""", 500
 
     finally:
@@ -117,7 +117,7 @@ def login( lang = "en"):
             ic("An error occured in Email")
             return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 400
         # System or developer error
-        toast_error = render_template("components/toast/___toast_error.html", message="System under maintenance")
+        toast_error = render_template("components/toast/___toast_error.html", message=x.lans("feedback_system_maintenance"))
         return f"""<browser mix-bottom="#toast">{ toast_error }</browser>""", 500
 
     finally:
@@ -233,8 +233,9 @@ def api_delete_review(review_pk):
         q = "UPDATE reviews SET review_deleted_at = %s WHERE review_pk = %s AND review_deleted_at = 0"
         cursor.execute(q, (review_deleted_at, review_pk))
         db.commit()
-        label_ok = render_template("components/toast/___label_ok.html", message="Deleted review!")        
+        label_ok = render_template("components/toast/___label_ok.html", message=x.lans("feedback_success_review_deleted"))        
 
+        #Send email to user if the admin deleted the review DOES NOT WORK :(
         # if session.get("admin_session") == True:
         #     q = """
         #     SELECT users.user_email
@@ -269,7 +270,7 @@ def api_delete_review(review_pk):
         if "db" in locals(): db.rollback()
 
         # System or developer error
-        label_error = render_template("components/toast/___label_error.html", message="System under maintenance")
+        label_error = render_template("components/toast/___label_error.html", message=x.lans("feedback_system_maintenance"))
         return f"""<browser mix-bottom="#error_container">{ label_error }</browser>""", 500
 
     finally:

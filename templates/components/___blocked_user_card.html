@@ -18,6 +18,6 @@
     <div class="d-flex gap-2 p-self-end" md="p-self-center">
         <button class="button-secondary-small"
             mix-patch="{{ url_for('api_actions.api_unblock_user', blocked_user_fk=blocked.user_pk, blocker_user_fk=user.user_pk)}}">
-            Unblock {{blocked.user_first_name}}</button>
+            {{ x.lans("system_unblock") }} {{blocked.user_first_name}}</button>
     </div>
 </article>

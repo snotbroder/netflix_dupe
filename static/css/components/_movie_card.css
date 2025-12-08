@@ -13,18 +13,16 @@
     &:not(:first-of-type, :last-of-type){
         margin-block: 2rem;
     }
-    &:last-of-type{
-        padding-bottom: 10rem;
-    }
+
     &:hover&::after{
         content: '';
         position: absolute;
-        top: 25%;
+        top: 20%;
         right: 0;
         background: var(--gradient_fade_right);
         z-index: 10;
-        width: 5%;
-        height: 70%;
+        width: 7%;
+        height: 80%;
     }
     
 }

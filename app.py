@@ -517,11 +517,11 @@ def api_update_account():
         
         # Database errors
         if "Duplicate entry" and user_email in str(ex): 
-            label_error = render_template("components/toast/___label_error.html", message="Email already registered")
+            label_error = render_template("components/toast/___label_error.html", message=x.lans("feedback_email_already_registered"))
             return f"""<mixhtml mix-update="#error_container">{ label_error }</mixhtml>""", 400
         
         # System or developer error
-        label_error = render_template("components/toast/___label_error.html", message="System under maintenance")
+        label_error = render_template("components/toast/___label_error.html", message=x.lans("feedback_system_maintenance"))
         return f"""<mixhtml mix-bottom="#error_container">{ label_error }</mixhtml>""", 500
 
     finally:
@@ -599,7 +599,7 @@ def view_admin_login():
                 return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 400
             
             # System or developer error
-            label_error = render_template("components/toast/___label_error.html", message="System under maintenance")
+            label_error = render_template("components/toast/___label_error.html", message=x.lans("feedback_system_maintenance"))
             return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 500
     
         finally:

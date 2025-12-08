@@ -31,7 +31,7 @@
 </section>
 <section class="start-trending bg-c-var(--color_main_bg) px-4% mx--4.2%">
     <header>
-        <h2>Trending Now</h2>
+        <h2>{{ x.lans("browse_category_trending_right_now")}}</h2>
     </header>
 
     <div class="start-trending-cards-wrapper fade-overlay d-flex gap-1.5rem h-10rem" md="h-15rem gap-2.5rem"
@@ -45,7 +45,7 @@
 </section>
 <section class="start-info-cards-container bg-c-var(--color_main_bg) px-4% py-2rem mx--4.2%">
     <header>
-        <h2>More reasons to join</h2>
+        <h2>{{ x.lans("index_reasons_to_join") }}</h2>
     </header>
     <div class="d-grid gap-1rem" lg="cols-2">
         {% include "/components/_info_card.html" %}

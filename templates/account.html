@@ -46,7 +46,7 @@
     </form>
 </section>
 <section id="block_list" class="my-4rem max-w-580px ma-auto">
-    <h2>Block list</h2>
+    <h2>{{ x.lans("account_header_2") }}</h2>
     {% if blocked_users %}
     {% for blocked in blocked_users %}
     {% include "components/___blocked_user_card.html" %}
@@ -57,14 +57,16 @@
 </section>
 <section class="max-w-580px ma-auto">
     <div class="d-flex j-content-between flex-wrap gap-1rem mb-2rem">
-        <h2 class="bg-c-var(--color_system_error) w-100% pa-2rem rounded-sm">Danger Zone</h2>
+        <h2 class="bg-c-var(--color_system_error) w-100% pa-2rem rounded-sm">{{ x.lans("account_danger_zone") }}</h2>
         <div class="d-flex j-content-between w-100%">
-            <p class="text-c-var(--color_tertiary)">I want to delete my Dupeflix account</p>
+            <p class="text-c-var(--color_tertiary)">{{ x.lans("account_body_2") }}</p>
             <div>
-                <button class="button-primary" id="fakeButton">Delete account</button>
+                <button class="button-primary" id="fakeButton">{{ x.lans("account_cta_2") }}</button>
                 <button class="button-primary d-none" mix-patch="/delete-user?user_id={{ user.user_pk }}"
-                    mix-await="Deleting account..." mix-default="Delete my account" id="confirmButton">Confirm delete
-                    account</button>
+                    mix-await="Deleting account..." mix-default="Delete my account" id="confirmButton">
+                    {{ x.lans("system_confirm") }}
+                    {{ x.lans("account_cta_2") }}
+                </button>
             </div>
         </div>
     </div>

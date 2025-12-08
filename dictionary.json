@@ -89,6 +89,21 @@
         "nl": "terug",
         "es": "volver"
     },
+    "system_block": {
+        "en": "Block",
+        "nl": "Blokkeren",
+        "es": "Bloquear"
+    },
+    "system_unblock": {
+        "en": "Unblock",
+        "nl": "Deblokkeren",
+        "es": "Desbloquear"
+    },
+    "system_confirm": {
+        "en": "Confirm",
+        "nl": "Bevestigen",
+        "es": "Confirmar"
+    },
     "feedback_user_not_found": {
         "en": "User not found",
         "nl": "Account bestaat niet",
@@ -141,13 +156,13 @@
     },
     "feedback_invalid_already_blocked": {
         "en": "User already blocked",
-        "nl": "",
-        "es": ""
+        "nl": "Gebruiker al geblokkeerd",
+        "es": "Usuario ya bloqueado"
     },
     "feedback_invalid_user_deleted": {
         "en": "User deleted from Dupeflix, contact admin to request reactivation",
-        "nl": "",
-        "es": ""
+        "nl": "Gebruiker verwijderd van Dupeflix, neem contact op met de beheerder om reactivering aan te vragen",
+        "es": "Usuario eliminado de Dupeflix. Contacta al administrador para solicitar la reactivación."
     },
     "feedback_check_email": {
         "en": "Please check your email",
@@ -174,25 +189,30 @@
         "nl": "Recensie is aangemaakt",
         "es": "Reseña creada exitosamente"
     },
+    "feedback_success_review_deleted": {
+        "en": "Successfully deleted review",
+        "nl": "Recensie succesvol verwijderd",
+        "es": "Reseña eliminada correctamente"
+    },
     "feedback_success_blocked_user": {
         "en": "Successfully blocked user. Unblock them under My Account",
-        "nl": "",
-        "es": ""
+        "nl": "Gebruiker succesvol geblokkeerd. Deblokkeer ze via 'Mijn account'.",
+        "es": "Usuario bloqueado correctamente. Desbloquéelo en Mi cuenta."
     },
     "feedback_success_unblocked_user": {
         "en": "Successfully unblocked user",
-        "nl": "",
-        "es": ""
+        "nl": "Gebruiker succesvol gedeblokkeerd.",
+        "es": "Usuario desbloqueado correctamente."
     },
     "feedback_success_signup_email_sent": {
         "en": "Please verify your account, check your email",
-        "nl": "",
-        "es": ""
+        "nl": "Verifieer je account en controleer je e-mail.",
+        "es": "Verifique su cuenta y revise su correo electrónico."
     },
     "feedback_success_account_updated": {
         "en": "Successfully updated account details",
-        "nl": "",
-        "es": ""
+        "nl": "Accountgegevens succesvol bijgewerkt.",
+        "es": "Se actualizaron los datos de la cuenta correctamente."
     },
     "LOGIN & SIGNUP": {
         "en": "",
@@ -268,6 +288,21 @@
         "en": "Get started",
         "nl": "Begin hier",
         "es": "Empezar aquí"
+    },
+    "index_reasons_to_join": {
+        "en": "More reasons to join",
+        "nl": "Redenen om een account aan te maken",
+        "es": "Más razones para unirte"
+    },
+    "index_reason_1_header": {
+        "en": "Enjoy on your TV",
+        "nl": "Geniet ervan vanaf jouw televisie",
+        "es": "Disfruta en tu televisor"
+    },
+    "index_reason_1_body": {
+        "en": "Watch on smart TVs, PlayStation, Xbox, Chromecast, Apple TV, Blu-ray players and more.",
+        "nl": "Kijk op smart-tv's, PlayStation, Xbox, Chromecast, Apple TV, Blu-ray-spelers en meer.",
+        "es": "Míralo en televisores inteligentes, PlayStation, Xbox, Chromecast, Apple TV, reproductores de Blu-ray y más."
     },
     "COMP. NAV": {
         "en": "",
@@ -403,6 +438,26 @@
         "en": "Update details",
         "nl": "Gegevens wijzigen",
         "es": "Actualizar detalles"
+    },
+    "account_header_2": {
+        "en": "Users I have blocked",
+        "nl": "Gebruikers die ik heb geblokkeerd",
+        "es": "Usuarios que he bloqueado"
+    },
+    "account_danger_zone": {
+        "en": "Danger Zone",
+        "nl": "Gevaarlijke Zone",
+        "es": "Zona de Peligro"
+    },
+    "account_body_2": {
+        "en": "I want to delete my Dupeflix account",
+        "nl": "Ik wil mijn Dupeflix-account verwijderen",
+        "es": "Quiero eliminar mi cuenta de Dupeflix"
+    },
+    "account_cta_2": {
+        "en": "Delete my account",
+        "nl": "Verwijder mijn account",
+        "es": "Eliminar mi cuenta"
     },
     "COMP. REVIEW": {
         "en": "",
@@ -597,11 +652,81 @@
     "mylist_header_2": {
         "en": "Add more movies to My List through Browse",
         "nl": "Voeg meer films toe aan Mijn lijst via Ontdeken",
-        "es": "Añade más películas a Mi lista a través de la exploración"
+        "es": "Añade más películas a Mi lista a través de la Navegar"
     },
     "mylist_empty": {
         "en": "My List is empty...",
         "nl": "Mijn Lijst is leeg...",
         "es": "Mi Lista está vacía..."
+    },
+    "COMP. FOOTER": {
+        "en": "",
+        "nl": "",
+        "es": ""
+    },
+    "footer_audio": {
+        "en": "Audio Description",
+        "nl": "Audiobeschrijving",
+        "es": "Descripción de audio"
+    },
+    "footer_investor": {
+        "en": "Investor Relations",
+        "nl": "Investeerdersrelaties",
+        "es": "Relaciones con inversores"
+    },
+    "footer_legal": {
+        "en": "Legal Notices",
+        "nl": "Juridische kennisgevingen",
+        "es": "Avisos legales"
+    },
+    "footer_advert": {
+        "en": "Advert choices",
+        "nl": "Advertentie keuzes",
+        "es": "Opciones de publicidad"
+    },
+    "footer_help": {
+        "en": "Help Centre",
+        "nl": "Helpcentrum",
+        "es": "Centro de ayuda"
+    },
+    "footer_jobs": {
+        "en": "Jobs",
+        "nl": "Vacatures",
+        "es": "Empleos"
+    },
+    "footer_cookie": {
+        "en": "Cookie Preferences",
+        "nl": "Cookievoorkeuren",
+        "es": "Preferencias de cookies"
+    },
+    "footer_gift": {
+        "en": "Gift Cards",
+        "nl": "Cadeaubonnen",
+        "es": "Tarjetas de regalo"
+    },
+    "footer_terms": {
+        "en": "Terms of Use",
+        "nl": "Gebruiksvoorwaarden",
+        "es": "Condiciones de uso"
+    },
+    "footer_corporate": {
+        "en": "Corporate Information",
+        "nl": "Bedrijfsinformatie",
+        "es": "Información corporativa"
+    },
+    "footer_media": {
+        "en": "Media Centre",
+        "nl": "Mediacentrum",
+        "es": "Centro de prensa"
+    },
+    "footer_privacy": {
+        "en": "Privacy",
+        "nl": "Privacy",
+        "es": "Privacidad"
+    },
+    "footer_contact": {
+        "en": "Contact Us",
+        "nl": "Contact ons",
+        "es": "Contacto "
     }
 }
