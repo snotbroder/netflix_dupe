@@ -224,7 +224,7 @@ def api_delete_review(review_pk):
         user = session.get("user", "")
         if not user: return "invalid user"
 
-        review_deleted_at = int(time.time()) 
+        review_deleted_at = int(time.time())  
         # Fallbcak
         if not review_pk:
             return redirect(url_for("view_browse"))
@@ -233,14 +233,39 @@ def api_delete_review(review_pk):
         q = "UPDATE reviews SET review_deleted_at = %s WHERE review_pk = %s AND review_deleted_at = 0"
         cursor.execute(q, (review_deleted_at, review_pk))
         db.commit()
-        label_ok = render_template("components/toast/___label_ok.html", message="Deleted review!")
-    
+        label_ok = render_template("components/toast/___label_ok.html", message="Deleted review!")        
+
+        # if session.get("admin_session") == True:
+        #     q = """
+        #     SELECT users.user_email
+        #     FROM reviews
+        #     JOIN users ON users.user_pk = reviews.review_user_fk
+        #     WHERE reviews.review_pk = %s;
+        #     """
+        #     cursor.execute(q, (review_pk,))
+        #     user_email_row = cursor.fetchone()
+
+        #     #extract from row
+        #     if user_email_row:
+        #         user_email = user_email_row["user_email"]
+
+        #     email_deleted_review = render_template("components/email/_email_deleted_review.html")
+        #     x.send_email(user_email, "Deleted review | Dupeflix", email_deleted_review)
+            
+        #     return f"""
+        #     <browser mix-remove="#review-{review_pk}"></browser>
+        #     <browser mix-bottom='#error_container'>{label_ok}</browser>
+        #     """
+
+        
+
         return f"""
             <browser mix-bottom="#error_container">{label_ok}</browser>
+            <browser mix-bottom=".error_container_dialog">{label_ok}</browser>
             <browser mix-remove="#review-{review_pk}"></browser>
         """
     except Exception as ex:
-        ic("An error accured while deleting a review:", ex)
+        ic("An error occured while deleting a review:", ex)
         if "db" in locals(): db.rollback()
 
         # System or developer error
@@ -390,6 +415,7 @@ def api_delete_user():
             label_ok = render_template("components/toast/___label_ok.html", message="Successfully deleted user")
             return f"""
             <browser mix-update="#error_container">{ label_ok }</browser>
+            <browser mix-remove="#user-{user_id}"></browser>
             """, 200
     except Exception as ex:
         ic(ex)
@@ -429,6 +455,7 @@ def api_reactivate_user():
 
         label_ok = render_template("components/toast/___label_ok.html", message="Successfully reactivated user")
         return f"""
+        <browser mix-remove="#user-{user_id}"></browser>
         <browser mix-update="#error_container">{ label_ok }</browser>
         """, 200
     except Exception as ex:

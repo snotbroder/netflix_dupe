@@ -5,11 +5,11 @@
                 src="{{ url_for('static', filename='' ~ (review.user_avatar_path if review.user_avatar_path else '/images/twitter_default.png')) }}"
                 alt="{{review.user_first_name}}">
         </div>
-        <div class="d-flex flex-col j-content-between">
+        <div class="d-flex flex-col gap-.25rem">
             {% if review.review_user_fk == user.user_pk %}
-            <h4>{{x.lans("review_me")}}</h4>
+            <h4 class="ma-0">{{x.lans("review_me")}}</h4>
             {% else %}
-            <h3 class="text-t-capitalize">{{review.user_first_name}}</h3>
+            <h3 class="text-t-capitalize ma-0">{{review.user_first_name}}</h3>
             {% endif %}
             <p class="small">{{x.lans("review_body_ago_2")}} {{review.review_created_at | timeago}}
                 {{x.lans("review_body_ago_1")}}</p>

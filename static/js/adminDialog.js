@@ -1,16 +1,20 @@
-const dialog = document.querySelector("dialog");
-const showButtons = document.querySelectorAll(".openDialog");
-const closeButton = document.querySelector("#closeDialog");
+// All open buttons
+const showButtons = document.querySelectorAll(".openDialogBtn");
 
-// "Show the dialog" button opens the dialog modally
 showButtons.forEach(button => {
   button.addEventListener("click", () => {
-    dialog.showModal();
+    const userPk = button.dataset.user; // get the user PK
+    const dialog = document.getElementById(`dialog-${userPk}`);
+    if (dialog) dialog.showModal();
   });
 });
 
-// "Close" button closes the dialog
-closeButton.addEventListener("click", () => {
-  dialog.close();
-});
+// Close buttons
+const closeButtons = document.querySelectorAll(".closeDialogBtn");
 
+closeButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    const dialog = button.closest("dialog");
+    if (dialog) dialog.close();
+  });
+});

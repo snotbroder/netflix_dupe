@@ -538,7 +538,7 @@ def view_admin():
         # Connect to the database
         db, cursor = x.db()
         #Active uses in database
-        q = "SELECT * FROM users WHERE user_deleted_at = '0'" #LIMIT 5
+        q = "SELECT * FROM users WHERE user_deleted_at = '0'" 
         cursor.execute(q)
         active_users = cursor.fetchall()
 
@@ -546,8 +546,13 @@ def view_admin():
         q = "SELECT * FROM users WHERE user_deleted_at != '0'"
         cursor.execute(q)
         deleted_users = cursor.fetchall()
-        
-        return render_template("admin.html", active_users=active_users, deleted_users=deleted_users)
+
+        #reviews
+        q = "SELECT * FROM reviews"
+        cursor.execute(q)
+        reviews = cursor.fetchall()
+
+        return render_template("admin.html", active_users=active_users, deleted_users=deleted_users, reviews=reviews)
 
     except Exception as ex:
         ic(ex)

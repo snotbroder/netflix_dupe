@@ -272,3 +272,14 @@ textarea {
 .profile-icon{
     aspect-ratio: 1/1;
 }
+.reviews-dialog{
+    background: var(--gradient_info_card);
+    width: 70%;
+    max-width: 1200px;
+
+    max-height: 60%;
+}
+body:has(.reviews-dialog[open]) {
+  /* Poof! No more scrolling! */
+  overflow: hidden;
+}

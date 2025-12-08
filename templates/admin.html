@@ -12,7 +12,7 @@
 <section id="admin_users_lists" class="max-w-1080px mx-auto" lg="max-w-full d-grid cols-2 gap-2rem">
     <section>
         <h2>Active users</h2>
-        <div class=" d-flex flex-col gap-2 mb-4">
+        <div id="active_users_list" class=" d-flex flex-col gap-2 mb-4">
             {% for user in active_users %}
             {% include "components/_admin_account_card.html" %}
             {% endfor %}
@@ -20,18 +20,20 @@
     </section>
     <section>
         <h2>Deleted users</h2>
-        <div class="d-flex flex-col gap-2 mb-4">
+        <div id="deleted_users_list" class="d-flex flex-col gap-2 mb-4">
             {% for user in deleted_users %}
             {% include "components/_admin_account_card.html" %}
             {% endfor %}
         </div>
     </section>
 </section>
-<dialog>
+<!-- Dialog -->
+
+<!-- <dialog>
     <h2>User reviews</h2>
 
     <button id="closeDialog">Cancel</button>
-</dialog>
+</dialog> -->
 
 <script defer src="{{ url_for('static', filename='js/adminDialog.js') }}"></script>
 {% include "components/_footer.html" %}

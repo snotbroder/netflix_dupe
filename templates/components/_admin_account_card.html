@@ -1,13 +1,13 @@
-<article md="flex-row p-items-center"
+<article id="user-{{ user.user_pk }}" md="flex-row p-items-center"
     class="d-flex j-content-between flex-col border-t-2 border-c-var(--color_tertiary) pt-.5rem">
     <div class="d-grid gap-2 cols-3 w-30% a-items-center">
         <div class="img-container w-3rem a-self-center">
-            <img class="rounded-xs"
+            <img class="rounded-xs profile-icon"
                 src="{{ url_for('static', filename=user.user_avatar_path or 'images/twitter_default.png') }}"
                 alt="Profile">
         </div>
-        <div class="d-flex flex-col j-content-between">
-            <p>
+        <div class="d-flex flex-col ">
+            <p class="ma-0 text-t-capitalize">
                 {{ user.user_first_name }}
             </p>
             <p class="text-c-var(--color_tertiary)">
@@ -16,8 +16,10 @@
         </div>
     </div>
     <div class="d-flex gap-2 p-self-end" md="p-self-center">
+        <button class="button-secondary openDialogBtn" data-user="{{ user.user_pk }}">See reviews</button>
         {% if user.user_deleted_at != 0 %}
-        <button class="button-secondary openDialog">open dialog</button>
+        <!-- <button id="openDialog" [data-{{user.user_pk}}] class="button-secondary">open dialog</button> -->
+
         <button class="button-secondary" mix-patch="/reactivate-user?user_id={{ user.user_pk }}"
             mix-await="Reactivating user..." mix-default="Reactivate user">Reactivate
             user</button>
@@ -28,6 +30,44 @@
         {% endif %}
     </div>
 </article>
-<!-- {{ url_for('api_actions.api_delete_user', user_pk=user.user_pk) }} -->
-<!-- /delete-user?user_id={{ user.user_pk }} -->
-<!-- /reactivate-user?user_id={{ user.user_pk }} -->
+
+<dialog id="dialog-{{ user.user_pk }}" class="reviews-dialog bg-c-var pa-2rem rounded-md">
+    <div class="d-flex j-content-between">
+        <h2>{{ user.user_first_name }}'s reviews</h2>
+        <button class="button-secondary closeDialogBtn">Close</button>
+    </div>
+    <div class="error_container_dialog"></div>
+    {% for review in reviews %}
+    {% if user.user_pk == review.review_user_fk %}
+
+    <article id="review-{{review.review_pk}}" class="my-2rem gap-1rem d-flex j-content-between">
+
+        <div class="d-flex gap-.5rem {% if review.review_deleted_at != 0 %} grayscale-100 {% endif %}">
+            <div class="img-container w-3rem ">
+                <img class="rounded-xs profile-icon a-self-center"
+                    src="{{ url_for('static', filename=user.user_avatar_path or 'images/twitter_default.png') }}"
+                    alt="Profile">
+            </div>
+            <div>
+                <p class="small ma-0">{{review.review_created_at | timeago}} ago | <a class="hyperlink ma-0"
+                        href="{{ url_for('view_movie', movie_id=review.review_movie_id )}}"> on movie ID
+                        {{review.review_movie_id}}</a></p>
+                <p class="max-w-600px">{{review.review_text}}</p>
+            </div>
+        </div>
+        <!-- /delete-user?user_id={{ user.user_pk }} -->
+        {% if review.review_deleted_at == 0 %}
+        <button class="button-secondary-small"
+            mix-patch="{{ url_for('api_actions.api_delete_review', review_pk=review.review_pk) }}">Delete
+            review</button>
+
+        {% else %}
+        <p class="p-relative top-0 right-0 text-a-right">Review was deleted {{review.review_deleted_at | timeago}} ago
+        </p>
+        {% endif %}
+    </article>
+    {% endif %}
+    {% endfor %}
+    <p>User has no more reviews</p>
+
+</dialog>
