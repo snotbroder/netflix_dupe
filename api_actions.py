@@ -32,7 +32,7 @@ def signup(lang = "en"):
         user_avatar_path = "images/twitter_default.png"
         user_verification_key = uuid.uuid4().hex
         user_verified_at = 0
-        user_new_password_key = 0
+        user_new_password_key = "0"
         user_deleted_at = 0
 
         user_hashed_password = generate_password_hash(user_password)
@@ -97,7 +97,7 @@ def login( lang = "en"):
         if not check_password_hash(user["user_password"], user_password):
             raise Exception(x.lans("feedback_invalid_password"), 400)
 
-        if user["user_verification_key"] != "":
+        if user["user_verification_key"] != "0":
             raise Exception(x.lans("feedback_user_not_verified"), 400)
         
         
@@ -145,7 +145,7 @@ def api_verify_account():
         user_verification_key = x.validate_uuid4_without_dashes(request.args.get("key", ""))
         user_verified_at = int(time.time())
         db, cursor = x.db()
-        q = "UPDATE users SET user_verification_key = '', user_verified_at = %s WHERE user_verification_key = %s"
+        q = "UPDATE users SET user_verification_key = '0', user_verified_at = %s WHERE user_verification_key = %s"
         cursor.execute(q, (user_verified_at, user_verification_key))
         db.commit()
         if cursor.rowcount != 1: raise Exception("Invalid key", 400)
@@ -292,10 +292,10 @@ def api_forgot_password(lang = "en"):
         if not user:
             raise Exception(x.lans("feedback_user_not_found"), 400)
 
-        if user["user_verification_key"] != "":
+        if user["user_verification_key"] != "0":
             raise Exception(x.lans("feedback_user_not_verified"), 400)
         
-        if user["user_new_password_key"] != "":
+        if user["user_new_password_key"] != "0":
             raise Exception(x.lans("feedback_pass_email_already_sent"), 400)
 
         #Create new password key for email and system
@@ -338,7 +338,7 @@ def api_update_password():
     try: 
         user_new_password_key = x.validate_uuid4_without_dashes(request.args.get("key"))
 
-        if user_new_password_key == '':
+        if user_new_password_key == "0":
             raise redirect(url_for("index.html"))
 
         user_new_password = x.validate_user_password()
@@ -349,7 +349,7 @@ def api_update_password():
         
         user_hashed_new_password = generate_password_hash(user_new_password)
         db, cursor = x.db()
-        q = "UPDATE users SET user_new_password_key = '', user_password = %s WHERE user_new_password_key = %s"
+        q = "UPDATE users SET user_new_password_key = '0', user_password = %s WHERE user_new_password_key = %s"
         cursor.execute(q, (user_hashed_new_password, user_new_password_key))
         db.commit()
 
