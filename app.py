@@ -742,17 +742,46 @@ def api_like_movie(movie_id):
 
 ####################### 
 @app.route("/my-list")
+@x.no_cache
 def view_mylist():
     try:
         user = session.get("user", "")
-        if not user: return redirect(url_for("view_index"))
+        if not user: 
+            return redirect(url_for("view_index"))
+
+        user_pk = user.get("user_pk", "")
         lang = user.get("user_language", "en")
-        return render_template("mylist.html", user=user, lang=lang)
+
+        db, cursor = x.db()
+        q = "SELECT mylist_movie_id FROM mylists WHERE mylist_user_fk = %s AND mylist_deleted_at = 0"
+        cursor.execute(q, (user_pk,))
+        rows = cursor.fetchall()
+
+        # Get all movie_ids from all matching rows
+        movie_ids = [row["mylist_movie_id"] for row in rows]  
+
+        movie_list = []
+
+        # Fetch movie details from TMDB for each ID
+        for movie_id in movie_ids:
+            headers = {"Authorization": f"Bearer {TMDB_API_KEY}"}
+            url_movie = f"https://api.themoviedb.org/3/movie/{movie_id}?language={lang}"
+            response = requests.get(url_movie, headers=headers)
+            if response.status_code == 200:
+                #if fetch went correctly, add the fetched movies to the empty dict
+                movie_list.append(response.json())
+            if response.status_code != 200:
+                return "Fetching failed"
+
+
+        return render_template("mylist.html", user=user, lang=lang, movie_list=movie_list)
+
     except Exception as ex:
         ic(ex)
         return "System under maintenance"
     finally:
-        pass
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
 
 
 ####################### 

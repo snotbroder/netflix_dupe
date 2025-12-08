@@ -2,6 +2,36 @@
 {% include "components/___back_btn.html" %}
 
 
-<h1>My liked movies</h1>
+<h1 class="my-1rem">{{x.lans("mylist_header_1")}}</h1>
+<h3>{{x.lans("mylist_header_2")}}</h3>
+<section class="d-grid cols-2 gap-2rem pa-1rem" md="gap-2rem cols-3">
 
+    {% if movie_list %}
+    {% for movie in movie_list %}
+
+    <article class="ts-100" hover="scale-105 ts-100">
+        <a href="/movie?movie_id={{movie.id}}">
+            <div class="img-container w-100%">
+                <img class="rounded-sm" src="https://image.tmdb.org/t/p/w500{{movie.backdrop_path}}"
+                    alt="Movie backdrop">
+            </div>
+            <div class="">
+                <h3>{{ movie.title }}</h3>
+                <span>
+                    <p>
+                        {% for genre in movie.genres %}
+                        {{ genre["name"] }}
+                        {% if not loop.last %}
+                        <i class="fa-solid fa-circle fa-2xs text-5px text-c-var(--color_tertiary) mx-.25rem"></i>
+                        {% endif %}
+                        {% endfor %}
+                    </p>
+            </div>
+        </a>
+    </article>
+    {% endfor %}
+    {% else %}
+    <p>{{x.lans("mylist_empty")}}</p>
+    {% endif %}
+</section>
 {% include "components/_footer.html" %}

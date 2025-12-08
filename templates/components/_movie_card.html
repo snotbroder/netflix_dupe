@@ -1,17 +1,20 @@
 <article class="card-container shadow-lg">
     <a href="/movie?movie_id={{movie.id}}">
         <div class="img-container w-100%">
-            <img src="https://image.tmdb.org/t/p/w500{{movie.backdrop_path}}" alt="">
+            <img src="https://image.tmdb.org/t/p/w500{{movie.backdrop_path}}" alt="movie backdrop">
         </div>
         <div class="card-content">
             <h3>{{ movie.title }}</h3>
 
             <span>
-                <!-- {% include "components/___add_mylist_btn.html" with context %}</span> -->
 
                 <p>
                     {% for genre in movie.genres %}
+                    {% if request.endpoint=='view_mylist' %}
+                    {{ genre["name"] }}
+                    {% else %}
                     {{ genre }}
+                    {% endif %}
                     {% if not loop.last %}
                     <i class="fa-solid fa-circle fa-2xs text-5px text-c-var(--color_tertiary) mx-.25rem"></i>
                     {% endif %}

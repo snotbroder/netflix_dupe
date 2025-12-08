@@ -583,5 +583,25 @@
         "en": "Create new password",
         "nl": "Nieuw wachtwoord aanmaken",
         "es": "Crear nueva contraseña"
+    },
+    "MY LIST": {
+        "en": "",
+        "nl": "",
+        "es": ""
+    },
+    "mylist_header_1": {
+        "en": "Movies in My List",
+        "nl": "Films in Mijn Lijst",
+        "es": "Películas en Mi Lista"
+    },
+    "mylist_header_2": {
+        "en": "Add more movies to My List through Browse",
+        "nl": "Voeg meer films toe aan Mijn lijst via Ontdeken",
+        "es": "Añade más películas a Mi lista a través de la exploración"
+    },
+    "mylist_empty": {
+        "en": "My List is empty...",
+        "nl": "Mijn Lijst is leeg...",
+        "es": "Mi Lista está vacía..."
     }
 }
