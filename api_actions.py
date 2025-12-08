@@ -117,8 +117,8 @@ def login( lang = "en"):
             ic("An error occured in Email")
             return f"""<browser mix-update="#error_container">{ label_error }</browser>""", 400
         # System or developer error
-        toast_error = render_template("components/toast/___toast_error.html", message=x.lans("feedback_system_maintenance"))
-        return f"""<browser mix-bottom="#toast">{ toast_error }</browser>""", 500
+        label_error = render_template("components/toast/___label_error.html", message=x.lans("feedback_system_maintenance"))
+        return f"""<browser mix-bottom="#toast">{ label_error }</browser>""", 500
 
     finally:
         if "cursor" in locals(): cursor.close()

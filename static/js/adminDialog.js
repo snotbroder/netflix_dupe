@@ -1,15 +1,15 @@
-// All open buttons
 const showButtons = document.querySelectorAll(".openDialogBtn");
 
 showButtons.forEach(button => {
   button.addEventListener("click", () => {
-    const userPk = button.dataset.user; // get the user PK
+    // get the user_pk
+    const userPk = button.dataset.user; 
     const dialog = document.getElementById(`dialog-${userPk}`);
     if (dialog) dialog.showModal();
   });
 });
 
-// Close buttons
+
 const closeButtons = document.querySelectorAll(".closeDialogBtn");
 
 closeButtons.forEach(button => {

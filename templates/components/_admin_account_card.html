@@ -18,7 +18,6 @@
     <div class="d-flex gap-2 p-self-end" md="p-self-center">
         <button class="button-secondary openDialogBtn" data-user="{{ user.user_pk }}">See reviews</button>
         {% if user.user_deleted_at != 0 %}
-        <!-- <button id="openDialog" [data-{{user.user_pk}}] class="button-secondary">open dialog</button> -->
 
         <button class="button-secondary" mix-patch="/reactivate-user?user_id={{ user.user_pk }}"
             mix-await="Reactivating user..." mix-default="Reactivate user">Reactivate
