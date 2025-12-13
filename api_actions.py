@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, render_template, request, session, redirect, url_for
+from flask import Flask, Blueprint, render_template, request, session, redirect, url_for, jsonify
 import requests
 from flask_session import Session
 from werkzeug.security import generate_password_hash

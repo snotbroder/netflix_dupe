@@ -1,7 +1,8 @@
 <article class="card-container shadow-lg">
     <a href="/movie?movie_id={{movie.id}}">
         <div class="img-container w-100%">
-            <img src="https://image.tmdb.org/t/p/w500{{movie.backdrop_path}}" alt="movie backdrop">
+            <img src="{{'https://image.tmdb.org/t/p/w500' ~ movie.backdrop_path if movie.backdrop_path else url_for('static', filename='images/img-not-avail.jpg')}}"
+                alt="movie backdrop">
         </div>
         <div class="card-content">
             <h3>{{ movie.title }}</h3>

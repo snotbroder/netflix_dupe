@@ -54,7 +54,6 @@
                 <p class="max-w-600px">{{review.review_text}}</p>
             </div>
         </div>
-        <!-- /delete-user?user_id={{ user.user_pk }} -->
         {% if review.review_deleted_at == 0 %}
         <button class="button-secondary-small"
             mix-patch="{{ url_for('api_actions.api_delete_review', review_pk=review.review_pk) }}">Delete
