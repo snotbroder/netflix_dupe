@@ -278,6 +278,120 @@ def api_delete_review(review_pk):
         if "db" in locals(): db.close() 
 
 
+### DISPLAY EDITABLE REVIEW ###
+@api_actions.post("/api-edit-review/<review_pk>")
+def api_edit_review(review_pk):
+    try:
+        user = session.get("user", "")
+        if not user: return "invalid user"
+        # Fallback
+        if not review_pk:
+            return redirect(url_for("view_browse"))
+        
+        # Connect to the database
+        db, cursor = x.db()
+        q = "SELECT * FROM reviews WHERE review_pk = %s"
+        cursor.execute(q, ( review_pk,))
+        review = cursor.fetchone()
+
+
+        edit_review_html = render_template("components/_review_update.html", user=user, review=review)
+        return f"""
+            <browser mix-update="#review-{review_pk}">{edit_review_html}</browser>
+            """ 
+    except Exception as ex:
+        ic("An error occured while retrieving a review:", ex)
+
+        # System or developer error
+        label_error = render_template("components/toast/___label_error.html", message=x.lans("feedback_system_maintenance"))
+        return f"""<browser mix-bottom="#error_container">{ label_error }</browser>""", 500
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close() 
+
+### CANCEL REVIEW ###
+@api_actions.post("/api-cancel-review/<review_pk>")
+def api_cancel_review(review_pk):
+    try:
+        user = session.get("user", "")
+        if not user: return "invalid user"
+        db, cursor = x.db()
+        q = "SELECT * FROM reviews WHERE review_pk = %s"
+        cursor.execute(q, ( review_pk,))
+        review = cursor.fetchone()
+
+        label_ok = render_template("components/toast/___label_ok.html", message="Canceled edit")
+        review_html = render_template("components/_review.html", user=user, review=review)
+        return f"""
+            <browser mix-bottom="#error_container">{ label_ok }</browser>
+            <browser mix-update="#review-{review_pk}">{review_html}</browser>
+            """ 
+    except Exception as ex:
+        ic(ex)
+        
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close() 
+
+### REVIEW UPDATE ###
+@api_actions.patch("/api-update-review/<review_pk>")
+def api_update_review(review_pk):
+    try:
+        user = session.get("user", "")
+        user_pk = user["user_pk"]
+        user_avatar_path = user["user_avatar_path"]
+        if not user: return "invalid user"
+        
+        updated_review_text = request.form.get("updated_review_text")
+        db, cursor = x.db()
+        q = "SELECT * FROM reviews WHERE review_pk = %s AND review_user_fk = %s"
+        cursor.execute(q, (review_pk, user_pk))
+        old_review = cursor.fetchone()
+
+        # If there is no difference between the old and new edit, apply nothing
+        old_review_text = old_review["review_text"]
+        if updated_review_text == old_review_text:
+            label_error = render_template("components/toast/___label_error.html", message="No edits applied")      
+            review_html = render_template("components/_review.html", user=user, review=old_review)
+            return f"""
+                    <browser mix-bottom="#error_container">{ label_error }</browser>
+                    <browser mix-update="#review-{review_pk}">{review_html}</browser>
+                    """
+        # Update review in database
+        updated_review_text = x.validate_post(updated_review_text)
+
+        q = "UPDATE reviews SET review_text = %s WHERE review_pk = %s"
+        cursor.execute(q, (updated_review_text, review_pk))
+        db.commit()
+
+        # Temporary get the old review data, and insert the new updated review text
+        updated_review = dict(old_review)
+        updated_review["review_text"] = updated_review_text
+        label_ok = render_template("components/toast/___label_ok.html", message="Edited review")        
+        review_html = render_template("components/_review.html", user=user, review=updated_review)
+        return f"""
+            <browser mix-update="#review-{review_pk}">{review_html}</browser>
+            <browser mix-bottom="#error_container">{ label_ok }</browser>
+            """
+
+    except Exception as ex:
+        ic("An error occured while updating a review:", ex)
+        # User errors
+        if "x-error post" in str(ex):
+            label_error = render_template("components/toast/___label_error.html", message=f"{x.lans('feedback_invalid_review')} {x.POST_MIN_LEN} {x.lans('system_to')} {x.POST_MAX_LEN} {x.lans('system_characters')}")
+            return f"""<browser mix-bottom="#error_container">{label_error}</browser>"""
+        if "db" in locals(): db.rollback()
+
+        # System or developer error
+        label_error = render_template("components/toast/___label_error.html", message=x.lans("feedback_system_maintenance"))
+        return f"""<browser mix-bottom="#error_container">{ label_error }</browser>""", 500
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close() 
+
+
 ### FORGOT PASSWORD ###
 @api_actions.post("/forgot-password")
 @api_actions.post("/forgot-password/<lang>")

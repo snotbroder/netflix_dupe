@@ -91,6 +91,33 @@ main{
         
     }
 }
+.button-primary-small{
+    background-color: var(--color_primary);
+    height: fit-content;
+    width: fit-content;
+    color: var(--color_secondary);
+    padding: .40rem 1rem;
+    border-radius: .25rem;
+    font-family: var(--font_semibold);
+    letter-spacing: .5px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    place-content: center;
+    &:hover{
+        background-color: var(--color_primary50);
+        color: var(--color_tertiary50);
+        i{
+            transform: translateX(5px);
+            transition: transform .15s ease-in-out;
+        }
+    }
+    i{
+        font-size: 85%;
+        align-self: center;
+        transition: transform .1s ease-in;
+        
+    }
+}
 .button-secondary{
     background-color: transparent;
     box-sizing: border-box;

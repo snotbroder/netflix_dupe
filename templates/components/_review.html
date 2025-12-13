@@ -16,14 +16,18 @@
         </div>
     </div>
     <div class="p-absolute top-0 right-0">
-        {% if review.review_user_fk == user.user_pk %}
-        <button class="button-secondary-small"
-            mix-patch="{{ url_for('api_actions.api_delete_review', review_pk=review.review_pk) }}">{{x.lans("system_delete")}}</button>
-        {% endif %}
         {% if review.review_user_fk != user.user_pk %}
+
         <button class="button-secondary-small"
             mix-patch="{{ url_for('api_actions.api_block_user', blocking_user_fk=review.review_user_fk, blocker_user_fk=user.user_pk, review_pk=review.review_pk)}}">
             {{x.lans("review_block")}} {{review.user_first_name}}</button>
+        {% else %}
+
+        <button class="button-secondary-small"
+            mix-post="{{ url_for('api_actions.api_edit_review', review_pk=review.review_pk) }}">Edit</button>
+        <button class="button-primary-small"
+            mix-patch="{{ url_for('api_actions.api_delete_review', review_pk=review.review_pk) }}">{{x.lans("system_delete")}}</button>
+
         {% endif %}
     </div>
     <p class="mt-0">{{review.review_text}}</p>
