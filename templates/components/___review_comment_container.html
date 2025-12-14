@@ -1,0 +1,16 @@
+<form id="review_comment_container" action="{{ url_for('api_actions.api_create_comment', review_fk=review_fk) }}"
+    mix-post class="form-handle ml-.125rem">
+    <div class="form-handle-item">
+        <textarea name="post" placeholder="Add a comment to the review"
+            class="w-full outline-color-var(color_input_border) outline-1 min-h-3rem pa-2"></textarea>
+
+    </div>
+    <div class="d-flex j-content-between">
+        <p class="small mt-0">({{ x.POST_MIN_LEN }} {{ x.lans('system_to')}} {{ x.POST_MAX_LEN }} {{
+            x.lans('system_characters')}})</p>
+        <button mix-default="Post comment" mix-await="{{ x.lans('system_loading')}}"
+            class="button-primary-small p-self-end">
+            Post comment
+        </button>
+    </div>
+</form>

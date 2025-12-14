@@ -638,3 +638,67 @@ def api_unblock_user(blocked_user_fk, blocker_user_fk):
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
 
+@api_actions.get("/api-display-comment-container/<review_fk>")
+def api_display_comment_container(review_fk):
+    try:
+        ic("REVIEW FK:", review_fk)
+
+        html_comment_container = render_template("components/___review_comment_container.html", review_fk=review_fk)
+        return f"""
+        <browser mix-top="#comments-for-{review_fk}">{html_comment_container}</browser>
+            """
+    
+    except Exception as ex:
+        ic(ex)
+    finally:
+        pass
+
+
+### COMMENT CREATE ###
+@api_actions.route("/api-create-comment/<review_fk>", methods=["POST"])
+def api_create_comment(review_fk):
+    try:
+        user = session.get("user", "")
+        if not user: return "invalid user"
+
+        user_pk = user["user_pk"]        
+        comment_text = x.validate_post(request.form.get("post", ""))
+        comment_pk = uuid.uuid4().hex
+        comment_created_at = int(time.time()) 
+        comment_deleted_at = 0
+
+        db, cursor = x.db()
+        q = "INSERT INTO comments VALUES(%s, %s, %s, %s, %s, %s)"
+        cursor.execute(q, (comment_pk, user_pk, review_fk, comment_text, comment_created_at, comment_deleted_at))
+        db.commit()
+
+        comment = {
+            "user_first_name": user["user_first_name"],
+            "user_avatar_path": user["user_avatar_path"],
+            "comment_text": comment_text,
+            "comment_created_at": comment_created_at,
+        }
+        html_comment_container = render_template("components/___review_container.html")
+        html_comment = render_template("components/_review_comment.html", comment=comment, user=user)
+        label_ok = render_template("components/toast/___label_ok.html", message="Successfully posted comment")
+        return f"""
+            <browser mix-bottom="#error_container">{label_ok}</browser>
+            <browser mix-top="#reviews">{html_comment}</browser>
+            <browser mix-replace="#review_container">{html_review_container}</browser>
+        """
+    except Exception as ex:
+        ic("An error accured while creating a review:", ex)
+        if "db" in locals(): db.rollback()
+
+       # User errors
+        if "x-error post" in str(ex):
+            label_error = render_template("components/toast/___label_error.html", message=f"{x.lans('feedback_invalid_review')} {x.POST_MIN_LEN} {x.lans('system_to')} {x.POST_MAX_LEN} {x.lans('system_characters')}")
+            return f"""<browser mix-bottom="#error_container">{label_error}</browser>"""
+
+        # System or developer error
+        label_error = render_template("components/toast/___label_error.html", message=x.lans("feedback_system_maintenance"))
+        return f"""<browser mix-bottom="#error_container">{ label_error }</browser>""", 500
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()   
