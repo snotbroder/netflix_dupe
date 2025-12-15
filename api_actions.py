@@ -642,13 +642,11 @@ def api_unblock_user(blocked_user_fk, blocker_user_fk):
 @api_actions.get("/api-display-comment-container/<review_fk>")
 def api_display_comment_container(review_fk):
     try:
-        ic("REVIEW FK:", review_fk)
-
         html_comment_container = render_template("components/___review_comment_container.html", review_fk=review_fk)
         return f"""
         <browser mix-replace="#commentarea-{review_fk}">{html_comment_container}</browser>
         <browser mix-replace="#comment-button-{review_fk}">
-            <form mix-get action="{{ url_for('api_actions.api_close_display_comment_container', review_fk={review_fk}) }}">
+            <form mix-get action="/api-close-display-comment-container/{review_fk}">
             <button
             hover="text-d-underline text-c-var(--color_primary50) cursor-pointer"
             class="bg-c-transparent w-30% text-a-left">
@@ -669,7 +667,16 @@ def api_display_comment_container(review_fk):
 def api_close_display_comment_container(review_fk):
     try:
         return f"""
-        <browser mix-replace="#commentarea-{review_fk}"></browser>
+            <browser mix-replace="#comment-button-{review_fk}">
+                <form mix-get action="/api-display-comment-container/{review_fk}">
+                <button hover="text-d-underline text-c-var(--color_primary50) cursor-pointer"
+                    class="bg-c-transparent w-30% text-a-left">
+                    <p class="small">Add a comment</p>
+                </button>
+                </form>
+            </browser>
+            <browser mix-replace="#commentarea-{review_fk}"></browser>
+            <browser mix-replace="#review_comment_container-{review_fk}"></browser>
             """
     
     except Exception as ex:
@@ -702,13 +709,21 @@ def api_create_comment(review_fk):
             "comment_text": comment_text,
             "comment_created_at": comment_created_at,
         }
-        html_comment_container = render_template("components/___review_container.html")
+
         html_comment = render_template("components/_review_comment.html", comment=comment, user=user)
         label_ok = render_template("components/toast/___label_ok.html", message="Successfully posted comment")
         return f"""
-            <browser mix-replace="#commentarea-{review_fk}"></browser>
+            <browser mix-replace="#review_comment_container-{review_fk}"></browser>
             <browser mix-bottom="#error_container">{label_ok}</browser>
             <browser mix-top="#comments-for-{review_fk}">{html_comment}</browser>
+            <browser mix-replace="#comment-button-{review_fk}">
+                <form mix-get action="/api-display-comment-container/{review_fk}">
+                <button hover="text-d-underline text-c-var(--color_primary50) cursor-pointer"
+                    class="bg-c-transparent w-30% text-a-left">
+                    <p class="small">Add a comment</p>
+                </button>
+                </form>
+            </browser>
         """
     except Exception as ex:
         ic("An error accured while creating a comment:", ex)

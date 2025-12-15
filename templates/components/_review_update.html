@@ -20,8 +20,12 @@
 
 
     </div>
-    <form action="{{ url_for('api_actions.api_update_review', review_pk=review.review_pk) }}" mix-patch>
-        <textarea name="updated_review_text" id="updated_review_text">{{review.review_text}}</textarea>
+    <form action="{{ url_for('api_actions.api_update_review', review_pk=review.review_pk) }}" mix-patch
+        class="form-handle">
+        <div class="form-handle-item">
+            <textarea name="updated_review_text" id="updated_review_text"
+                class="w-full outline-color-var(color_input_border)  outline-1 min-h-3rem pa-2">{{review.review_text}}</textarea>
+        </div>
         <button class="button-primary-small">Post edit</button>
 
     </form>

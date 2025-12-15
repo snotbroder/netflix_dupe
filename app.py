@@ -365,7 +365,16 @@ def api_update_account():
         label_ok = render_template("components/toast/___label_ok.html", message=x.lans("feedback_success_account_updated"))
         return f"""
         <browser mix-update="#error_container">{label_ok}</browser>
-        <browser mix-update="#header-profile-icon"></browser>
+        <browser mix-update="#header-profile-icon">
+            <img class="profile-icon"
+                    src="static/{file_path}"
+                    alt="Profile">
+        </browser>
+        <browser mix-update="#account-profile-icon">
+            <img src="static/{file_path}"
+                alt="Profile picture" class="img rounded-md aspect-ratio:1/1">
+        </browser>
+        <browser mix-update="#account-header">{x.lans("account_header_1")} {user_first_name}</browser>
         """, 200
     
     except Exception as ex:

@@ -8,9 +8,9 @@
         </div>
         <div class="d-flex flex-col gap-.125rem">
             {% if comment.comment_user_fk == user.user_pk %}
-            <h4 class="ma-0">{{x.lans("review_me")}}</h4>
+            <p class="ma-0 small">{{x.lans("review_me")}}</p>
             {% else %}
-            <h3 class="text-t-capitalize ">{{comment.user_first_name}}</h3>
+            <p class="text-t-capitalize small ma-0">{{comment.user_first_name}}</p>
             {% endif %}
             <p class="small ma-0">{{x.lans("review_body_ago_2")}} {{comment.comment_created_at | timeago}}
                 {{x.lans("review_body_ago_1")}}</p>
