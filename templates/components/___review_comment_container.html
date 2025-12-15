@@ -1,7 +1,7 @@
 <form id="review_comment_container" action="{{ url_for('api_actions.api_create_comment', review_fk=review_fk) }}"
     mix-post class="form-handle ml-.125rem">
     <div class="form-handle-item">
-        <textarea name="post" placeholder="Add a comment to the review"
+        <textarea name="comment" placeholder="Add a comment to the review"
             class="w-full outline-color-var(color_input_border) outline-1 min-h-3rem pa-2"></textarea>
 
     </div>
@@ -13,4 +13,5 @@
             Post comment
         </button>
     </div>
+
 </form>

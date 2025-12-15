@@ -31,14 +31,23 @@
         {% endif %}
     </div>
     <p class="mt-0">{{review.review_text}}</p>
-    <button mix-get="/api-display-comment-container/{{review.review_pk}}"
-        hover="text-d-underline text-c-var(--color_primary50) cursor-pointer"
-        class="bg-c-transparent max-w-100px text-a-left">
-        <p class="small">Add a comment</p>
-    </button>
-    <section id="comments-for-{{review.review_pk}}">
-        {% for revie in review %}
-        <!-- {% include "components/_review_comment.html" %} -->
+    <div id="comment-button-{{review.review_pk}}">
+        <form mix-get action="{{ url_for('api_actions.api_display_comment_container', review_fk=review.review_pk) }}">
+            <button hover="text-d-underline text-c-var(--color_primary50) cursor-pointer"
+                class="bg-c-transparent w-30% text-a-left">
+                <p class="small">Add a comment</p>
+            </button>
+        </form>
+    </div>
+
+    <section id="comments-for-{{ review.review_pk }}">
+        {% for comment in comments %}
+        {% if comment.comment_review_fk == review.review_pk %}
+        {% include "components/_review_comment.html" %}
+        {% endif %}
         {% endfor %}
+        <section id="commentarea-{{review.review_pk}}"></section>
+
+
     </section>
 </article>

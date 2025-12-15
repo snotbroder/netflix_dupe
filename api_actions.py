@@ -638,6 +638,7 @@ def api_unblock_user(blocked_user_fk, blocker_user_fk):
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
 
+### DISPLAY COMMENT CONTAINER ###
 @api_actions.get("/api-display-comment-container/<review_fk>")
 def api_display_comment_container(review_fk):
     try:
@@ -645,7 +646,30 @@ def api_display_comment_container(review_fk):
 
         html_comment_container = render_template("components/___review_comment_container.html", review_fk=review_fk)
         return f"""
-        <browser mix-top="#comments-for-{review_fk}">{html_comment_container}</browser>
+        <browser mix-replace="#commentarea-{review_fk}">{html_comment_container}</browser>
+        <browser mix-replace="#comment-button-{review_fk}">
+            <form mix-get action="{{ url_for('api_actions.api_close_display_comment_container', review_fk={review_fk}) }}">
+            <button
+            hover="text-d-underline text-c-var(--color_primary50) cursor-pointer"
+            class="bg-c-transparent w-30% text-a-left">
+            <p class="small">Cancel</p>
+            </button>
+            </form>
+        </browser>
+            """
+    except Exception as ex:
+        ic(ex)
+        label_error = render_template("components/toast/___label_error.html", message="Error")
+        return f"""<mixhtml mix-update="#error_container">{ label_error }</mixhtml>""", 400
+    finally:
+        pass
+
+### HIDE COMMENT CONTAINER ###
+@api_actions.get("/api-close-display-comment-container/<review_fk>")
+def api_close_display_comment_container(review_fk):
+    try:
+        return f"""
+        <browser mix-replace="#commentarea-{review_fk}"></browser>
             """
     
     except Exception as ex:
@@ -662,7 +686,7 @@ def api_create_comment(review_fk):
         if not user: return "invalid user"
 
         user_pk = user["user_pk"]        
-        comment_text = x.validate_post(request.form.get("post", ""))
+        comment_text = x.validate_post(request.form.get("comment", ""))
         comment_pk = uuid.uuid4().hex
         comment_created_at = int(time.time()) 
         comment_deleted_at = 0
@@ -682,12 +706,12 @@ def api_create_comment(review_fk):
         html_comment = render_template("components/_review_comment.html", comment=comment, user=user)
         label_ok = render_template("components/toast/___label_ok.html", message="Successfully posted comment")
         return f"""
+            <browser mix-replace="#commentarea-{review_fk}"></browser>
             <browser mix-bottom="#error_container">{label_ok}</browser>
-            <browser mix-top="#reviews">{html_comment}</browser>
-            <browser mix-replace="#review_container">{html_review_container}</browser>
+            <browser mix-top="#comments-for-{review_fk}">{html_comment}</browser>
         """
     except Exception as ex:
-        ic("An error accured while creating a review:", ex)
+        ic("An error accured while creating a comment:", ex)
         if "db" in locals(): db.rollback()
 
        # User errors
@@ -702,3 +726,34 @@ def api_create_comment(review_fk):
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()   
+
+### COMMENT DELETE ###
+@api_actions.patch("/api-delete-comment/<comment_pk>")
+def api_delete_comment(comment_pk):
+    try:
+        user = session.get("user", "")
+        if not user: return "invalid user"
+
+        comment_deleted_at = int(time.time())  
+        
+        db, cursor = x.db()
+        q = "UPDATE comments SET comment_deleted_at = %s WHERE comment_pk = %s AND comment_deleted_at = 0"
+        cursor.execute(q, (comment_deleted_at, comment_pk))
+        db.commit()
+        label_ok = render_template("components/toast/___label_ok.html", message="Successfully deleted comment")        
+
+        return f"""
+            <browser mix-bottom="#error_container">{label_ok}</browser>
+            <browser mix-remove="#comment-{comment_pk}"></browser>
+        """
+    except Exception as ex:
+        ic("An error occured while deleting a review:", ex)
+        if "db" in locals(): db.rollback()
+
+        # System or developer error
+        label_error = render_template("components/toast/___label_error.html", message=x.lans("feedback_system_maintenance"))
+        return f"""<browser mix-bottom="#error_container">{ label_error }</browser>""", 500
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close() 

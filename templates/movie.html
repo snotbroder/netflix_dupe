@@ -79,7 +79,7 @@
                             <h3>{{ x.lans("review_recent") }}</h3>
                             {% if reviews %}
                             {% for review in reviews %}
-                            {% include "components/_review.html" %}
+                            {% include "components/_review.html" with context %}
                             {% endfor %}
                             {% else %}
                             <p class="text-c-var(--color_tertiary)">{{ x.lans("review_container_be_the_first")}}...</p>

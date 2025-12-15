@@ -233,6 +233,7 @@ def view_movie():
         ORDER BY reviews.review_created_at DESC
         LIMIT 5;
         """
+        
         cursor.execute(q, (user_pk, user_pk, movie_id))
         reviews = cursor.fetchall()
 
@@ -246,7 +247,40 @@ def view_movie():
         if mylist_existing_row and mylist_existing_row.get("mylist_deleted_at") == 0:
             has_user_liked = True
 
-        return render_template("movie.html", user=user, data=data, lang=lang, reviews=reviews, movie_id=movie_id, has_user_liked=has_user_liked)
+        q = """
+        SELECT
+        comments.comment_pk,
+        comments.comment_review_fk,
+        comments.comment_user_fk,
+        comments.comment_text,
+        comments.comment_created_at,
+
+        users.user_first_name,
+        users.user_avatar_path,
+        users.user_verified_at
+
+        FROM comments
+        JOIN users
+        ON users.user_pk = comments.comment_user_fk
+
+        LEFT JOIN blocks
+        ON (
+        (blocks.block_blocker_user_fk = %s AND blocks.block_blocking_user_fk = comments.comment_user_fk)
+        OR
+        (blocks.block_blocker_user_fk = comments.comment_user_fk AND blocks.block_blocking_user_fk = %s)
+        )
+
+        WHERE
+        comments.comment_deleted_at = 0
+        AND users.user_deleted_at = 0
+        AND blocks.block_blocker_user_fk IS NULL
+
+        ORDER BY comments.comment_created_at DESC;
+        """
+        cursor.execute(q, (user_pk, user_pk))
+        comments = cursor.fetchall()
+
+        return render_template("movie.html", comments=comments, user=user, data=data, lang=lang, reviews=reviews, movie_id=movie_id, has_user_liked=has_user_liked)
     except Exception as ex:
         ic(ex)
         return "An error occured", 500
