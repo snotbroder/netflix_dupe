@@ -772,3 +772,27 @@ def api_delete_comment(comment_pk):
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close() 
+
+### ADMIN SEARCH ###
+@api_actions.post("/api-search")
+def api_search():
+    try:
+        search_for = x.validate_search(request.form.get("search_for", ""))
+
+        if not search_for: return """empty search field""", 400
+        part_of_query = f"%{search_for}%"
+        ic(search_for)
+        db, cursor = x.db()
+        q = "SELECT * FROM users WHERE user_first_name OR user_email LIKE %s"
+        cursor.execute(q, (part_of_query,))
+        users = cursor.fetchall()
+        return jsonify(users)
+    except Exception as ex:
+        ic(ex)
+        if "error search" and search_for in str(ex):
+            message = "Search should be at least"
+            return f"""<browser mix-top="#search_results">{message}</browser>"""
+        return str(ex)
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()

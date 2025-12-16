@@ -164,11 +164,14 @@ def view_browse():
         url_movies_genres = "https://api.themoviedb.org/3/genre/movie/list?language=en-US"
         response_genres = requests.get(url_movies_genres, headers=headers)
         genres_data = response_genres.json()
+
+        #create genre mapping dict
         genre_mapping = {g["id"]: g["name"] for g in genres_data["genres"]}
 
         # Attach genre names to movie categories
         for movie_list in [movies_popular, movies_comedy, movies_romance]:
             for movie in movie_list:
+                # replace genre id's with the genre names
                 movie["genres"] = [
                     genre_mapping.get(gid, "Unknown")
                     for gid in movie.get("genre_ids", [])
@@ -706,26 +709,5 @@ def view_new_password(lang = "en"):
         return "An error occured", 500
 
     finally: 
-        if "cursor" in locals(): cursor.close()
-        if "db" in locals(): db.close()
-
-
-@app.post("/api-search")
-def api_search():
-    try:
-        # TODO: The input search_for must be validated
-        search_for = request.form.get("search_for", "")
-        if not search_for: return """empty search field""", 400
-        part_of_query = f"%{search_for}%"
-        ic(search_for)
-        db, cursor = x.db()
-        q = "SELECT * FROM users WHERE user_first_name LIKE %s"
-        cursor.execute(q, (part_of_query,))
-        users = cursor.fetchall()
-        return jsonify(users)
-    except Exception as ex:
-        ic(ex)
-        return str(ex)
-    finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
